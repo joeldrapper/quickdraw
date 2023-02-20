@@ -3,7 +3,7 @@
 ### Assert
 
 ```ruby
-describe Thing do
+GreenDots.describe Thing do
   test "something" do
     assert true
   end
@@ -13,7 +13,7 @@ end
 ### Refute
 
 ```ruby
-describe Thing do
+GreenDots.describe Thing do
   test "something" do
     assert true
   end
@@ -23,7 +23,7 @@ end
 ### Expect
 
 ```ruby
-describe Thing do
+GreenDots.describe Thing do
   test "equality" do
     expect(Thing.foo) == "foo"
     expect(Thing.bar) != "foo"
