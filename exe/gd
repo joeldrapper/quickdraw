@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/green_dots"
+
+$LOAD_PATH.unshift File.expand_path("fixtures")
+
+Dir.glob("test/**/*.rb") do |f|
+	Module.new.module_eval(
+		File.read(f)
+	)
+end
+
+puts
+puts "✅ Success"
