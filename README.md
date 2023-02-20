@@ -15,7 +15,7 @@ end
 ```ruby
 GreenDots.describe Thing do
   test "something" do
-    assert true
+    refute false
   end
 end
 ```
