@@ -1,39 +1,52 @@
 # GreenDots
 
-TODO: Delete this and the text below, and describe your gem
+### Assert
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/green_dots`. To experiment with that code, run `bin/console` for an interactive prompt.
+```ruby
+describe Thing do
+  test "something" do
+    assert true
+  end
+end
+```
 
-## Installation
+### Refute
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+```ruby
+describe Thing do
+  test "something" do
+    assert true
+  end
+end
+```
 
-Install the gem and add to the application's Gemfile by executing:
+### Expect
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+describe Thing do
+  test "equality" do
+    expect(Thing.foo) == "foo"
+    expect(Thing.bar) != "foo"
+  end
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+  test "raises" do
+    expect { Thing.bar! }.raises(ArgumentError) do |error|
+      expect(error.message) == "Foo bar"
+    end
+  end
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+  test "mocks and spies" do
+    expect(Thing).to_receive(:foo) do |a, b, c|
+      # The block receives arguments and can make assertions about them.
+      expect(a) == 1
+      expect(b) != 1
+      assert(c)
 
-## Usage
+      # Either return a mock response or call the original via `@super`
+      @super.call
+    end
 
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/green_dots. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/green_dots/blob/master/CODE_OF_CONDUCT.md).
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the GreenDots project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/green_dots/blob/master/CODE_OF_CONDUCT.md).
+    Thing.foo(1, 2, 3)
+  end
+end
+```
