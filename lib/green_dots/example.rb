@@ -2,8 +2,16 @@
 
 class GreenDots::Example
 	class << self
-		def test(name = nil, &block)
-			(@tests ||= []) << block
+		def test(name = nil, skip: false, &block)
+			{
+				name: name,
+				block: block,
+				skip: skip
+			}.tap { (@tests ||= []) << _1 }
+		end
+
+		def skip(test, &block)
+			test[:skip] = true
 		end
 
 		def context(description = nil, &block)
@@ -13,17 +21,28 @@ class GreenDots::Example
 		def run
 			return unless @tests
 
-			instance = new
-
-			@tests.shuffle.each do |test|
-				instance.instance_eval(&test)
-				instance.resolve
-			end
+			new.run(@tests)
 		end
 	end
 
+	attr_accessor :skip
+
 	def initialize
 		@expectations = []
+	end
+
+	def run(tests)
+		tests.shuffle.each do |test|
+			@name = test[:name]
+			@skip = test[:skip]
+
+			instance_eval(&test[:block])
+
+			resolve
+		end
+	ensure
+		@name = nil
+		@skip = nil
 	end
 
 	def expect(expression = nil, &block)
@@ -43,5 +62,13 @@ class GreenDots::Example
 
 	def refute(expression = nil, &block)
 		expect(expression, &block).falsy?
+	end
+
+	def success!
+		@skip ? raise("Error") : GreenDots.success
+	end
+
+	def error!(message)
+		@skip ? GreenDots.success : raise(message)
 	end
 end

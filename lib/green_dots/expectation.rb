@@ -2,23 +2,24 @@
 
 class GreenDots::Expectation < BasicObject
 	def initialize(context, expression = nil, &block)
-		__raise__ ::ArgumentError, "You need to provide an expression or block to `expect`." unless expression || block
 		__raise__ ::ArgumentError, "You can only provide an expression or a block to `expect`." if expression && block
 
-		@context, @expression, @block = context, expression, block
+		@context = context
+		@expression = expression
+		@block = block
 	end
 
 	define_method :__raise__, ::Object.instance_method(:raise)
 	define_method :__block_given__?, ::Object.instance_method(:block_given?)
 
 	def ==(other)
-		__raise__ ::ArgumentError, "You can't use the `==` matcher with a block expectation." if @block
-		@expression == other ? success : @result = "Expected #{@expression} to == #{other}"
+		assert (expression == other),
+			message: "Expected #{@expression} to == #{other}."
 	end
 
 	def !=(other)
-		__raise__ ::ArgumentError, "You can't use the `!=` matcher with a block expectation." if @block
-		@expression == other ? @result = "Expected #{@expression} to != #{other}" : success
+		assert (expression != other),
+			message: "Expected #{@expression} to != #{other}"
 	end
 
 	def to_raise(error = ::Exception)
@@ -26,7 +27,7 @@ class GreenDots::Expectation < BasicObject
 		@block.call
 	rescue ::Exception => e
 		if e.is_a? error
-			success
+			success!
 			yield(e) if __block_given__?
 		else
 			@result = "Expected an #{error} but got a #{e.class}(#{e})"
@@ -35,24 +36,26 @@ class GreenDots::Expectation < BasicObject
 
 	def to_not_raise
 		@block.call
-		success
+		success!
 	rescue ::Exception => e
 		@result = "Expected not to raise, but raised #{e.class}(#{e})"
 	end
 
 	def truthy?
-		__raise__ ::ArgumentError, "You can't use the `truthy?` matcher with a block expectation." if @block
-		@expression ? success : @result = "Expected #{@expression} to be truthy."
+		assert expression,
+			message: "Expected #{@expression} to be truthy."
 	end
 
 	def falsy?
-		__raise__ ::ArgumentError, "You can't use the `falsy?` matcher with a block expectation." if @block
-		@expression ? @result = "Expected #{@expression} to be truthy." : success
+		refute expression,
+			message: "Expected #{@expression} to be truthy."
 	end
 
 	def to_receive(method_name, &expectation_block)
 		__raise__ ::ArgumentError, "You can't use the `to_receive` matcher with a block expectation." if @block
+
 		@result = "Expected #{@expression} to receive #{method_name}"
+
 		interceptor = ::Module.new
 
 		# Make these available from the block
@@ -60,11 +63,11 @@ class GreenDots::Expectation < BasicObject
 		context = @context
 
 		interceptor.define_method(method_name) do |*args, **kwargs, &block|
-			expectation.success
-
+			expectation.success!
+			super_block = -> (*a, &b) { (a.length > 0) || b ? super(*a, &b) : super(*args, **kwargs, &block) }
+			original_super = context.instance_variable_get(:@super)
 			begin
-				original_super = context.instance_variable_get(:@super)
-				context.instance_variable_set(:@super, -> { super(*args, **kwargs, &block) })
+				context.instance_variable_set(:@super, super_block)
 				result = expectation_block&.call(*args, **kwargs, &block)
 			ensure
 				context.instance_variable_set(:@super, original_super)
@@ -77,11 +80,29 @@ class GreenDots::Expectation < BasicObject
 		@expression.singleton_class.prepend(interceptor)
 	end
 
-	def success
+	def success!
 		@result = true
 	end
 
 	def resolve
-		@result == true ? ::GreenDots.success : __raise__(@result)
+		@result == true ? @context.success! : @context.error!(@result)
+	end
+
+	private
+
+	def expression
+		if @block
+			__raise__ ::ArgumentError, "You must pass an expression rather than a block."
+		else
+			@expression
+		end
+	end
+
+	def assert(expression, message:)
+		expression ? success! : @result = message
+	end
+
+	def refute(expression, message:)
+		expression ? @result = message : success!
 	end
 end
