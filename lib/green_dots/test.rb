@@ -56,6 +56,10 @@ class GreenDots::Test
 	end
 
 	def error!(message)
-		@skip ? GreenDots.success : raise(GreenDots::TestFailure, message)
+		if @skip
+			GreenDots.success
+		else
+			raise(GreenDots::TestFailure, message)
+		end
 	end
 end

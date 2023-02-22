@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-class GreenDots::Expectation < BasicObject
+# < BasicObject
+class GreenDots::Expectation
 	def initialize(context, expression = nil, &block)
 		if expression && block
 			__raise__ ::ArgumentError, "You can only provide an expression or a block to `expect`."
@@ -15,18 +16,16 @@ class GreenDots::Expectation < BasicObject
 	define_method :__block_given__?, ::Object.instance_method(:block_given?)
 
 	def ==(other)
-		assert expression == other,
-			message: "Expected #{@expression} to == #{other}."
+		assert(expression == other) { "Expected #{@expression} to == #{other}." }
 	end
 
 	def !=(other)
-		assert expression != other,
-			message: "Expected #{@expression} to != #{other}"
+		assert(expression != other) { "Expected #{@expression} to != #{other}" }
 	end
 
 	def to_raise(error = ::Exception)
 		@result = "Expected #{error} to be raised but wasn't."
-		@block.call
+		block.call
 	rescue ::Exception => e
 		if e.is_a? error
 			success!
@@ -37,20 +36,18 @@ class GreenDots::Expectation < BasicObject
 	end
 
 	def to_not_raise
-		@block.call
+		block.call
 		success!
 	rescue ::Exception => e
 		@result = "Expected not to raise, but raised #{e.class}(#{e})"
 	end
 
 	def truthy?
-		assert expression,
-			message: "Expected #{@expression} to be truthy."
+		assert(expression) { "Expected #{@expression} to be truthy." }
 	end
 
 	def falsy?
-		refute expression,
-			message: "Expected #{@expression} to be truthy."
+		refute(expression) { "Expected #{@expression} to be truthy." }
 	end
 
 	def to_receive(method_name, &expectation_block)
@@ -101,17 +98,22 @@ class GreenDots::Expectation < BasicObject
 
 	def expression
 		if @block
-			__raise__ ::ArgumentError, "You must pass an expression rather than a block."
+			__raise__ ::ArgumentError,
+				"You must pass an expression rather than a block when using the #{caller_locations.first.label} matcher."
 		else
 			@expression
 		end
 	end
 
-	def assert(expression, message:)
-		expression ? success! : @result = message
+	def block
+		@block || __raise__(::ArgumentError, "You must pass a block rather than an expression when using the #{caller_locations.first.label} matcher.")
 	end
 
-	def refute(expression, message:)
-		expression ? @result = message : success!
+	def assert(expression)
+		expression ? success! : @result = yield
+	end
+
+	def refute(expression)
+		expression ? @result = yield : success!
 	end
 end

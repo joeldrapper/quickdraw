@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GreenDots::Context
 	def describe(description = nil, &block)
 		Class.new(self, &block).run
