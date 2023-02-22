@@ -60,7 +60,7 @@ You can optionally wrap tests in any number of `describe` blocks. `describe` is 
 
 ```ruby
 describe Thing do
-	test { assert true }
+  test { assert true }
 end
 ```
 
