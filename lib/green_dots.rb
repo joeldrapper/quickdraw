@@ -6,7 +6,8 @@ module GreenDots
 	class TestFailure < RuntimeError; end
 
 	def self.success
-		::Kernel.print "\e[32m·\e[0m"
+		# ::Kernel.print "\e[32m◦\e[0m"
+		::Kernel.print "\e[32m⚬\e[0m"
 	end
 end
 
