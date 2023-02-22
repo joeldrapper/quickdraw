@@ -48,7 +48,11 @@ class GreenDots::Test
 	end
 
 	def success!
-		@skip ? raise(GreenDots::FileTest, "Skipped test started passing.") : GreenDots.success
+		if @skip
+			raise(GreenDots::FileTest, "Skipped test #{@name} started passing.")
+		else
+			GreenDots.success
+		end
 	end
 
 	def error!(message)
