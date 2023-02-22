@@ -3,50 +3,62 @@
 ### Assert
 
 ```ruby
-GreenDots.describe Thing do
-  test "something" do
-    assert true
-  end
+test "something" do
+  assert true
 end
 ```
 
 ### Refute
 
 ```ruby
-GreenDots.describe Thing do
-  test "something" do
-    refute false
-  end
+test "something" do
+  refute false
 end
 ```
 
-### Expect
+### Expect matchers
+
+### `==` and `!=`
 
 ```ruby
-GreenDots.describe Thing do
-  test "equality" do
-    expect(Thing.foo) == "foo"
-    expect(Thing.bar) != "foo"
-  end
+test "equality" do
+  expect(Thing.foo) == "foo"
+  expect(Thing.bar) != "foo"
+end
+```
 
-  test "raises" do
-    expect { Thing.bar! }.raises(ArgumentError) do |error|
-      expect(error.message) == "Foo bar"
-    end
-  end
+### `to_raise`
 
-  test "mocks and spies" do
-    expect(Thing).to_receive(:foo) do |a, b, c|
-      # The block receives arguments and can make assertions about them.
-      expect(a) == 1
-      expect(b) != 1
-      assert(c)
-
-      # Either return a mock response or call the original via `@super`
-      @super.call
-    end
-
-    Thing.foo(1, 2, 3)
+```ruby
+test "raises" do
+  expect { Thing.bar! }.raises(ArgumentError) do |error|
+    expect(error.message) == "Foo bar"
   end
 end
 ```
+
+### `to_receive`
+
+```ruby
+test "mocks and spies" do
+  expect(Thing).to_receive(:foo) do |a, b, c|
+    # The block receives arguments and can make assertions about them.
+    expect(a) == 1
+    expect(b) != 1
+    assert(c)
+
+    # Either return a mock response or call the original via `@super`
+    @super.call
+  end
+
+  Thing.foo(1, 2, 3)
+end
+```
+
+## Describe
+You can optionally wrap tests in any number of `describe` blocks. `describe` is also aliased as `context`.
+
+```ruby
+describe Thing do
+	test { assert true }
+end

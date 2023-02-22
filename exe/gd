@@ -6,9 +6,11 @@ require_relative "../lib/green_dots"
 $LOAD_PATH.unshift File.expand_path("fixtures")
 
 Dir.glob("test/**/*.rb") do |f|
-	Module.new.module_eval(
-		File.read(f)
-	)
+	Class.new(GreenDots::Test) do
+		class_eval(
+			File.read(f), f, 1
+		)
+	end.run
 end
 
 puts

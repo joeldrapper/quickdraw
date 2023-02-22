@@ -1,31 +1,13 @@
 # frozen_string_literal: true
 
-class GreenDots::Example
-	class << self
-		def test(name = nil, skip: false, &block)
-			{
-				name: name,
-				block: block,
-				skip: skip
-			}.tap { (@tests ||= []) << _1 }
-		end
+class GreenDots::Test
+	extend GreenDots::Context
 
-		def skip(test, &block)
-			test[:skip] = true
-		end
+	def self.run
+		return unless @tests
 
-		def context(description = nil, &block)
-			Class.new(self, &block).run
-		end
-
-		def run
-			return unless @tests
-
-			new.run(@tests)
-		end
+		new.run(@tests)
 	end
-
-	attr_accessor :skip
 
 	def initialize
 		@expectations = []
@@ -53,6 +35,7 @@ class GreenDots::Example
 
 	def resolve
 		@expectations.each(&:resolve)
+	ensure
 		@expectations.clear
 	end
 
@@ -65,10 +48,10 @@ class GreenDots::Example
 	end
 
 	def success!
-		@skip ? raise("Error") : GreenDots.success
+		@skip ? raise(GreenDots::FileTest, "Skipped test started passing.") : GreenDots.success
 	end
 
 	def error!(message)
-		@skip ? GreenDots.success : raise(message)
+		@skip ? GreenDots.success : raise(GreenDots::TestFailure, message)
 	end
 end

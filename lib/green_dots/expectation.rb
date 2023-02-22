@@ -2,7 +2,9 @@
 
 class GreenDots::Expectation < BasicObject
 	def initialize(context, expression = nil, &block)
-		__raise__ ::ArgumentError, "You can only provide an expression or a block to `expect`." if expression && block
+		if expression && block
+			__raise__ ::ArgumentError, "You can only provide an expression or a block to `expect`."
+		end
 
 		@context = context
 		@expression = expression
@@ -13,12 +15,12 @@ class GreenDots::Expectation < BasicObject
 	define_method :__block_given__?, ::Object.instance_method(:block_given?)
 
 	def ==(other)
-		assert (expression == other),
+		assert expression == other,
 			message: "Expected #{@expression} to == #{other}."
 	end
 
 	def !=(other)
-		assert (expression != other),
+		assert expression != other,
 			message: "Expected #{@expression} to != #{other}"
 	end
 
@@ -85,7 +87,14 @@ class GreenDots::Expectation < BasicObject
 	end
 
 	def resolve
-		@result == true ? @context.success! : @context.error!(@result)
+		case @result
+		when nil
+			@context.error! "You didn't make any expectations."
+		when true
+			@context.success!
+		else
+			@context.error!(@result)
+		end
 	end
 
 	private

@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
+extend GreenDots::Context
+
 class Foo
 	def self.bar
 		"original"
 	end
 end
 
-GreenDots.describe GreenDots do
+test { assert true }
+
+describe GreenDots do
 	test { assert true }
 	test(skip: true) { assert false }
 
