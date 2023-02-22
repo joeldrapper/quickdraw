@@ -18,7 +18,7 @@ end
 
 ### Expect matchers
 
-### `==` and `!=`
+#### `==` and `!=`
 
 ```ruby
 test "equality" do
@@ -27,7 +27,7 @@ test "equality" do
 end
 ```
 
-### `to_raise`
+#### `to_raise`
 
 ```ruby
 test "raises" do
@@ -37,7 +37,7 @@ test "raises" do
 end
 ```
 
-### `to_receive`
+#### `to_receive`
 
 ```ruby
 test "mocks and spies" do
@@ -55,10 +55,24 @@ test "mocks and spies" do
 end
 ```
 
-## Describe
+### Describe
 You can optionally wrap tests in any number of `describe` blocks. `describe` is also aliased as `context`.
 
 ```ruby
 describe Thing do
 	test { assert true }
 end
+```
+
+### Test
+The test description is optional.
+
+```ruby
+test { assert true }
+```
+
+You can pass `skip: true` to skip the test. Skipped tests are still run and will fail if they start passing.
+
+```ruby
+test(skip: true) { assert false }
+```
