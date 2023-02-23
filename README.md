@@ -31,7 +31,7 @@ end
 
 ```ruby
 test "raises" do
-  expect { Thing.bar! }.raises(ArgumentError) do |error|
+  expect { Thing.bar! }.to_raise(ArgumentError) do |error|
     expect(error.message) == "Foo bar"
   end
 end
