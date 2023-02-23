@@ -8,7 +8,7 @@ You can optionally wrap tests in any number of `describe` blocks. `describe` is 
 ```ruby
 describe Thing do
   test "something" do
-  	assert true
+    assert true
   end
 end
 ```
