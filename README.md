@@ -1,6 +1,32 @@
 # GreenDots
 
-### Assert
+Your test files are executed in an anonymous class, so you can define methods and constants at the top level, without collisions.
+
+### `.describe`
+You can optionally wrap tests in any number of `describe` blocks. `describe` is also aliased as `context`. The describe block might not be necessary though and the name of the file might be enough.
+
+```ruby
+describe Thing do
+  test "something" do
+  	assert true
+  end
+end
+```
+
+### `.test`
+The test description is optional — sometimes you don't need a description.
+
+```ruby
+test { assert true }
+```
+
+You can pass `skip: true` to skip the test. Skipped tests are still run and will fail if they start passing.
+
+```ruby
+test(skip: true) { assert false }
+```
+
+### `#assert`
 
 ```ruby
 test "something" do
@@ -8,7 +34,7 @@ test "something" do
 end
 ```
 
-### Refute
+### `#refute`
 
 ```ruby
 test "something" do
@@ -16,7 +42,7 @@ test "something" do
 end
 ```
 
-### Expect matchers
+### `expect` matchers
 
 #### `==` and `!=`
 
@@ -53,26 +79,4 @@ test "mocks and spies" do
 
   Thing.foo(1, 2, 3)
 end
-```
-
-### Describe
-You can optionally wrap tests in any number of `describe` blocks. `describe` is also aliased as `context`.
-
-```ruby
-describe Thing do
-  test { assert true }
-end
-```
-
-### Test
-The test description is optional.
-
-```ruby
-test { assert true }
-```
-
-You can pass `skip: true` to skip the test. Skipped tests are still run and will fail if they start passing.
-
-```ruby
-test(skip: true) { assert false }
 ```
