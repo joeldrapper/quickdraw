@@ -45,7 +45,7 @@ class GreenDots::Expectation
 
 	def expression
 		if @block
-			raise ArgumentError,
+			raise GreenDots::ArgumentError,
 				"You must pass an expression rather than a block when using the #{caller_locations.first.label} matcher."
 		else
 			@expression
@@ -53,7 +53,7 @@ class GreenDots::Expectation
 	end
 
 	def block
-		@block || raise(ArgumentError,
+		@block || raise(GreenDots::ArgumentError,
 			"You must pass a block rather than an expression when using the #{caller_locations.first.label} matcher.")
 	end
 

@@ -3,7 +3,14 @@
 require_relative "green_dots/version"
 
 module GreenDots
-	class TestFailure < RuntimeError; end
+	module Error; end
+	class TestFailure < RuntimeError
+		include Error
+	end
+	
+	class ArgumentError < ::ArgumentError
+		include Error
+	end
 
 	def self.success
 		# ::Kernel.print "\e[32m◦\e[0m"

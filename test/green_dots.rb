@@ -6,6 +6,8 @@ class Foo
 	end
 end
 
+test(skip: true) { expect(1) }
+
 test { assert true }
 test(skip: true) { assert false }
 
