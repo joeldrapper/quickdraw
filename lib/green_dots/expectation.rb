@@ -6,9 +6,11 @@ require_relative "matchers/to_not_raise"
 require_relative "matchers/to_receive"
 require_relative "matchers/truthy"
 require_relative "matchers/falsy"
+require_relative "matchers/is_a"
 
 # < BasicObject
 class GreenDots::Expectation
+	include GreenDots::Matchers::IsA
 	include GreenDots::Matchers::Falsy
 	include GreenDots::Matchers::Truthy
 	include GreenDots::Matchers::ToRaise
