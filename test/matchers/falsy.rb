@@ -1,19 +1,23 @@
 require "green_dots"
 
-test "with truthy" do
+test "with falsy" do
   expect {
     Class.new(GreenDots::Test) do
-      test { expect(1).truthy? }
+      test do
+        expect(nil).falsy?
+      end
     end.run
   }.to_not_raise
 end
 
-test "with falsy" do
+test "with truthy" do
   expect {
     Class.new(GreenDots::Test) do
-      test { expect(nil).truthy? }
+      test do
+        expect(1).falsy?
+      end
     end.run
   }.to_raise(GreenDots::TestFailure) do |error|
-    expect(error.message) == %(Expected nil to be truthy.)
+    expect(error.message) == %(Expected 1 to be falsy.)
   end
 end

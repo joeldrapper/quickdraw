@@ -14,6 +14,6 @@ test "refute with truthy expression" do
 			test { refute true }
 		end.run
 	}.to_raise(GreenDots::TestFailure) do |error|
-		expect(error.message) == "Expected true to be truthy."
+		expect(error.message) == "Expected true to be falsy."
 	end
 end
