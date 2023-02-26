@@ -8,13 +8,11 @@ module GreenDots::Matchers
 
 			begin
 				expectation_block.call
+			rescue error => e
+				success!
+				yield(e) if block_given?
 			rescue ::Exception => e
-				if e.is_a? error
-					success!
-					yield(e) if block_given?
-				else
-					@result = "Expected an #{error} but got a #{e.class}(#{e})"
-				end
+				@result = "Expected `#{error.inspect}` to be raised but `#{e.class.inspect}` was raised."
 			end
 		end
 	end
