@@ -4,9 +4,12 @@ inherit_from:
 
 AllCops:
   TargetRubyVersion: 2.7
-  
+
 Lint/RescueException:
   Enabled: false
-  
+
 Lint/Void:
+  Enabled: false
+
+Style/MultilineBlockChain:
   Enabled: false

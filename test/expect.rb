@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 test "raises without an expectation" do
 	expect {
 		Class.new(GreenDots::Test) do

@@ -4,10 +4,11 @@ require_relative "green_dots/version"
 
 module GreenDots
 	module Error; end
+
 	class TestFailure < RuntimeError
 		include Error
 	end
-	
+
 	class ArgumentError < ::ArgumentError
 		include Error
 	end

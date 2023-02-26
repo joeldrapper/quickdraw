@@ -5,7 +5,7 @@ module GreenDots::Matchers
 		def to_raise(error = ::Exception)
 			@result = "Expected #{error} to be raised but wasn't."
 			expectation_block = block
-			
+
 			begin
 				expectation_block.call
 			rescue ::Exception => e

@@ -1,4 +1,4 @@
-require "green_dots"
+# frozen_string_literal: true
 
 describe "==" do
 	test "when equal" do
