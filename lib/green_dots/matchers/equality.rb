@@ -3,11 +3,11 @@
 module GreenDots::Matchers
 	module Equality
 		def ==(other)
-			assert(expression == other) { "Expected #{expression} to == #{other}." }
+			assert(expression == other) { "Expected #{expression.inspect} to == #{other.inspect}." }
 		end
 
 		def !=(other)
-			assert(expression != other) { "Expected #{expression} to != #{other}" }
+			assert(expression != other) { "Expected #{expression.inspect} to != #{other.inspect}." }
 		end
 	end
 end

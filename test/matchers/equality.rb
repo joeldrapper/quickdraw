@@ -18,7 +18,9 @@ describe "==" do
 					expect("a") == "b"
 				end
 			end.run
-		}.to_raise(GreenDots::TestFailure)
+		}.to_raise(GreenDots::TestFailure) do |error|
+			expect(error.message) == %(Expected "a" to == "b".)
+		end
 	end
 end
 
@@ -40,6 +42,8 @@ describe "!=" do
 					expect("a") != "a"
 				end
 			end.run
-		}.to_raise(GreenDots::TestFailure)
+		}.to_raise(GreenDots::TestFailure) do |error|
+			expect(error.message) == %(Expected "a" to != "a".)
+		end
 	end
 end
