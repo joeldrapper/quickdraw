@@ -6,7 +6,7 @@ module Matchers
 			begin
 				Class.new(GreenDots::Test, &block).run
 			rescue GreenDots::TestFailure => e
-				error!
+				failure!
 			end
 
 			success!
@@ -16,11 +16,12 @@ module Matchers
 			begin
 				Class.new(GreenDots::Test, &block).run
 			rescue GreenDots::TestFailure => e
+				success!
 				assert(e.message == message) if message
-				return success!
+				return
 			end
 
-			error!
+			failure!
 		end
 	end
 end

@@ -4,26 +4,27 @@ class GreenDots::Test
 	extend GreenDots::Context
 
 	class << self
-		def run
+		def run(run = GreenDots::Run.new)
 			return unless @tests
 
-			new.run(@tests)
+			new(run).run(@tests)
 		end
 
 		def include_matcher(*args)
-			args.each { |matcher| matchers << matcher }
+			args.each { |m| matchers << m }
 		end
 
 		def matchers
 			@matchers ||= if superclass < GreenDots::Test
 				superclass.matchers.dup
 			else
-				Set.new
+				Concurrent::Set.new
 			end
 		end
 	end
 
-	def initialize
+	def initialize(run)
+		@run = run
 		@expectations = []
 		@matchers = self.class.matchers
 	end
@@ -73,17 +74,17 @@ class GreenDots::Test
 
 	def success!
 		if @skip
-			raise(GreenDots::TestFailure, "The skipped test \"#{@name}\" started passing.")
+			@run.failure! %(The skipped test "#{@name}" started passing.)
 		else
-			GreenDots.success
+			@run.success!
 		end
 	end
 
-	def error!(message)
+	def failure!(message)
 		if @skip
-			GreenDots.success
+			@run.success!
 		else
-			raise(GreenDots::TestFailure, message)
+			@run.failure!(message)
 		end
 	end
 end

@@ -8,7 +8,6 @@ require_relative "matchers/truthy"
 require_relative "matchers/falsy"
 require_relative "matchers/is_a"
 
-# < BasicObject
 class GreenDots::Expectation
 	include GreenDots::Matchers::IsA
 	include GreenDots::Matchers::Falsy
@@ -35,11 +34,11 @@ class GreenDots::Expectation
 	def resolve
 		case @result
 		when nil
-			@context.error! "You didn't make any expectations."
+			@context.failure! "You didn't make any expectations."
 		when true
 			@context.success!
 		else
-			@context.error!(@result)
+			@context.failure!(@result)
 		end
 	end
 
@@ -60,14 +59,14 @@ class GreenDots::Expectation
 	end
 
 	def assert(value)
-		value ? success! : error!(yield)
+		value ? success! : failure!(yield)
 	end
 
 	def refute(value)
-		value ? error!(yield) : success!
+		value ? failure!(yield) : success!
 	end
 
-	def error!(message)
-		@context.error!(message)
+	def failure!(message)
+		@context.failure!(message)
 	end
 end

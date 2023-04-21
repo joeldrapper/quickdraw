@@ -1,21 +1,25 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require "concurrent"
+
 require_relative "../lib/green_dots"
 
 $LOAD_PATH.unshift File.expand_path("fixtures")
 
 Dir.glob("test/support/**/*.rb").each { |f| eval File.read(f), binding, f, 1 }
 
+run = GreenDots::Run.new
+
 Dir.glob("test/**/*.rb").reject { |f| f.start_with? "test/support/" }.shuffle.each do |f|
 	Class.new(GreenDots::Test) do
 		class_eval(
 			File.read(f), f, 1
 		)
-	end.run
+	end.run(run)
 end
 
 SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
 
 puts "\n\n"
-puts "All your tests passed. #{SUCCESS_EMOJI.sample}"
+puts "#{run.successes} expectations passed. #{SUCCESS_EMOJI.sample}"
