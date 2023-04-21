@@ -1,22 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "matchers/equality"
-require_relative "matchers/to_raise"
-require_relative "matchers/to_not_raise"
-require_relative "matchers/to_receive"
-require_relative "matchers/truthy"
-require_relative "matchers/falsy"
-require_relative "matchers/is_a"
-
 class GreenDots::Expectation
-	include GreenDots::Matchers::IsA
-	include GreenDots::Matchers::Falsy
-	include GreenDots::Matchers::Truthy
-	include GreenDots::Matchers::ToRaise
-	include GreenDots::Matchers::Equality
-	include GreenDots::Matchers::ToReceive
-	include GreenDots::Matchers::ToNotRaise
-
 	def initialize(context, value = nil, &block)
 		if value && block
 			raise ::ArgumentError, "You can only provide a value or a block to `expect`."

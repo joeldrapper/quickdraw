@@ -1,6 +1,24 @@
 # frozen_string_literal: true
 
+require_relative "matchers/is_a"
+require_relative "matchers/falsy"
+require_relative "matchers/truthy"
+require_relative "matchers/to_raise"
+require_relative "matchers/equality"
+require_relative "matchers/to_receive"
+require_relative "matchers/to_not_raise"
+
 class GreenDots::Test
+	DEFAULT_MATCHERS = [
+		GreenDots::Matchers::IsA,
+		GreenDots::Matchers::Falsy,
+		GreenDots::Matchers::Truthy,
+		GreenDots::Matchers::ToRaise,
+		GreenDots::Matchers::Equality,
+		GreenDots::Matchers::ToReceive,
+		GreenDots::Matchers::ToNotRaise
+	]
+
 	extend GreenDots::Context
 
 	class << self
@@ -18,7 +36,7 @@ class GreenDots::Test
 			@matchers ||= if superclass < GreenDots::Test
 				superclass.matchers.dup
 			else
-				Concurrent::Set.new
+				Concurrent::Set.new(DEFAULT_MATCHERS)
 			end
 		end
 	end
