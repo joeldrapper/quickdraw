@@ -5,7 +5,7 @@ module GreenDots::Matchers
 		def to_receive(method_name, &expectation_block)
 			__raise__ ::ArgumentError, "You can't use the `to_receive` matcher with a block expectation." if @block
 
-			@result = "Expected #{@expression} to receive #{method_name}"
+			@result = "Expected #{@value} to receive #{method_name}"
 
 			interceptor = ::Module.new
 
@@ -28,7 +28,7 @@ module GreenDots::Matchers
 				result
 			end
 
-			@expression.singleton_class.prepend(interceptor)
+			@value.singleton_class.prepend(interceptor)
 		end
 	end
 end

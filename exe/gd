@@ -5,7 +5,9 @@ require_relative "../lib/green_dots"
 
 $LOAD_PATH.unshift File.expand_path("fixtures")
 
-Dir.glob("test/**/*.rb").shuffle.each do |f|
+Dir.glob("test/support/**/*.rb").each { |f| eval File.read(f), binding, f, 1 }
+
+Dir.glob("test/**/*.rb").reject { |f| f.start_with? "test/support/" }.shuffle.each do |f|
 	Class.new(GreenDots::Test) do
 		class_eval(
 			File.read(f), f, 1

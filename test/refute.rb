@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-test "refute with falsy expression" do
+test "refute with falsy value" do
 	expect {
 		Class.new(GreenDots::Test) do
 			test { refute false }
@@ -8,7 +8,7 @@ test "refute with falsy expression" do
 	}.to_not_raise
 end
 
-test "refute with truthy expression" do
+test "refute with truthy value" do
 	expect {
 		Class.new(GreenDots::Test) do
 			test { refute true }

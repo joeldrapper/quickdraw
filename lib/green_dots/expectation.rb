@@ -18,13 +18,13 @@ class GreenDots::Expectation
 	include GreenDots::Matchers::ToReceive
 	include GreenDots::Matchers::ToNotRaise
 
-	def initialize(context, expression = nil, &block)
-		if expression && block
-			raise ::ArgumentError, "You can only provide an expression or a block to `expect`."
+	def initialize(context, value = nil, &block)
+		if value && block
+			raise ::ArgumentError, "You can only provide a value or a block to `expect`."
 		end
 
 		@context = context
-		@expression = expression
+		@value = value
 		@block = block
 	end
 
@@ -45,25 +45,29 @@ class GreenDots::Expectation
 
 	private
 
-	def expression
+	def value
 		if @block
 			raise GreenDots::ArgumentError,
-				"You must pass an expression rather than a block when using the #{caller_locations.first.label} matcher."
+				"You must pass a value rather than a block when using the #{caller_locations.first.label} matcher."
 		else
-			@expression
+			@value
 		end
 	end
 
 	def block
 		@block || raise(GreenDots::ArgumentError,
-			"You must pass a block rather than an expression when using the #{caller_locations.first.label} matcher.")
+			"You must pass a block rather than a value when using the #{caller_locations.first.label} matcher.")
 	end
 
-	def assert(expression)
-		expression ? success! : @result = yield
+	def assert(value)
+		value ? success! : error!(yield)
 	end
 
-	def refute(expression)
-		expression ? @result = yield : success!
+	def refute(value)
+		value ? error!(yield) : success!
+	end
+
+	def error!(message)
+		@context.error!(message)
 	end
 end

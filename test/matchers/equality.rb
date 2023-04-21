@@ -1,49 +1,31 @@
 # frozen_string_literal: true
 
+include_matcher Matchers::PassFail
+
 describe "==" do
 	test "when equal" do
 		expect {
-			Class.new(GreenDots::Test) do
-				test do
-					expect("a") == "a"
-				end
-			end.run
-		}.to_not_raise
+			test { expect("a") == "a" }
+		}.to_pass
 	end
 
 	test "when not equal" do
 		expect {
-			Class.new(GreenDots::Test) do
-				test do
-					expect("a") == "b"
-				end
-			end.run
-		}.to_raise(GreenDots::TestFailure) do |error|
-			expect(error.message) == %(Expected "a" to == "b".)
-		end
+			test { expect("a") == "b" }
+		}.to_fail message: %(Expected "a" to == "b".)
 	end
 end
 
 describe "!=" do
 	test "when not equal" do
 		expect {
-			Class.new(GreenDots::Test) do
-				test do
-					expect("a") != "b"
-				end
-			end.run
-		}.to_not_raise
+			test { expect("a") != "b" }
+		}.to_pass
 	end
 
 	test "when equal" do
 		expect {
-			Class.new(GreenDots::Test) do
-				test do
-					expect("a") != "a"
-				end
-			end.run
-		}.to_raise(GreenDots::TestFailure) do |error|
-			expect(error.message) == %(Expected "a" to != "a".)
-		end
+			test { expect("a") != "a" }
+		}.to_fail message: %(Expected "a" to != "a".)
 	end
 end

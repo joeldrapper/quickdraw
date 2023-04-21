@@ -3,8 +3,8 @@
 module GreenDots::Matchers
 	module IsA
 		def is_a?(type)
-			assert expression.is_a?(type) do
-				"Expected #{expression.inspect} to have the type #{type.inspect}"
+			assert value.is_a?(type) do
+				"Expected #{value.inspect} to have the type #{type.inspect}"
 			end
 		end
 	end

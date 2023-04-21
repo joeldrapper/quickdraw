@@ -3,7 +3,7 @@
 module GreenDots::Matchers
 	module Falsy
 		def falsy?
-			refute(expression) { "Expected #{expression.inspect} to be falsy." }
+			refute(value) { "Expected #{value.inspect} to be falsy." }
 		end
 	end
 end

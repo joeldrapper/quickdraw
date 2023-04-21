@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-test "assert with falsy expression" do
+test "assert with falsy value" do
 	expect {
 		Class.new(GreenDots::Test) do
 			test { assert false }
@@ -10,7 +10,7 @@ test "assert with falsy expression" do
 	end
 end
 
-test "assert with truthy expression" do
+test "assert with truthy value" do
 	expect {
 		Class.new(GreenDots::Test) do
 			test { assert true }

@@ -3,14 +3,29 @@
 class GreenDots::Test
 	extend GreenDots::Context
 
-	def self.run
-		return unless @tests
+	class << self
+		def run
+			return unless @tests
 
-		new.run(@tests)
+			new.run(@tests)
+		end
+
+		def include_matcher(*args)
+			args.each { |matcher| matchers << matcher }
+		end
+
+		def matchers
+			@matchers ||= if superclass < GreenDots::Test
+				superclass.matchers.dup
+			else
+				Set.new
+			end
+		end
 	end
 
 	def initialize
 		@expectations = []
+		@matchers = self.class.matchers
 	end
 
 	def run(tests)
@@ -27,8 +42,17 @@ class GreenDots::Test
 		@skip = nil
 	end
 
-	def expect(expression = nil, &block)
-		expectation = GreenDots::Expectation.new(self, expression, &block)
+	def expect(value = nil, &block)
+		matchers = @matchers # we need this to be a local variable because it's used in the block below
+		expectation_class = GreenDots::EXPECTATION_SHAPES[matchers] ||= Class.new(GreenDots::Expectation) do
+			matchers.each { include _1 }
+			freeze
+		end
+
+		location = caller_locations(1, 1).first
+
+		expectation = expectation_class.new(self, value, &block)
+
 		@expectations << expectation
 		expectation
 	end
@@ -39,17 +63,17 @@ class GreenDots::Test
 		@expectations.clear
 	end
 
-	def assert(expression = nil, &block)
-		expect(expression, &block).truthy?
+	def assert(value = nil, &block)
+		expect(value, &block).truthy?
 	end
 
-	def refute(expression = nil, &block)
-		expect(expression, &block).falsy?
+	def refute(value = nil, &block)
+		expect(value, &block).falsy?
 	end
 
 	def success!
 		if @skip
-			raise(GreenDots::FileTest, "Skipped test #{@name} started passing.")
+			raise(GreenDots::TestFailure, "The skipped test \"#{@name}\" started passing.")
 		else
 			GreenDots.success
 		end

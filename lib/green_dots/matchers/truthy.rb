@@ -3,7 +3,7 @@
 module GreenDots::Matchers
 	module Truthy
 		def truthy?
-			assert(expression) { "Expected #{expression.inspect} to be truthy." }
+			assert(value) { "Expected #{value.inspect} to be truthy." }
 		end
 	end
 end

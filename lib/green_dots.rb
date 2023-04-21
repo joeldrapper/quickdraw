@@ -3,6 +3,8 @@
 require_relative "green_dots/version"
 
 module GreenDots
+	EXPECTATION_SHAPES = {}
+
 	module Error; end
 
 	class TestFailure < RuntimeError

@@ -1,21 +1,17 @@
 # frozen_string_literal: true
 
+include_matcher Matchers::PassFail
+
 test "with a block that doesn't raise" do
 	expect {
-		Class.new(GreenDots::Test) do
-			test { expect { 1 }.to_raise }
-		end.run
-	}.to_raise(GreenDots::TestFailure) do |error|
-		expect(error.message) == "Expected Exception to be raised but wasn't."
-	end
+		test { expect { 1 }.to_raise }
+	}.to_fail message: "Expected Exception to be raised but wasn't."
 end
 
 test "with a block that raises" do
 	expect {
-		Class.new(GreenDots::Test) do
-			test { expect { raise }.to_raise }
-		end.run
-	}.to_not_raise
+		test { expect { raise }.to_raise }
+	}.to_pass
 end
 
 test "yieldsd the exception to the block" do
@@ -35,19 +31,13 @@ end
 describe "expcting a specific exception" do
 	test "with a block that raises the expected exception" do
 		expect {
-			Class.new(GreenDots::Test) do
-				test { expect { raise ArgumentError }.to_raise(ArgumentError) }
-			end.run
-		}.to_not_raise
+			test { expect { raise ArgumentError }.to_raise(ArgumentError) }
+		}.to_pass
 	end
 
 	test "with a block that raises a different exception" do
 		expect {
-			Class.new(GreenDots::Test) do
-				test { expect { raise ArgumentError }.to_raise(NameError) }
-			end.run
-		}.to_raise(GreenDots::TestFailure) do |error|
-			expect(error.message) == "Expected `NameError` to be raised but `ArgumentError` was raised."
-		end
+			test { expect { raise ArgumentError }.to_raise(NameError) }
+		}.to_fail message: "Expected `NameError` to be raised but `ArgumentError` was raised."
 	end
 end
