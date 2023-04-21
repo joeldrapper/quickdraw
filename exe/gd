@@ -15,7 +15,7 @@ Dir.glob("test/**/*.rb").reject { |f| f.start_with? "test/support/" }.shuffle.ea
 	end.run
 end
 
-puts
-puts
-puts "Success! ✅"
-puts "All your tests passed. 💃"
+SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
+
+puts "\n\n"
+puts "All your tests passed. #{SUCCESS_EMOJI.sample}"
