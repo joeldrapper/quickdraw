@@ -5,9 +5,11 @@ require "concurrent"
 
 require_relative "../lib/green_dots"
 
-$LOAD_PATH.unshift File.expand_path("fixtures")
+$LOAD_PATH.unshift File.expand_path("test/support")
 
-Dir.glob("test/support/**/*.rb").each { |f| eval File.read(f), binding, f, 1 }
+require "helper"
+
+# Dir.glob("test/support/**/*.rb").each { |f| eval File.read(f), binding, f, 1 }
 
 run = GreenDots::Run.new
 

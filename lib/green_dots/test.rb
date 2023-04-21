@@ -3,12 +3,10 @@
 class GreenDots::Test
 	DEFAULT_MATCHERS = [
 		GreenDots::Matchers::IsA,
-		GreenDots::Matchers::Falsy,
-		GreenDots::Matchers::Truthy,
 		GreenDots::Matchers::ToRaise,
 		GreenDots::Matchers::Equality,
 		GreenDots::Matchers::ToReceive,
-		GreenDots::Matchers::ToNotRaise
+		GreenDots::Matchers::TruthyFalsy
 	]
 
 	extend GreenDots::Context
@@ -20,7 +18,7 @@ class GreenDots::Test
 			new(run).run(@tests)
 		end
 
-		def include_matcher(*args)
+		def use(*args)
 			args.each { |m| matchers << m }
 		end
 
@@ -53,14 +51,12 @@ class GreenDots::Test
 		@skip = nil
 	end
 
-	def expect(value = nil, &block)
-		matchers = @matchers # we need this to be a local variable because it's used in the block below
-		expectation_class = GreenDots::EXPECTATION_SHAPES[matchers] ||= Class.new(GreenDots::Expectation) do
-			matchers.each { include _1 }
-			freeze
-		end
+	def expect(value = GreenDots::Null, &block)
+		type = GreenDots::Null == value ? block : value
 
-		location = caller_locations(1, 1).first
+		expectation_class = GreenDots::CONFIGURATION.registry.expectation_for(type, matchers: @matchers)
+
+		# location = caller_locations(1, 1).first
 
 		expectation = expectation_class.new(self, value, &block)
 
@@ -74,12 +70,14 @@ class GreenDots::Test
 		@expectations.clear
 	end
 
-	def assert(value = nil, &block)
-		expect(value, &block).truthy?
+	def assert(value, &block)
+		block ||= -> { "Expected #{value.inspect} to be truthy." }
+		value ? success! : failure!(block.call)
 	end
 
-	def refute(value = nil, &block)
-		expect(value, &block).falsy?
+	def refute(value, &block)
+		block ||= -> { "Expected #{value.inspect} to be falsy." }
+		value ? failure!(block.call) : success!
 	end
 
 	def success!

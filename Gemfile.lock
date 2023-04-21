@@ -11,6 +11,7 @@ GEM
     ast (2.4.2)
     concurrent-ruby (1.2.2)
     json (2.6.3)
+    nokolexbor (0.4.2-arm64-darwin)
     parallel (1.22.1)
     parser (3.2.1.0)
       ast (~> 2.4.1)
@@ -38,6 +39,7 @@ PLATFORMS
 
 DEPENDENCIES
   green_dots!
+  nokolexbor
   rubocop
 
 BUNDLED WITH

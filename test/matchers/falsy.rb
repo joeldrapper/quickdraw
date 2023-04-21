@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-include_matcher Matchers::PassFail
-
 test "with falsy" do
 	expect {
 		test { expect(nil).falsy? }

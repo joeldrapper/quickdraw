@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+use Matchers::PassFail
+
 test "assert with falsy value" do
 	expect {
 		Class.new(GreenDots::Test) do
@@ -16,4 +18,10 @@ test "assert with truthy value" do
 			test { assert true }
 		end.run
 	}.to_not_raise
+end
+
+test "assert with custom failure message" do
+	expect {
+		test { assert(false) { "Message" } }
+	}.to_fail message: "Message"
 end

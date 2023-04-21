@@ -13,3 +13,6 @@ Lint/Void:
 
 Style/MultilineBlockChain:
   Enabled: false
+
+Style/YodaCondition:
+  Enabled: false

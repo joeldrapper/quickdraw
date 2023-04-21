@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-include_matcher Matchers::PassFail
-
 test "with a block that doesn't raise" do
 	expect {
 		test { expect { 1 }.to_raise }

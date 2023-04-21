@@ -5,8 +5,8 @@ module Matchers
 		def to_pass
 			begin
 				Class.new(GreenDots::Test, &block).run
-			rescue GreenDots::TestFailure => e
-				failure!
+			rescue GreenDots::TestFailure
+				failure!("")
 			end
 
 			success!
@@ -17,11 +17,18 @@ module Matchers
 				Class.new(GreenDots::Test, &block).run
 			rescue GreenDots::TestFailure => e
 				success!
-				assert(e.message == message) if message
+				if message
+					if message == e.message
+						success!
+					else
+						failure!("Expected #{e.message.inspect} to equal #{message.inspect}.")
+					end
+				end
+
 				return
 			end
 
-			failure!
+			failure!("")
 		end
 	end
 end

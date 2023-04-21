@@ -3,9 +3,9 @@
 require "zeitwerk"
 
 module GreenDots
+	Null = Object.new
 	Loader = Zeitwerk::Loader.for_gem.tap(&:setup)
-
-	EXPECTATION_SHAPES = {}
+	CONFIGURATION = Configuration.new
 
 	module Error; end
 
@@ -15,5 +15,9 @@ module GreenDots
 
 	class ArgumentError < ::ArgumentError
 		include Error
+	end
+
+	def self.configure
+		yield CONFIGURATION
 	end
 end

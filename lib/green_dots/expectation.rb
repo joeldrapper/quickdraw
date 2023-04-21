@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class GreenDots::Expectation
-	def initialize(context, value = nil, &block)
-		if value && block
+	def initialize(context, value = GreenDots::Null, &block)
+		if block && GreenDots::Null != value
 			raise ::ArgumentError, "You can only provide a value or a block to `expect`."
 		end
 
@@ -11,19 +11,20 @@ class GreenDots::Expectation
 		@block = block
 	end
 
+	def resolve
+		if @result.nil?
+			failure! { "You didn't make any expectations." }
+		end
+	end
+
 	def success!
+		@context.success!
 		@result = true
 	end
 
-	def resolve
-		case @result
-		when nil
-			@context.failure! "You didn't make any expectations."
-		when true
-			@context.success!
-		else
-			@context.failure!(@result)
-		end
+	def failure!
+		@context.failure!(yield)
+		@result = false
 	end
 
 	private
@@ -42,15 +43,11 @@ class GreenDots::Expectation
 			"You must pass a block rather than a value when using the #{caller_locations.first.label} matcher.")
 	end
 
-	def assert(value)
-		value ? success! : failure!(yield)
+	def assert(value, &block)
+		value ? success! : failure!(&block)
 	end
 
-	def refute(value)
-		value ? failure!(yield) : success!
-	end
-
-	def failure!(message)
-		@context.failure!(message)
+	def refute(value, &block)
+		value ? failure!(&block) : success!
 	end
 end
