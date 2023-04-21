@@ -3,6 +3,7 @@ PATH
   specs:
     green_dots (0.1.0)
       concurrent-ruby
+      zeitwerk
 
 GEM
   remote: https://rubygems.org/
@@ -30,6 +31,7 @@ GEM
       parser (>= 3.2.1.0)
     ruby-progressbar (1.11.0)
     unicode-display_width (2.4.2)
+    zeitwerk (2.6.7)
 
 PLATFORMS
   arm64-darwin-22

@@ -1,24 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "green_dots/version"
+require "zeitwerk"
 
 module GreenDots
-	class Run
-		def initialize
-			@successes = 0
-		end
-
-		attr_reader :successes
-
-		def success!
-			@successes += 1
-			::Kernel.print "\e[32m⚬\e[0m"
-		end
-
-		def failure!(message)
-			raise(GreenDots::TestFailure, message)
-		end
-	end
+	Loader = Zeitwerk::Loader.for_gem.tap(&:setup)
 
 	EXPECTATION_SHAPES = {}
 
@@ -31,13 +16,4 @@ module GreenDots
 	class ArgumentError < ::ArgumentError
 		include Error
 	end
-
-	def self.success
-		# ::Kernel.print "\e[32m◦\e[0m"
-		::Kernel.print "\e[32m⚬\e[0m"
-	end
 end
-
-require_relative "green_dots/context"
-require_relative "green_dots/test"
-require_relative "green_dots/expectation"

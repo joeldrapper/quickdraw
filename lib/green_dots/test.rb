@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "matchers/is_a"
-require_relative "matchers/falsy"
-require_relative "matchers/truthy"
-require_relative "matchers/to_raise"
-require_relative "matchers/equality"
-require_relative "matchers/to_receive"
-require_relative "matchers/to_not_raise"
-
 class GreenDots::Test
 	DEFAULT_MATCHERS = [
 		GreenDots::Matchers::IsA,
