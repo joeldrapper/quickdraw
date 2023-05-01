@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 test "to_be success" do
 	expect {
 		test { expect(nil).to_be :nil? }

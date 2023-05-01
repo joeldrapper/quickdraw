@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GreenDots::Matchers::ToBe
 	def to_be(predicate)
 		assert(value.send(predicate)) { "Expected `#{value.inspect}` to be `#{predicate}`." }

@@ -24,6 +24,8 @@ class GreenDots::Registry
 		end
 	end
 
+	private
+
 	def shape_for(matchers)
 		@shapes[matchers] ||= Class.new(GreenDots::Expectation) do
 			matchers.each { include _1 if _1 }
@@ -38,8 +40,6 @@ class GreenDots::Registry
 			find_matchers_for(value)
 		)
 	end
-
-	private
 
 	def check_cache!
 		unless @registered_matchers.hash == @hash

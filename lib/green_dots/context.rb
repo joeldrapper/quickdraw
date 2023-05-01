@@ -14,9 +14,7 @@ class GreenDots::Context
 		def run(run = GreenDots::Run.new)
 			@sub_contexts&.each { |c| c.run(run) }
 
-			return unless @tests
-
-			new(run).run(@tests)
+			new(run).run(@tests) if @tests
 		end
 
 		def use(*args)
