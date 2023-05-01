@@ -2,6 +2,7 @@
 
 class GreenDots::Test
 	DEFAULT_MATCHERS = [
+		GreenDots::Matchers::ToBe,
 		GreenDots::Matchers::ToBeA,
 		GreenDots::Matchers::ToRaise,
 		GreenDots::Matchers::Equality,
