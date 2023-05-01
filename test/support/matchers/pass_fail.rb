@@ -4,7 +4,7 @@ module Matchers
 	module PassFail
 		def to_pass
 			begin
-				Class.new(GreenDots::Test, &block).run
+				Class.new(GreenDots::Context, &block).run
 			rescue GreenDots::TestFailure
 				failure!("")
 			end
@@ -14,7 +14,7 @@ module Matchers
 
 		def to_fail(message: nil)
 			begin
-				Class.new(GreenDots::Test, &block).run
+				Class.new(GreenDots::Context, &block).run
 			rescue GreenDots::TestFailure => e
 				success!
 				if message

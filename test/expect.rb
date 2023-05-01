@@ -2,7 +2,7 @@
 
 test "raises without an expectation" do
 	expect {
-		Class.new(GreenDots::Test) do
+		Class.new(GreenDots::Context) do
 			test { expect(1) }
 		end.run
 	}.to_raise(GreenDots::TestFailure) do |error|
@@ -12,7 +12,7 @@ end
 
 test "raises when a block matcher is given a value" do
 	expect {
-		Class.new(GreenDots::Test) do
+		Class.new(GreenDots::Context) do
 			test { expect(1).to_raise }
 		end.run
 	}.to_raise(GreenDots::ArgumentError) do |error|
@@ -22,7 +22,7 @@ end
 
 test "raises when a value matcher is given a block" do
 	expect {
-		Class.new(GreenDots::Test) do
+		Class.new(GreenDots::Context) do
 			test { expect { 1 } == 1 }
 		end.run
 	}.to_raise(GreenDots::ArgumentError) do |error|

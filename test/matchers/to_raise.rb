@@ -15,7 +15,7 @@ end
 test "yieldsd the exception to the block" do
 	exception = nil
 
-	Class.new(GreenDots::Test) do
+	Class.new(GreenDots::Context) do
 		test do
 			expect { raise ArgumentError }.to_raise(ArgumentError) do |error|
 				exception = error
