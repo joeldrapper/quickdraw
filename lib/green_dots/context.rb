@@ -7,7 +7,8 @@ class GreenDots::Context
 		GreenDots::Matchers::ToRaise,
 		GreenDots::Matchers::Equality,
 		GreenDots::Matchers::ToReceive,
-		GreenDots::Matchers::TruthyFalsy
+		GreenDots::Matchers::TruthyFalsy,
+		GreenDots::Matchers::ToHaveAttributes
 	].freeze
 
 	class << self

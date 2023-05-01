@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 test do
 	expect {
 		Class.new(GreenDots::Context) do
