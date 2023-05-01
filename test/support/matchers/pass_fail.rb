@@ -21,7 +21,7 @@ module Matchers
 					if message == e.message
 						success!
 					else
-						failure!("Expected #{e.message.inspect} to equal #{message.inspect}.")
+						failure! { "Expected `#{e.message.inspect}` to equal `#{message.inspect}`." }
 					end
 				end
 

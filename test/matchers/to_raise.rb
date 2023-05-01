@@ -23,7 +23,7 @@ test "yieldsd the exception to the block" do
 		end
 	end.run
 
-	expect(exception).is_a? ArgumentError
+	expect(exception).to_be_an ArgumentError
 end
 
 describe "expcting a specific exception" do
