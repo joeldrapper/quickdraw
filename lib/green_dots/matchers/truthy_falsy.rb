@@ -2,11 +2,11 @@
 
 module GreenDots::Matchers
 	module TruthyFalsy
-		def truthy?
+		def to_be_truthy
 			assert(value) { "Expected #{value.inspect} to be truthy." }
 		end
 
-		def falsy?
+		def to_be_falsy
 			refute(value) { "Expected #{value.inspect} to be falsy." }
 		end
 	end

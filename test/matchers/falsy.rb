@@ -2,12 +2,12 @@
 
 test "with falsy" do
 	expect {
-		test { expect(nil).falsy? }
+		test { expect(nil).to_be_falsy }
 	}.to_pass
 end
 
 test "with truthy" do
 	expect {
-		test { expect(1).falsy? }
+		test { expect(1).to_be_falsy }
 	}.to_fail message: %(Expected 1 to be falsy.)
 end

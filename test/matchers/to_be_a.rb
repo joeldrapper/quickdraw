@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 test "positive case failure" do
 	expect {
 		test { expect(1).to_be_a String }
