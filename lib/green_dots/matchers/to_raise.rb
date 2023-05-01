@@ -21,6 +21,6 @@ module GreenDots::Matchers::ToRaise
 		block.call
 		success!
 	rescue ::Exception => e
-		@result = "Expected the block not to raise, but it raised `#{e.class}(#{e}`."
+		failure! { "Expected the block not to raise, but it raised `#{e.class}`." }
 	end
 end

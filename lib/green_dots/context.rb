@@ -95,7 +95,7 @@ class GreenDots::Context
 
 	def success!
 		if @skip
-			@run.failure! %(The skipped test "#{@name}" started passing.)
+			@run.failure! "The skipped test `#{@name}` started passing."
 		else
 			@run.success!
 		end

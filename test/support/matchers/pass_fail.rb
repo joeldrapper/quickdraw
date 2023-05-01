@@ -6,7 +6,7 @@ module Matchers
 			begin
 				Class.new(GreenDots::Context, &block).run
 			rescue GreenDots::TestFailure
-				failure!("")
+				failure! { "Expected the test to pass." }
 			end
 
 			success!
@@ -28,7 +28,7 @@ module Matchers
 				return
 			end
 
-			failure!("")
+			failure! { "Expected the test to fail." }
 		end
 	end
 end

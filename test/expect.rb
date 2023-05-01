@@ -29,3 +29,9 @@ test "raises when a value matcher is given a block" do
 		expect(error.message) == "You must pass a value rather than a block when using the == matcher."
 	end
 end
+
+test "skipped tests fail when they start passing" do
+	expect {
+		test("foo", skip: true) { expect(1) == 1 }
+	}.to_fail message: "The skipped test `foo` started passing."
+end

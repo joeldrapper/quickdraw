@@ -3,7 +3,7 @@
 class GreenDots::Expectation
 	def initialize(context, value = GreenDots::Null, &block)
 		if block && GreenDots::Null != value
-			raise ::ArgumentError, "You can only provide a value or a block to `expect`."
+			raise GreenDots::ArgumentError, "You can only provide a value or a block to `expect`."
 		end
 
 		@context = context
