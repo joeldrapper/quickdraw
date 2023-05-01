@@ -7,12 +7,14 @@ class GreenDots::Test
 		GreenDots::Matchers::Equality,
 		GreenDots::Matchers::ToReceive,
 		GreenDots::Matchers::TruthyFalsy
-	]
+	].freeze
 
 	extend GreenDots::Context
 
 	class << self
 		def run(run = GreenDots::Run.new)
+			@sub_contexts&.each { |c| c.run(run) }
+
 			return unless @tests
 
 			new(run).run(@tests)

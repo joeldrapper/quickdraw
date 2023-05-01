@@ -7,3 +7,4 @@ gemspec
 
 gem "rubocop"
 gem "nokolexbor"
+gem "concurrent-ruby"

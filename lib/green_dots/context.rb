@@ -2,13 +2,13 @@
 
 module GreenDots::Context
 	def describe(description = nil, &block)
-		Class.new(self, &block).run
+		(@sub_contexts ||= Concurrent::Array.new) << Class.new(self, &block)
 	end
 
 	alias_method :context, :describe
 
 	def test(name = nil, skip: false, &block)
-		(@tests ||= []) << {
+		(@tests ||= Concurrent::Array.new) << {
 			name: name,
 			block: block,
 			skip: skip

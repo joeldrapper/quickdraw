@@ -38,6 +38,7 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
+  concurrent-ruby
   green_dots!
   nokolexbor
   rubocop

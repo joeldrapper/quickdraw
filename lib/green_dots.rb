@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require "zeitwerk"
+require "concurrent"
 
 module GreenDots
-	Null = Object.new
+	Null = Object.new.freeze
 	Loader = Zeitwerk::Loader.for_gem.tap(&:setup)
 	CONFIGURATION = Configuration.new
 

@@ -2,9 +2,9 @@
 
 class GreenDots::Registry
 	def initialize
-		@registered_matchers = {}
-		@type_matchers = {}
-		@shapes = {}
+		@registered_matchers = Concurrent::Hash.new
+		@type_matchers = Concurrent::Map.new
+		@shapes = Concurrent::Map.new
 		@hash = @registered_matchers.hash
 	end
 

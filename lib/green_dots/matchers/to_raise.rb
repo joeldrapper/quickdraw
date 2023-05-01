@@ -22,7 +22,7 @@ module GreenDots::Matchers
 			block.call
 			success!
 		rescue ::Exception => e
-			@result = "Expected not to raise, but raised #{e.class}(#{e})"
+			@result = "Expected the block not to raise, but it raised `#{e.class}(#{e}`."
 		end
 	end
 end
