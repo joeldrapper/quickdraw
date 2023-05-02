@@ -17,7 +17,7 @@ module GreenDots::Matchers::ToRaise
 		failure! { "Expected #{error} to be raised but wasn't." }
 	end
 
-	def to_not_raise
+	def not_to_raise
 		block.call
 		success!
 	rescue ::Exception => e

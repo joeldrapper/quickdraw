@@ -17,7 +17,7 @@ test "assert with truthy value" do
 		Class.new(GreenDots::Context) do
 			test { assert true }
 		end.run
-	}.to_not_raise
+	}.not_to_raise
 end
 
 test "assert with custom failure message" do

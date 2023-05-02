@@ -2,12 +2,12 @@
 
 class GreenDots::Context
 	DEFAULT_MATCHERS = [
-		GreenDots::Matchers::ToBe,
 		GreenDots::Matchers::ToBeA,
+		GreenDots::Matchers::Boolean,
 		GreenDots::Matchers::ToRaise,
 		GreenDots::Matchers::Equality,
 		GreenDots::Matchers::ToReceive,
-		GreenDots::Matchers::TruthyFalsy,
+		GreenDots::Matchers::Predicate,
 		GreenDots::Matchers::ToHaveAttributes
 	].freeze
 

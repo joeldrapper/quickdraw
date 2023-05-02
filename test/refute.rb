@@ -5,7 +5,7 @@ test "refute with falsy value" do
 		Class.new(GreenDots::Context) do
 			test { refute false }
 		end.run
-	}.to_not_raise
+	}.not_to_raise
 end
 
 test "refute with truthy value" do

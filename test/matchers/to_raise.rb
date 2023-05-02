@@ -42,16 +42,16 @@ describe "to_raise" do
 	end
 end
 
-describe "to_not_raise" do
+describe "not_to_raise" do
 	test do
 		expect {
-			test { expect { 1 }.to_not_raise }
+			test { expect { 1 }.not_to_raise }
 		}.to_pass
 	end
 
 	test do
 		expect {
-			test { expect { raise }.to_not_raise }
+			test { expect { raise }.not_to_raise }
 		}.to_fail message: "Expected the block not to raise, but it raised `RuntimeError`."
 	end
 end

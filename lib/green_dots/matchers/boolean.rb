@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::TruthyFalsy
+module GreenDots::Matchers::Boolean
 	def to_be_truthy
 		assert(value) { "Expected `#{value.inspect}` to be truthy." }
 	end

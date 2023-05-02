@@ -55,6 +55,6 @@ context "with a document" do
 
 	test do
 		expect(doc).to_have_selector("h1")
-		expect(doc).to_not_have_selector("h2")
+		expect(doc).not_to_have_selector("h2")
 	end
 end

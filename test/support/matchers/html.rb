@@ -9,7 +9,7 @@ module Matchers::HTML
 		end
 	end
 
-	def to_not_have_selector(selector, &block)
+	def not_to_have_selector(selector, &block)
 		refute value.css(selector).any?(&block) do
 			"Expected `#{value.inspect}` to not have the selector `#{selector}`."
 		end
