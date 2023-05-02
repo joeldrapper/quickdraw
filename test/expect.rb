@@ -16,7 +16,7 @@ test "raises when a block matcher is given a value" do
 			test { expect(1).to_raise }
 		end.run
 	}.to_raise(GreenDots::ArgumentError) do |error|
-		expect(error.message) == "You must pass a block rather than a value when using the to_raise matcher."
+		expect(error.message) == "You must pass a block rather than a subject when using the to_raise matcher."
 	end
 end
 
@@ -26,7 +26,7 @@ test "raises when a value matcher is given a block" do
 			test { expect { 1 } == 1 }
 		end.run
 	}.to_raise(GreenDots::ArgumentError) do |error|
-		expect(error.message) == "You must pass a value rather than a block when using the == matcher."
+		expect(error.message) == "You must pass a subject rather than a block when using the == matcher."
 	end
 end
 

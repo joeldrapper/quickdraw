@@ -6,6 +6,6 @@ test do
 			test { expect(1) { 2 } }
 		end.run
 	}.to_raise(GreenDots::ArgumentError) do |error|
-		expect(error.message) == "You can only provide a value or a block to `expect`."
+		expect(error.message) == "You can only provide a subject or a block to `expect`."
 	end
 end

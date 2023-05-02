@@ -2,10 +2,10 @@
 
 module GreenDots::Matchers::Equality
 	def ==(other)
-		assert(value == other) { "Expected `#{value.inspect}` to == `#{other.inspect}`." }
+		assert(subject == other) { "Expected `#{subject.inspect}` to == `#{other.inspect}`." }
 	end
 
 	def !=(other)
-		assert(value != other) { "Expected `#{value.inspect}` to != `#{other.inspect}`." }
+		assert(subject != other) { "Expected `#{subject.inspect}` to != `#{other.inspect}`." }
 	end
 end

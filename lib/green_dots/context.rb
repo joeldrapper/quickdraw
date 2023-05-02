@@ -65,14 +65,14 @@ class GreenDots::Context
 		@skip = nil
 	end
 
-	def expect(value = GreenDots::Null, &block)
-		type = GreenDots::Null == value ? block : value
+	def expect(subject = GreenDots::Null, &block)
+		type = GreenDots::Null == subject ? block : subject
 
 		expectation_class = GreenDots::CONFIGURATION.registry.expectation_for(type, matchers: @matchers)
 
 		# location = caller_locations(1, 1).first
 
-		expectation = expectation_class.new(self, value, &block)
+		expectation = expectation_class.new(self, subject, &block)
 
 		@expectations << expectation
 		expectation
@@ -84,14 +84,14 @@ class GreenDots::Context
 		@expectations.clear
 	end
 
-	def assert(value, &block)
-		block ||= -> { "Expected #{value.inspect} to be truthy." }
-		value ? success! : failure!(block.call)
+	def assert(subject, &block)
+		block ||= -> { "Expected #{subject.inspect} to be truthy." }
+		subject ? success! : failure!(block.call)
 	end
 
-	def refute(value, &block)
-		block ||= -> { "Expected #{value.inspect} to be falsy." }
-		value ? failure!(block.call) : success!
+	def refute(subject, &block)
+		block ||= -> { "Expected #{subject.inspect} to be falsy." }
+		subject ? failure!(block.call) : success!
 	end
 
 	def success!
