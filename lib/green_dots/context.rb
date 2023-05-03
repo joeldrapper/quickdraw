@@ -43,6 +43,21 @@ class GreenDots::Context
 				skip: skip
 			}
 		end
+
+		def let(method_name)
+			original_method = instance_method(method_name)
+			ivar_name = :"@#{method_name}"
+
+			define_method(method_name) do
+				if instance_variable_defined?(ivar_name)
+					instance_variable_get(ivar_name)
+				else
+					instance_variable_set(ivar_name, original_method.bind(self).call)
+				end
+			end
+
+			method_name
+		end
 	end
 
 	def initialize(run)
