@@ -8,6 +8,7 @@ class GreenDots::Context
 		GreenDots::Matchers::Equality,
 		GreenDots::Matchers::ToReceive,
 		GreenDots::Matchers::Predicate,
+		GreenDots::Matchers::CaseEquality,
 		GreenDots::Matchers::ToHaveAttributes
 	].freeze
 
