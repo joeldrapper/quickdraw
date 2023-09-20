@@ -9,9 +9,9 @@ module BazMatcher
 	end
 end
 
-GreenDots.configure do |config|
-	config.register_matcher Matchers::PassFail, Proc
-	config.register_matcher BazMatcher, String
+GreenDots.configure do
+	matcher Matchers::PassFail, Proc
+	matcher BazMatcher, String
 end
 
 SimpleCov.start

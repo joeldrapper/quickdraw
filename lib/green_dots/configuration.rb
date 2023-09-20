@@ -7,7 +7,7 @@ class GreenDots::Configuration
 
 	attr_reader :registry
 
-	def register_matcher(...)
-		@registry.register(...)
+	def matcher(matcher, *types)
+		@registry.register(matcher, *types)
 	end
 end

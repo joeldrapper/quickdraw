@@ -36,7 +36,7 @@ class GreenDots::Registry
 	def matchers_for(value)
 		check_cache!
 
-		@type_matchers[value.class] ||= Set.new(
+		@type_matchers[value.class] ||= Array.new(
 			find_matchers_for(value)
 		)
 	end

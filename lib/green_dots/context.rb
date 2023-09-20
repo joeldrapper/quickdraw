@@ -14,12 +14,15 @@ class GreenDots::Context
 
 	class << self
 		def run(run = GreenDots::Run.new)
-			@sub_contexts&.each { |c| c.run(run) }
+			if defined?(@sub_contexts)
+				@sub_contexts.each { |c| c.run(run) }
+			end
+
 			new(run).run(@tests) if @tests
 		end
 
-		def use(*args)
-			args.each { |m| matchers << m }
+		def use(*new_matchers)
+			new_matchers.each { |m| matchers << m }
 		end
 
 		def matchers
@@ -31,17 +34,21 @@ class GreenDots::Context
 		end
 
 		def describe(description = nil, &block)
-			(@sub_contexts ||= Concurrent::Array.new) << Class.new(self, &block)
+			unless defined?(@sub_contexts)
+				@sub_contexts = Concurrent::Array.new
+			end
+
+			@sub_contexts << Class.new(self, &block)
 		end
 
 		alias_method :context, :describe
 
 		def test(name = nil, skip: false, &block)
-			(@tests ||= Concurrent::Array.new) << {
-				name: name,
-						block: block,
-						skip: skip
-			}
+			unless defined?(@tests)
+				@tests = Concurrent::Array.new
+			end
+
+			@tests << [name, skip, block]
 		end
 	end
 
@@ -52,28 +59,24 @@ class GreenDots::Context
 	end
 
 	def run(tests)
-		tests.shuffle.each do |test|
-			@name = test[:name]
-			@skip = test[:skip]
+		tests.each do |(name, skip, block)|
+			@name = name
+			@skip = skip
 
-			instance_eval(&test[:block])
+			instance_eval(&block)
 
 			resolve
 		end
-	ensure
-		@name = nil
-		@skip = nil
 	end
 
 	def expect(value = GreenDots::Null, &block)
 		type = GreenDots::Null == value ? block : value
 
-		expectation_class = GreenDots::CONFIGURATION.registry.expectation_for(type, matchers: @matchers)
-
-		# location = caller_locations(1, 1).first
+		expectation_class = GreenDots::Config.registry.expectation_for(
+			type, matchers: @matchers
+		)
 
 		expectation = expectation_class.new(self, value, &block)
-
 		@expectations << expectation
 		expectation
 	end
@@ -84,14 +87,24 @@ class GreenDots::Context
 		@expectations.clear
 	end
 
-	def assert(value, &block)
-		block ||= -> { "Expected #{value.inspect} to be truthy." }
-		value ? success! : failure!(block.call)
+	def assert(value)
+		if value
+			success!
+		elsif block_given?
+			failure!(yield(value))
+		else
+			failure!("Expected #{value.inspect} to be truthy.")
+		end
 	end
 
-	def refute(value, &block)
-		block ||= -> { "Expected #{value.inspect} to be falsy." }
-		value ? failure!(block.call) : success!
+	def refute(value)
+		if !value
+			success!
+		elsif block_given?
+			failure!(yield(value))
+		else
+			failure!("Expected #{value.inspect} to be falsy.")
+		end
 	end
 
 	def success!
