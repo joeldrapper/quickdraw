@@ -51,6 +51,12 @@ batches.each_with_index do |batch, index|
 		batch_elapsed_time = (batch_end_time - batch_start_time)
 
 		writer.write("Process[#{index + 1}]: #{run.successes} assertions passed in #{batch_elapsed_time} milliseconds. #{SUCCESS_EMOJI.sample}")
+		run.failures.each do |(message, backtrace)|
+			writer.write "\n\n"
+			writer.write message
+			writer.write "\n"
+			writer.write "#{backtrace.first.path}:#{backtrace.first.lineno}"
+		end
 		writer.close
 	end
 
