@@ -13,7 +13,7 @@ class GreenDots::Context
 	].freeze
 
 	class << self
-		def run(run)
+		def run(run = GreenDots::Run.new)
 			@sub_contexts&.each { |c| c.run(run) }
 			new(run).run(@tests) if @tests
 		end
@@ -39,8 +39,8 @@ class GreenDots::Context
 		def test(name = nil, skip: false, &block)
 			(@tests ||= Concurrent::Array.new) << {
 				name: name,
-				block: block,
-				skip: skip
+						block: block,
+						skip: skip
 			}
 		end
 	end
