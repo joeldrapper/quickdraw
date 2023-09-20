@@ -6,7 +6,7 @@ module GreenDots::Matchers::ToReceive
 
 		interceptor = ::Module.new
 
-		# Make these available from the block
+		# Define local variables so they're available from the block
 		expectation = self
 		context = @context
 

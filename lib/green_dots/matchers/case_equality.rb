@@ -2,6 +2,8 @@
 
 module GreenDots::Matchers::CaseEquality
 	def ===(other)
-		assert(value === other) { "Expected `#{value.inspect}` to === `#{other.inspect}`." }
+		assert value === other do
+			"Expected `#{value.inspect}` to === `#{other.inspect}`."
+		end
 	end
 end
