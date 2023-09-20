@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     green_dots (0.1.0)
-      async
       concurrent-ruby
       zeitwerk
 
@@ -10,19 +9,8 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
-    async (2.6.4)
-      console (~> 1.10)
-      fiber-annotation
-      io-event (~> 1.1)
-      timers (~> 4.1)
     concurrent-ruby (1.2.2)
-    console (1.23.2)
-      fiber-annotation
-      fiber-local
     docile (1.4.0)
-    fiber-annotation (0.2.0)
-    fiber-local (1.0.0)
-    io-event (1.3.2)
     json (2.6.3)
     parallel (1.22.1)
     parser (3.2.1.0)
@@ -49,7 +37,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    timers (4.3.5)
     unicode-display_width (2.4.2)
     zeitwerk (2.6.7)
 

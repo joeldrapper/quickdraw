@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "async"
+start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+
+SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
+
+require "etc"
 require "concurrent"
 
 require_relative "../lib/green_dots"
@@ -14,19 +18,61 @@ require "helper"
 
 run = GreenDots::Run.new
 
-Sync do
-	Dir.glob("./**/*.test.rb").reject { |f| f.start_with? "#{directory}/support/" }.shuffle.each do |f|
-		Async do
+pipes = []
+pids = []
+
+test_files = Dir.glob("./**/*.test.rb").reject { |f| f.start_with? "#{directory}/support/" }.shuffle
+
+processors = Etc.nprocessors
+
+batches = Array.new(processors) { [] }
+
+test_files.each_with_index do |file, index|
+	batches[index % processors] << file
+end
+
+batches.each_with_index do |batch, index|
+	reader, writer = IO.pipe
+
+	pids << Process.fork do
+		reader.close
+
+		batch_start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+
+		batch.each do |f|
 			Class.new(GreenDots::Context) do
 				class_eval(
 					File.read(f), f, 1
 				)
 			end.run(run)
 		end
+
+		batch_end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+		batch_elapsed_time = (batch_end_time - batch_start_time)
+
+		writer.write("Process[#{index + 1}]: #{run.successes} assertions passed in #{batch_elapsed_time} milliseconds. #{SUCCESS_EMOJI.sample}")
+		writer.close
 	end
+
+	writer.close
+	pipes << reader
 end
 
-SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
+results = []
 
-puts "\n\n"
-puts "#{run.successes} expectations passed. #{SUCCESS_EMOJI.sample}"
+Process.waitall
+
+pipes.each do |reader|
+	results << reader.read
+	reader.close
+end
+
+puts
+puts
+puts "Collated results: \n#{results.join("\n")}"
+
+end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+elapsed_time = (end_time - start_time)
+
+puts
+puts "Total time: #{elapsed_time}ms"

@@ -13,9 +13,8 @@ class GreenDots::Context
 	].freeze
 
 	class << self
-		def run(run = GreenDots::Run.new)
+		def run(run)
 			@sub_contexts&.each { |c| c.run(run) }
-
 			new(run).run(@tests) if @tests
 		end
 

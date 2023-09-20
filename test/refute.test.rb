@@ -8,6 +8,10 @@ test "refute with falsy value" do
 	}.not_to_raise
 end
 
+# test do
+# 	assert false
+# end
+
 test "refute with truthy value" do
 	expect {
 		Class.new(GreenDots::Context) do
