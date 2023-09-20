@@ -25,4 +25,11 @@ module GreenDots
 			yield Config
 		end
 	end
+
+	def self.timer(&block)
+		start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+		yield
+		finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+		GreenDots::TimeElapsed.new(start, finish)
+	end
 end

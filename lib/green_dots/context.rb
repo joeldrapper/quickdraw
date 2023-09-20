@@ -13,12 +13,12 @@ class GreenDots::Context
 	].freeze
 
 	class << self
-		def run(run = GreenDots::Run.new)
+		def run(result = GreenDots::Result.new)
 			if defined?(@sub_contexts)
-				@sub_contexts.each { |c| c.run(run) }
+				@sub_contexts.each { |c| c.run(result) }
 			end
 
-			new(run).run(@tests) if @tests
+			new(result).run(@tests) if @tests
 		end
 
 		def use(*new_matchers)
@@ -111,13 +111,13 @@ class GreenDots::Context
 		if @skip
 			@run.failure! "The skipped test `#{@name}` started passing."
 		else
-			@run.success!
+			@run.success!(@name)
 		end
 	end
 
 	def failure!(message)
 		if @skip
-			@run.success!
+			@run.success!(@name)
 		else
 			@run.failure!(message)
 		end
