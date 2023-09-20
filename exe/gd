@@ -14,7 +14,7 @@ total_time = GreenDots.timer do
 	require "concurrent"
 
 	run = GreenDots::Run.new(
-		number_of_processes: Etc.nprocessors,
+		number_of_processes: 1, # Etc.nprocessors,
 		directory: ARGV[0] || "test",
 		test_files: Dir.glob("./**/*.test.rb").reject { |f| f.start_with? "#{@directory}/support/" }
 	)

@@ -4,12 +4,8 @@ use Matchers::PassFail
 
 test "assert with falsy value" do
 	expect {
-		Class.new(GreenDots::Context) do
-			test { assert false }
-		end.run
-	}.to_raise GreenDots::TestFailure do |error|
-		expect(error.message) == "Expected false to be truthy."
-	end
+		test { assert false }
+	}.to_fail message: "Expected false to be truthy."
 end
 
 test "assert with truthy value" do

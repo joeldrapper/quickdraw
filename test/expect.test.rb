@@ -2,12 +2,8 @@
 
 test "raises without an expectation" do
 	expect {
-		Class.new(GreenDots::Context) do
-			test { expect(1) }
-		end.run
-	}.to_raise(GreenDots::TestFailure) do |error|
-		expect(error.message) == "You didn't make any expectations."
-	end
+		test { expect(1) }
+	}.to_fail message: "You didn't make any expectations."
 end
 
 test "raises when a block matcher is given a value" do
