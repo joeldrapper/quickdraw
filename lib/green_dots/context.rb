@@ -44,21 +44,6 @@ class GreenDots::Context
 				skip: skip
 			}
 		end
-
-		def let(method_name)
-			original_method = instance_method(method_name)
-			ivar_name = :"@#{method_name}"
-
-			define_method(method_name) do
-				if instance_variable_defined?(ivar_name)
-					instance_variable_get(ivar_name)
-				else
-					instance_variable_set(ivar_name, original_method.bind(self).call)
-				end
-			end
-
-			method_name
-		end
 	end
 
 	def initialize(run)
@@ -81,14 +66,14 @@ class GreenDots::Context
 		@skip = nil
 	end
 
-	def expect(subject = GreenDots::Null, &block)
-		type = GreenDots::Null == subject ? block : subject
+	def expect(value = GreenDots::Null, &block)
+		type = GreenDots::Null == value ? block : value
 
 		expectation_class = GreenDots::CONFIGURATION.registry.expectation_for(type, matchers: @matchers)
 
 		# location = caller_locations(1, 1).first
 
-		expectation = expectation_class.new(self, subject, &block)
+		expectation = expectation_class.new(self, value, &block)
 
 		@expectations << expectation
 		expectation
@@ -100,14 +85,14 @@ class GreenDots::Context
 		@expectations.clear
 	end
 
-	def assert(subject, &block)
-		block ||= -> { "Expected #{subject.inspect} to be truthy." }
-		subject ? success! : failure!(block.call)
+	def assert(value, &block)
+		block ||= -> { "Expected #{value.inspect} to be truthy." }
+		value ? success! : failure!(block.call)
 	end
 
-	def refute(subject, &block)
-		block ||= -> { "Expected #{subject.inspect} to be falsy." }
-		subject ? failure!(block.call) : success!
+	def refute(value, &block)
+		block ||= -> { "Expected #{value.inspect} to be falsy." }
+		value ? failure!(block.call) : success!
 	end
 
 	def success!

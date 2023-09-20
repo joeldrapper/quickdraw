@@ -25,6 +25,6 @@ module GreenDots::Matchers::ToReceive
 			result
 		end
 
-		subject.singleton_class.prepend(interceptor)
+		value.singleton_class.prepend(interceptor)
 	end
 end

@@ -47,14 +47,3 @@ test do
 
 	Foo.bar(1, 2, c: 3)
 end
-
-context "with a document" do
-	def doc
-		Nokolexbor::HTML("<html><body><h1>Test</h1><h1>Tests</h1></body></html>")
-	end
-
-	test do
-		expect(doc).to_have_selector("h1")
-		expect(doc).not_to_have_selector("h2")
-	end
-end

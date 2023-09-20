@@ -2,10 +2,10 @@
 
 module GreenDots::Matchers::Boolean
 	def to_be_truthy
-		assert(subject) { "Expected `#{subject.inspect}` to be truthy." }
+		assert(value) { "Expected `#{value.inspect}` to be truthy." }
 	end
 
 	def to_be_falsy
-		refute(subject) { "Expected `#{subject.inspect}` to be falsy." }
+		refute(value) { "Expected `#{value.inspect}` to be falsy." }
 	end
 end
