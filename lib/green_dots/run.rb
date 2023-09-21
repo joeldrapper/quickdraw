@@ -34,10 +34,9 @@ class GreenDots::Run
 	end
 
 	def fork_processes
-		result = GreenDots::Result.new
 		@batches.each_with_index do |batch, index|
 			@cluster.fork do |writer|
-				GreenDots::SomeRunner.new(writer, batch, result, index).call
+				GreenDots::Result.new(writer, batch, index).call
 			end
 		end
 	end
