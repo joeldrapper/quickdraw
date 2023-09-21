@@ -11,9 +11,7 @@ class GreenDots::Result
 		@failures = Concurrent::Array.new
 	end
 
-	attr_reader :successes, :failures
-
-	attr_reader :batch, :writer, :index
+	attr_reader :successes, :failures, :batch, :writer, :index
 
 	def call
 		batch_elapsed_time = GreenDots.timer do

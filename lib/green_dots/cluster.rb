@@ -24,13 +24,8 @@ class GreenDots::Cluster
 		freeze
 		@pids.each { |pid| Process.wait(pid) }
 
-		results = []
-
-		@pipes.each do |reader|
-			results << reader.read
-			reader.close
+		@pipes.map do |reader|
+			reader.read.tap { reader.close }
 		end
-
-		results
 	end
 end
