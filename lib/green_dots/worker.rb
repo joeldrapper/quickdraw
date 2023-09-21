@@ -6,7 +6,6 @@ class GreenDots::Worker
 
 		pid = Process.fork do
 			reader.close
-			# TODO: this could be a writer that serializes the input
 			yield(writer)
 			writer.close
 		end
