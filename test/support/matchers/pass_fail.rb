@@ -14,8 +14,8 @@ module Matchers
 				@successes << name
 			end
 
-			def failure!(message)
-				@failures << message
+			def failure!
+				@failures << yield
 			end
 		end
 

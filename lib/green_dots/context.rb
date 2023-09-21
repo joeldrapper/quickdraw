@@ -91,9 +91,9 @@ class GreenDots::Context
 		if value
 			success!
 		elsif block_given?
-			failure!(yield(value))
+			failure! { yield(value) }
 		else
-			failure!("Expected #{value.inspect} to be truthy.")
+			failure! { "Expected #{value.inspect} to be truthy." }
 		end
 	end
 
@@ -101,25 +101,25 @@ class GreenDots::Context
 		if !value
 			success!
 		elsif block_given?
-			failure!(yield(value))
+			failure! { yield(value) }
 		else
-			failure!("Expected #{value.inspect} to be falsy.")
+			failure! { "Expected #{value.inspect} to be falsy." }
 		end
 	end
 
 	def success!
 		if @skip
-			@run.failure! "The skipped test `#{@name}` started passing."
+			@run.failure! { "The skipped test `#{@name}` started passing." }
 		else
 			@run.success!(@name)
 		end
 	end
 
-	def failure!(message)
+	def failure!(&)
 		if @skip
 			@run.success!(@name)
 		else
-			@run.failure!(message)
+			@run.failure!(&)
 		end
 	end
 end

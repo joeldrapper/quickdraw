@@ -22,8 +22,8 @@ class GreenDots::Expectation
 		@result = true
 	end
 
-	def failure!
-		@context.failure!(yield)
+	def failure!(&)
+		@context.failure!(&)
 		@result = false
 	end
 
