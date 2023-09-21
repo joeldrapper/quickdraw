@@ -32,4 +32,8 @@ module GreenDots
 		finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
 		GreenDots::TimeElapsed.new(start, finish)
 	end
+
+	def self.run(...)
+		Run.new(...).call
+	end
 end

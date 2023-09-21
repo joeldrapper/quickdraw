@@ -14,22 +14,23 @@ class GreenDots::Run
 		end
 	end
 
-	attr_reader :directory, :test_files
-
 	def call
-		total_time = GreenDots.timer do
+		report_time do
 			load_directory
 			require "helper"
 			fork_processes
 			@results = @cluster.wait
 			puts_results
 		end
+	end
 
+	def report_time(&)
+		total_time = GreenDots.timer(&)
 		puts "Total time: #{total_time.ms}ms"
 	end
 
 	def load_directory
-		$LOAD_PATH.unshift File.expand_path("#{directory}/support")
+		$LOAD_PATH.unshift File.expand_path("#{@directory}/support")
 	end
 
 	def fork_processes
