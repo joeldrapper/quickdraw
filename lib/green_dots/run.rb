@@ -36,23 +36,7 @@ class GreenDots::Run
 		result = GreenDots::Result.new
 		@batches.each_with_index do |batch, index|
 			@cluster.fork do |writer|
-				batch_elapsed_time = GreenDots.timer do
-					batch.each do |f|
-						Class.new(GreenDots::Context) do
-							class_eval(
-								File.read(f), f, 1
-							)
-						end.run(result)
-					end
-				end
-
-				writer.write("Process[#{index + 1}]: #{result.successes} assertions passed in #{batch_elapsed_time} milliseconds. #{SUCCESS_EMOJI.sample}")
-				result.failures.each do |(message, backtrace)|
-					writer.write "\n\n"
-					writer.write message
-					writer.write "\n"
-					writer.write "#{backtrace.first.path}:#{backtrace.first.lineno}"
-				end
+				GreenDots::SomeRunner.new(writer, batch, result, index).call
 			end
 		end
 	end
