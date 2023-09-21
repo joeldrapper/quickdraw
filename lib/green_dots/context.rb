@@ -13,12 +13,14 @@ class GreenDots::Context
 	].freeze
 
 	class << self
-		def run(result = GreenDots::Result.new)
+		def run(result = GreenDots::Result.new, description = nil)
 			if defined?(@sub_contexts)
-				@sub_contexts.each { |c| c.run(result) }
+				@sub_contexts.each do |(context, desc)|
+					context.run(result, desc)
+				end
 			end
 
-			new(result).run(@tests) if @tests
+			new(result, description).run(@tests) if @tests
 		end
 
 		def use(*new_matchers)
@@ -33,12 +35,12 @@ class GreenDots::Context
 			end
 		end
 
-		def describe(description = nil, &block)
+		def describe(description, &block)
 			unless defined?(@sub_contexts)
 				@sub_contexts = Concurrent::Array.new
 			end
 
-			@sub_contexts << Class.new(self, &block)
+			@sub_contexts << [Class.new(self, &block), description]
 		end
 
 		alias_method :context, :describe
@@ -52,8 +54,9 @@ class GreenDots::Context
 		end
 	end
 
-	def initialize(run)
+	def initialize(run, description)
 		@run = run
+		@description = description
 		@expectations = []
 		@matchers = self.class.matchers
 	end
