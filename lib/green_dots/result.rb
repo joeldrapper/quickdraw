@@ -1,35 +1,30 @@
 # frozen_string_literal: true
 
 class GreenDots::Result
-	# TODO: these shouldn't be optional
-	def initialize(writer = nil, batch = nil, index = nil)
-		@writer = writer
-		@batch = batch
-		@index = index
+	def self.call(batch)
+		tests = batch.map do |f|
+			Class.new(GreenDots::Context) do
+				class_eval(
+					File.read(f), f, 1
+				)
+			end
+		end
+
+		new(tests).tap(&:call)
+	end
+
+	def initialize(tests = nil)
+		@tests = tests
 
 		@successes = Concurrent::Array.new
 		@failures = Concurrent::Array.new
 	end
 
-	attr_reader :successes, :failures, :batch, :writer, :index
+	attr_reader :successes, :failures, :elapsed_time
 
 	def call
-		batch_elapsed_time = GreenDots.timer do
-			batch.each do |f|
-				Class.new(GreenDots::Context) do
-					class_eval(
-						File.read(f), f, 1
-					)
-				end.run(self)
-			end
-		end
-
-		writer.write("Process[#{index + 1}]: #{successes} assertions passed in #{batch_elapsed_time} milliseconds. #{SUCCESS_EMOJI.sample}")
-		failures.each do |(message, backtrace)|
-			writer.write "\n\n"
-			writer.write message
-			writer.write "\n"
-			writer.write "#{backtrace.first.path}:#{backtrace.first.lineno}"
+		@elapsed_time = GreenDots.timer do
+			@tests.each { |t| t.run(self) }
 		end
 	end
 

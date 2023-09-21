@@ -36,7 +36,15 @@ class GreenDots::Run
 	def fork_processes
 		@batches.each_with_index do |batch, index|
 			@cluster.fork do |writer|
-				GreenDots::Result.new(writer, batch, index).call
+				result = GreenDots::Result.call(batch)
+
+				writer.write("Process[#{index + 1}]: #{result.successes} assertions passed in #{result.elapsed_time} milliseconds. #{SUCCESS_EMOJI.sample}")
+				result.failures.each do |(message, backtrace)|
+					writer.write "\n\n"
+					writer.write message
+					writer.write "\n"
+					writer.write "#{backtrace.first.path}:#{backtrace.first.lineno}"
+				end
 			end
 		end
 	end
@@ -44,6 +52,6 @@ class GreenDots::Run
 	def puts_results
 		puts
 		puts
-		puts "Collated results: \n#{@results.join("\n")}"
+		#puts "Collated results: \n#{@results.join("\n")}"
 	end
 end
