@@ -3,28 +3,17 @@
 
 require_relative "../lib/green_dots"
 
-total_time = GreenDots.timer do
-	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
+SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
 
-	require "tty-tree"
-	require "tty-box"
-	require "tty-table"
-	require "pastel"
-	require "etc"
-	require "concurrent"
+require "tty-tree"
+require "tty-box"
+require "tty-table"
+require "pastel"
+require "etc"
+require "concurrent"
 
-	run = GreenDots::Run.new(
-		number_of_processes: 1, # Etc.nprocessors,
-		directory: ARGV[0] || "test",
-		test_files: Dir.glob("./**/*.test.rb").reject { |f| f.start_with? "#{@directory}/support/" }
-	)
-
-	results = run.call
-
-	puts
-	puts
-	puts "Collated results: \n#{results.join("\n")}"
-end
-
-puts
-puts "Total time: #{total_time.ms}ms"
+run = GreenDots::Run.new(
+	number_of_processes: Etc.nprocessors,
+	directory: ARGV[0] || "test",
+	test_files: Dir.glob("./**/*.test.rb").reject { |f| f.start_with? "#{@directory}/support/" }
+).call

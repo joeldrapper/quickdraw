@@ -17,10 +17,15 @@ class GreenDots::Run
 	attr_reader :directory, :test_files
 
 	def call
-		load_directory
-		require "helper"
-		fork_processes
-		@cluster.wait
+		total_time = GreenDots.timer do
+			load_directory
+			require "helper"
+			fork_processes
+			@results = @cluster.wait
+			puts_results
+		end
+
+		puts "Total time: #{total_time.ms}ms"
 	end
 
 	def load_directory
@@ -50,5 +55,11 @@ class GreenDots::Run
 				end
 			end
 		end
+	end
+
+	def puts_results
+		puts
+		puts
+		puts "Collated results: \n#{@results.join("\n")}"
 	end
 end
