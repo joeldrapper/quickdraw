@@ -5,10 +5,6 @@ require_relative "../lib/green_dots"
 
 SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
 
-require "tty-tree"
-require "tty-box"
-require "tty-table"
-require "pastel"
 require "etc"
 require "concurrent"
 

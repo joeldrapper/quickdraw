@@ -3,11 +3,11 @@
 class GreenDots::Result
 	def self.call(batch)
 		tests = batch.map do |f|
-			Class.new(GreenDots::Context) do
+			[f, Class.new(GreenDots::Context) do
 				class_eval(
 					File.read(f), f, 1
 				)
-			end
+			end]
 		end
 
 		new(tests).tap(&:call)
@@ -24,7 +24,7 @@ class GreenDots::Result
 
 	def call
 		@elapsed_time = GreenDots.timer do
-			@tests.each { |t| t.run(self) }
+			@tests.each { |(f, t)| t.run(self, [f]) }
 		end
 	end
 
@@ -35,10 +35,10 @@ class GreenDots::Result
 		# ::Kernel.print "\e[32m⚬\e[0m"
 	end
 
-	def failure!(&message)
+	def failure!(path, &message)
 		location = caller_locations.drop_while { |l| !l.path.include?(".test.rb") }
 
-		@failures << [message, location]
+		@failures << [message, location, path]
 
 		Kernel.print "🔴 "
 		# ::Kernel.print "\e[31m⚬\e[0m"

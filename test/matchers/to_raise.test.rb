@@ -4,7 +4,7 @@ describe "to_raise" do
 	test "with a block that doesn't raise" do
 		expect {
 			test { expect { 1 }.to_raise }
-		}.to_fail message: "Expected Exception to be raised but wasn't."
+		}.to_fail message: "expected Exception to be raised but wasn't"
 	end
 
 	test "with a block that raises" do
@@ -22,7 +22,7 @@ describe "to_raise" do
 					exception = error
 				end
 			end
-		end.run
+		end.run(GreenDots::Result.new)
 
 		expect(exception).to_be_an ArgumentError
 	end
@@ -37,7 +37,7 @@ describe "to_raise" do
 		test "with a block that raises a different exception" do
 			expect {
 				test { expect { raise ArgumentError }.to_raise(NameError) }
-			}.to_fail message: "Expected `NameError` to be raised but `ArgumentError` was raised."
+			}.to_fail message: "expected `NameError` to be raised but `ArgumentError` was raised"
 		end
 	end
 end
@@ -52,6 +52,6 @@ describe "not_to_raise" do
 	test do
 		expect {
 			test { expect { raise }.not_to_raise }
-		}.to_fail message: "Expected the block not to raise, but it raised `RuntimeError`."
+		}.to_fail message: "expected the block not to raise, but it raised `RuntimeError`"
 	end
 end

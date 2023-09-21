@@ -6,7 +6,7 @@ module GreenDots::Matchers::Change
 
 		if GreenDots::Null != from
 			assert from === original do
-				"Expected `#{original.inspect}` to be `#{from.inspect}`."
+				"expected `#{original.inspect}` to be `#{from.inspect}`"
 			end
 		end
 
@@ -15,18 +15,18 @@ module GreenDots::Matchers::Change
 		new = object.call
 
 		if new == original
-			failure! "Expected `#{original.inspect}` to change."
+			failure! "expected `#{original.inspect}` to change"
 		end
 
 		if GreenDots::Null != to
 			assert to === new do
-				"Expected `#{new.inspect}` to be `#{to.inspect}`."
+				"expected `#{new.inspect}` to be `#{to.inspect}`"
 			end
 		end
 
 		if GreenDots::Null != by
 			assert by === (new - original) do
-				"Expected `#{new.inspect}` to change by `#{by.inspect}`."
+				"expected `#{new.inspect}` to change by `#{by.inspect}`"
 			end
 		end
 	end

@@ -11,16 +11,16 @@ module GreenDots::Matchers::ToRaise
 			yield(e) if block_given?
 			return
 		rescue ::Exception => e
-			return failure! { "Expected `#{error.inspect}` to be raised but `#{e.class.inspect}` was raised." }
+			return failure! { "expected `#{error.inspect}` to be raised but `#{e.class.inspect}` was raised" }
 		end
 
-		failure! { "Expected #{error} to be raised but wasn't." }
+		failure! { "expected #{error} to be raised but wasn't" }
 	end
 
 	def not_to_raise
 		block.call
 		success!
 	rescue ::Exception => e
-		failure! { "Expected the block not to raise, but it raised `#{e.class}`." }
+		failure! { "expected the block not to raise, but it raised `#{e.class}`" }
 	end
 end

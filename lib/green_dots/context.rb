@@ -13,14 +13,14 @@ class GreenDots::Context
 	].freeze
 
 	class << self
-		def run(result = GreenDots::Result.new, description = nil)
+		def run(result, path = [])
+			new(result, path).run(@tests) if @tests
+
 			if defined?(@sub_contexts)
 				@sub_contexts.each do |(context, desc)|
-					context.run(result, desc)
+					context.run(result, [*path, desc])
 				end
 			end
-
-			new(result, description).run(@tests) if @tests
 		end
 
 		def use(*new_matchers)
@@ -54,9 +54,9 @@ class GreenDots::Context
 		end
 	end
 
-	def initialize(run, description)
+	def initialize(run, path)
 		@run = run
-		@description = description
+		@path = path
 		@expectations = []
 		@matchers = self.class.matchers
 	end
@@ -96,7 +96,7 @@ class GreenDots::Context
 		elsif block_given?
 			failure! { yield(value) }
 		else
-			failure! { "Expected #{value.inspect} to be truthy." }
+			failure! { "expected #{value.inspect} to be truthy" }
 		end
 	end
 
@@ -106,13 +106,13 @@ class GreenDots::Context
 		elsif block_given?
 			failure! { yield(value) }
 		else
-			failure! { "Expected #{value.inspect} to be falsy." }
+			failure! { "expected #{value.inspect} to be falsy" }
 		end
 	end
 
 	def success!
 		if @skip
-			@run.failure! { "The skipped test `#{@name}` started passing." }
+			@run.failure!(full_path) { "The skipped test `#{@name}` started passing." }
 		else
 			@run.success!(@name)
 		end
@@ -122,7 +122,11 @@ class GreenDots::Context
 		if @skip
 			@run.success!(@name)
 		else
-			@run.failure!(&)
+			@run.failure!(full_path, &)
 		end
+	end
+
+	def full_path
+		[*@path, @name]
 	end
 end

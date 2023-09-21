@@ -14,16 +14,16 @@ module Matchers
 				@successes << name
 			end
 
-			def failure!
+			def failure!(path)
 				@failures << yield
 			end
 		end
 
 		def to_pass
 			begin
-				Class.new(GreenDots::Context, &block).run
+				Class.new(GreenDots::Context, &block).run(Result.new)
 			rescue GreenDots::TestFailure
-				failure! { "Expected the test to pass." }
+				return failure! { "expected the test to pass" }
 			end
 
 			success!
@@ -34,12 +34,12 @@ module Matchers
 			Class.new(GreenDots::Context, &block).run(result)
 
 			assert result.failures.any? do
-				"Expected the test to fail."
+				"expected the test to fail"
 			end
 
 			if message
 				assert result.failures.include?(message) do
-					"Expected the test to fail with message: #{message.inspect}"
+					"expected the test to fail with message: #{message.inspect}"
 				end
 			end
 		end

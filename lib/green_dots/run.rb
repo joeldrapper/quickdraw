@@ -38,10 +38,11 @@ class GreenDots::Run
 			@cluster.fork do |writer|
 				result = GreenDots::Result.call(batch)
 
-				writer.write("Process[#{index + 1}]: #{result.successes} assertions passed in #{result.elapsed_time} milliseconds. #{SUCCESS_EMOJI.sample}")
-				result.failures.each do |(message, backtrace)|
+				writer.write("Process[#{index + 1}]: #{result.successes.count} assertions passed in #{result.elapsed_time.time} milliseconds. #{SUCCESS_EMOJI.sample}")
+				result.failures.each do |(message, backtrace, path)|
 					writer.write "\n\n"
-					writer.write message
+					writer.write GreenDots::Path.new([*path, "\e[31m#{message.call}\e[0m"]).render
+
 					writer.write "\n"
 					writer.write "#{backtrace.first.path}:#{backtrace.first.lineno}"
 				end
@@ -52,6 +53,6 @@ class GreenDots::Run
 	def puts_results
 		puts
 		puts
-		#puts "Collated results: \n#{@results.join("\n")}"
+		puts "Collated results: \n#{@results.join("\n")}"
 	end
 end

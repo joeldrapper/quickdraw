@@ -5,7 +5,7 @@ use Matchers::PassFail
 test "assert with falsy value" do
 	expect {
 		test { assert false }
-	}.to_fail message: "Expected false to be truthy."
+	}.to_fail message: "expected false to be truthy"
 end
 
 test "assert with truthy value" do

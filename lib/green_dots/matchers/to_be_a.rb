@@ -3,13 +3,13 @@
 module GreenDots::Matchers::ToBeA
 	def to_be_a(type)
 		assert type === value do
-			"Expected `#{value.inspect}` to have the type `#{type.inspect}`."
+			"expected `#{value.inspect}` to have the type `#{type.inspect}`"
 		end
 	end
 
 	def not_to_be_a(type)
 		refute type === value do
-			"Expected `#{value.inspect}` to not have the type `#{type.inspect}`."
+			"expected `#{value.inspect}` to not have the type `#{type.inspect}`"
 		end
 	end
 
