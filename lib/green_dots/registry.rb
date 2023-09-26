@@ -5,11 +5,11 @@ class GreenDots::Registry
 		@registered_matchers = Concurrent::Hash.new
 		@type_matchers = Concurrent::Map.new
 		@shapes = Concurrent::Map.new
-		@hash = @registered_matchers.hash
 	end
 
 	def register(matcher, *types)
 		@registered_matchers[matcher] = types
+		@type_matchers.clear
 	end
 
 	def expectation_for(value, matchers: nil)
@@ -28,29 +28,18 @@ class GreenDots::Registry
 
 	def shape_for(matchers)
 		@shapes[matchers] ||= Class.new(GreenDots::Expectation) do
-			matchers.each { include _1 if _1 }
+			matchers.each { |m| include m }
 			freeze
 		end
 	end
 
 	def matchers_for(value)
-		check_cache!
-
-		@type_matchers[value.class] ||= Set.new(
-			find_matchers_for(value)
-		)
+		@type_matchers[value.class] ||= slowly_find_matchers_for(value)
 	end
 
-	def check_cache!
-		unless @registered_matchers.hash == @hash
-			@hash = @registered_matchers.hash
-			@type_matchers.clear
-		end
-	end
-
-	def find_matchers_for(value)
+	def slowly_find_matchers_for(value)
 		@registered_matchers.map do |matcher, types|
 			matcher if types.any? { |t| t === value }
-		end
+		end.compact!
 	end
 end
