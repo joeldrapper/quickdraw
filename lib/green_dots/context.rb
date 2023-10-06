@@ -13,7 +13,7 @@ class GreenDots::Context
 	].freeze
 
 	class << self
-		def run(result, path = [])
+		def run(result = GreenDots::Result.new, path = [])
 			new(result, path).run(@tests) if @tests
 
 			if defined?(@sub_contexts)

@@ -1,4 +1,10 @@
 # frozen_string_literal: true
+require "rouge"
+
+Lexer = Rouge::Lexers::Ruby.new
+Formatter = Rouge::Formatters::Terminal256.new(
+	theme: Rouge::Themes::Monokai.new
+)
 
 class GreenDots::Run
 	def initialize(number_of_processes:, directory:, test_files:)
@@ -43,8 +49,13 @@ class GreenDots::Run
 					writer.write "\n\n"
 					writer.write GreenDots::Path.new([*path, "\e[31m#{message.call}\e[0m"]).render
 
-					writer.write "\n"
-					writer.write "#{backtrace.first.path}:#{backtrace.first.lineno}"
+					lines = Formatter.format(
+						Lexer.lex(
+							File.read(backtrace.first.path).gsub!(/^(\t+)/) { |match| " " * (match.length * 2) }
+						)
+					).each_line.with_index(1).to_a
+
+					writer.write lines[(backtrace.first.lineno - 5)..(backtrace.first.lineno + 3)].map { |line, index| "#{index}:  #{line}" }.join
 				end
 			end
 		end

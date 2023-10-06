@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "matchers/pass_fail"
-require "simplecov"
+# require "simplecov"
 
 module BazMatcher
 	def baz?
@@ -14,4 +14,4 @@ GreenDots.configure do
 	matcher BazMatcher, String
 end
 
-SimpleCov.start
+# SimpleCov.start
