@@ -8,5 +8,3 @@ gemspec
 gem "rubocop"
 gem "concurrent-ruby"
 gem "simplecov"
-gem "rouge"
-gem "prism"

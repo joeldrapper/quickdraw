@@ -3,6 +3,8 @@ PATH
   specs:
     green_dots (0.1.0)
       concurrent-ruby
+      prism
+      rouge
       tty-tree
       zeitwerk
 
@@ -50,8 +52,6 @@ PLATFORMS
 DEPENDENCIES
   concurrent-ruby
   green_dots!
-  prism
-  rouge
   rubocop
   simplecov
 
