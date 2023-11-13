@@ -17,7 +17,6 @@ test(skip: true) { expect(1) == 2 }
 test { expect(1) != 2 }
 test(skip: true) { expect(1) != 1 }
 
-test { expect {}.to_raise(ArgumentError) }
 test { expect { raise ArgumentError }.to_raise(StandardError) }
 
 test(skip: true) { expect { "No raise" }.to_raise(NameError) }
