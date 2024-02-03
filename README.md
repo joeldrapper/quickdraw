@@ -1,5 +1,7 @@
 # GreenDots
 
+GreenDots is currently in development. You should almost definitely not use it in a project until `1.0` is released.
+
 Your test files are executed in an anonymous class, so you can define methods and constants at the top level, without collisions.
 
 ### `.describe`
