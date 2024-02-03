@@ -5,9 +5,9 @@ class GreenDots::Cluster
 		spawn(n, &).wait
 	end
 
-	def self.spawn(n, &)
+	def self.spawn(n, &block)
 	  new.tap do |cluster|
-			n.times { cluster.fork(&) }
+			n.times { cluster.fork(&block) }
 		end
 	end
 

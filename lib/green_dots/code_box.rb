@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class GreenDots::CodeBox
+	Lexer = Rouge::Lexers::Ruby.new
+
+	Formatter = Rouge::Formatters::Terminal256.new(
+		theme: Rouge::Themes::Base16.mode(:dark)
+	)
+
 	def initialize(code, lineno)
 		@max_length = code.lines.max_by(&:length).length
 		@lineno = lineno

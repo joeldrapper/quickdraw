@@ -1,11 +1,20 @@
 # frozen_string_literal: true
 
-require "zeitwerk"
 require "concurrent"
 
 module GreenDots
+	autoload :Cluster, "green_dots/cluster"
+	autoload :Configuration, "green_dots/configuration"
+	autoload :Context, "green_dots/context"
+	autoload :Expectation, "green_dots/expectation"
+	autoload :Matchers, "green_dots/matchers"
+	autoload :Registry, "green_dots/registry"
+	autoload :Result, "green_dots/result"
+	autoload :Run, "green_dots/run"
+	autoload :TimeElapsed, "green_dots/time_elapsed"
+	autoload :Worker, "green_dots/worker"
+
 	Null = Object.new.freeze
-	Loader = Zeitwerk::Loader.for_gem.tap(&:setup)
 	Config = Configuration.new
 
 	module Error; end

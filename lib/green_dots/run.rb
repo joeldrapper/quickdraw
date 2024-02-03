@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 require "rouge"
 
-Lexer = Rouge::Lexers::Ruby.new
-Formatter = Rouge::Formatters::Terminal256.new(
-	theme: Rouge::Themes::Base16.mode(:dark)
-)
-
 class GreenDots::Run
 	def initialize(number_of_processes:, directory:, test_files:)
 		@number_of_processes = number_of_processes
