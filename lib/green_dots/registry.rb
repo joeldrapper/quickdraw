@@ -2,9 +2,9 @@
 
 class GreenDots::Registry
 	def initialize
-		@registered_matchers = {}
-		@type_matchers = {}
-		@shapes = {}
+		@registered_matchers = GreenDots::Map.new
+		@type_matchers = GreenDots::Map.new
+		@shapes = GreenDots::Map.new
 		@hash = @registered_matchers.hash
 	end
 

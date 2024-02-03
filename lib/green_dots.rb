@@ -13,6 +13,7 @@ module GreenDots
 	autoload :Timer, "green_dots/timer"
 	autoload :Worker, "green_dots/worker"
 	autoload :Queue, "green_dots/queue"
+	autoload :Map, "green_dots/map"
 
 	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
 

@@ -40,15 +40,9 @@ class GreenDots::Run
 
 		@batches.each_with_index do |batch, index|
 			@cluster.fork do |writer|
-
-
 				results = @number_of_threads.times.map do
-					Thread.new do
-						GreenDots::Runner.call(batch)
-					end
+					Thread.new { GreenDots::Runner.call(batch) }
 				end.map(&:value)
-
-
 
 				results.each_with_index do |result, thread|
 					writer.write("\n")
