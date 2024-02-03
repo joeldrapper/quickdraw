@@ -16,13 +16,13 @@ describe "to_raise" do
 	test "yieldsd the exception to the block" do
 		exception = nil
 
-		Class.new(GreenDots::Context) do
+		Class.new(Quickdraw::Context) do
 			test do
 				expect { raise ArgumentError }.to_raise(ArgumentError) do |error|
 					exception = error
 				end
 			end
-		end.run(GreenDots::Runner.new)
+		end.run(Quickdraw::Runner.new)
 
 		expect(exception).to_be_an ArgumentError
 	end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::ToRaise
+module Quickdraw::Matchers::ToRaise
 	def to_raise(error = ::Exception)
 		expectation_block = block
 

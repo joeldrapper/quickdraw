@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::Equality
+module Quickdraw::Matchers::Equality
 	def ==(other)
 		assert value == other do
 			"expected `#{value.inspect}` to == `#{other.inspect}`"

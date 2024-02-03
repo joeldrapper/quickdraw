@@ -1,6 +1,6 @@
-describe GreenDots::Pipe do
+describe Quickdraw::Pipe do
 	test "with_reader and with_writer" do
-		pipe = GreenDots::Pipe.new
+		pipe = Quickdraw::Pipe.new
 
 		Process.fork do
 			pipe.with_writer do |writer|

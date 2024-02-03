@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-class GreenDots::Context
+class Quickdraw::Context
 	DEFAULT_MATCHERS = [
-		GreenDots::Matchers::Boolean,
-		GreenDots::Matchers::CaseEquality,
-		GreenDots::Matchers::Change,
-		GreenDots::Matchers::Equality,
-		GreenDots::Matchers::Include,
-		GreenDots::Matchers::Predicate,
-		GreenDots::Matchers::RespondTo,
-		GreenDots::Matchers::ToBeA,
-		GreenDots::Matchers::ToHaveAttributes,
-		GreenDots::Matchers::ToRaise,
-		GreenDots::Matchers::ToReceive,
+		Quickdraw::Matchers::Boolean,
+		Quickdraw::Matchers::CaseEquality,
+		Quickdraw::Matchers::Change,
+		Quickdraw::Matchers::Equality,
+		Quickdraw::Matchers::Include,
+		Quickdraw::Matchers::Predicate,
+		Quickdraw::Matchers::RespondTo,
+		Quickdraw::Matchers::ToBeA,
+		Quickdraw::Matchers::ToHaveAttributes,
+		Quickdraw::Matchers::ToRaise,
+		Quickdraw::Matchers::ToReceive,
 	].freeze
 
 	class << self
-		def run(result = GreenDots::Runner.new, path = [])
+		def run(result = Quickdraw::Runner.new, path = [])
 			new(result, path).run(@tests) if @tests
 
 			if defined?(@sub_contexts)
@@ -31,7 +31,7 @@ class GreenDots::Context
 		end
 
 		def matchers
-			@matchers ||= if superclass < GreenDots::Context
+			@matchers ||= if superclass < Quickdraw::Context
 				superclass.matchers.dup
 			else
 				Set.new(DEFAULT_MATCHERS)
@@ -78,10 +78,10 @@ class GreenDots::Context
 		end
 	end
 
-	def expect(value = GreenDots::Null, &block)
-		type = GreenDots::Null == value ? block : value
+	def expect(value = Quickdraw::Null, &block)
+		type = Quickdraw::Null == value ? block : value
 
-		expectation_class = GreenDots::Config.registry.expectation_for(
+		expectation_class = Quickdraw::Config.registry.expectation_for(
 			type, matchers: @matchers
 		)
 

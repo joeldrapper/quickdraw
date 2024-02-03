@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class GreenDots::Worker
+class Quickdraw::Worker
 	def self.fork
-		pipe = GreenDots::Pipe.new
+		pipe = Quickdraw::Pipe.new
 
 		pid = Process.fork do
 			pipe.with_writer do |writer|

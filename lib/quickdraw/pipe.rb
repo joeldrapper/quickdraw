@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GreenDots::Pipe
+class Quickdraw::Pipe
 	def initialize
 		@reader, @writer = IO.pipe
 	end

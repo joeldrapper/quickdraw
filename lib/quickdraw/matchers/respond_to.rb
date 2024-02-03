@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::RespondTo
+module Quickdraw::Matchers::RespondTo
 	def to_respond_to(method)
 		assert value.respond_to?(method) do
 			"expected `#{value.inspect}` to respond to `#{method.inspect}`"

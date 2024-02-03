@@ -1,6 +1,6 @@
-# GreenDots
+# Quickdraw
 
-GreenDots is currently in development. You should almost definitely not use it in a project until `1.0` is released.
+Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
 
 > [!TIP]
 > Your test files are executed in an anonymous class, so you can define methods and constants at the top level without worrying about collisions. If you’re testing something that references `Class.name`, you may have to define those classes as fixtures somewhere else.
@@ -10,7 +10,7 @@ GreenDots is currently in development. You should almost definitely not use it i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'green_dots'
+gem 'quickdraw'
 ```
 
 And then execute:
@@ -19,16 +19,18 @@ And then execute:
 bundle install
 ```
 
-Now create a file called `config/green_dots.rb`.
+Now create a file called `config/quickdraw.rb`.
 
 To run tests, execute:
 ```bash
-bundle exec gd
+bundle exec qt
 ```
+
+It stands for "quickdraw tests".
 
 ## Usage
 
-GreenDots searches for files that end with `.test.rb`. You can put these anywhere. Some people like to put them under `/tests` or `/spec`. Others like to put them next to the code they're testing.
+Quickdraw searches for files that end with `.test.rb`. You can put these anywhere. Some people like to put them under `/tests` or `/spec`. Others like to put them next to the code they're testing.
 
 ### `.test`
 Use the `test` method to define a test. The description is optional — sometimes you don’t need it.

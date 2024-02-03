@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GreenDots::Timer
+class Quickdraw::Timer
 	class Duration
 		def initialize(duration)
 			@duration = duration

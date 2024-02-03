@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::ToHaveAttributes
+module Quickdraw::Matchers::ToHaveAttributes
 	def to_have_attributes(**attributes)
 		attributes.each do |k, v|
 			assert v === value.send(k) do

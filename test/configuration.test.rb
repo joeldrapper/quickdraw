@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe GreenDots::Configuration do
+describe Quickdraw::Configuration do
 	test "has a registry" do
-		configuration = GreenDots::Configuration.new
-		expect(configuration.registry).to_be_a GreenDots::Registry
+		configuration = Quickdraw::Configuration.new
+		expect(configuration.registry).to_be_a Quickdraw::Registry
 	end
 end

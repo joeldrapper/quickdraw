@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GreenDots::Map
+class Quickdraw::Map
 	include Enumerable
 
 	def initialize

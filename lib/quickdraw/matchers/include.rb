@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::Include
+module Quickdraw::Matchers::Include
 	def to_include(other)
 		assert value.include?(other) do
 			"expected `#{value.inspect}` to include? `#{other.inspect}`"
