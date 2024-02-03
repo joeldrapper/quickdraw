@@ -2,7 +2,7 @@
 
 test "refute with falsy value" do
 	expect {
-		Class.new(GreenDots::Context) do
+		Class.new(Quickdraw::Context) do
 			test { refute false }
 		end.run
 	}.not_to_raise

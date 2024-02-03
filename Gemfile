@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in green_dots.gemspec
+# Specify your gem's dependencies in quickdraw.gemspec
 gemspec
 
 gem "rubocop"

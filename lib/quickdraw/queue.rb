@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GreenDots::Queue
+class Quickdraw::Queue
 	def initialize
 		@array = []
 		@mutex = Mutex.new

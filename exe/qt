@@ -2,11 +2,10 @@
 # frozen_string_literal: true
 
 require "etc"
-require_relative "../lib/green_dots"
-require File.expand_path("config/green_dots")
+require_relative "../lib/quickdraw"
+require File.expand_path("config/quickdraw")
 
-
-GreenDots::Run.new(
+Quickdraw::Run.new(
 	number_of_processes: Etc.nprocessors,
 	number_of_threads: 2,
 	test_files: Dir.glob("./**/*.test.rb")

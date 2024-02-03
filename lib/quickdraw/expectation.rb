@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class GreenDots::Expectation
-	def initialize(context, value = GreenDots::Null, &block)
-		if block && GreenDots::Null != value
-			raise GreenDots::ArgumentError.new(
+class Quickdraw::Expectation
+	def initialize(context, value = Quickdraw::Null, &block)
+		if block && Quickdraw::Null != value
+			raise Quickdraw::ArgumentError.new(
 				"You must only provide a value or a block to `expect`."
 			)
 		end
@@ -42,7 +42,7 @@ class GreenDots::Expectation
 
 	def value
 		if @block
-			raise GreenDots::ArgumentError.new(
+			raise Quickdraw::ArgumentError.new(
 				"You must pass a value rather than a block when using the #{caller_locations.first.label} matcher."
 			)
 		else
@@ -54,7 +54,7 @@ class GreenDots::Expectation
 		if @block
 			@block
 		else
-			raise GreenDots::ArgumentError.new(
+			raise Quickdraw::ArgumentError.new(
 				"You must pass a block rather than a value when using the #{caller_locations.first.label} matcher."
 			)
 		end

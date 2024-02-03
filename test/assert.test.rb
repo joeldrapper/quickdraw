@@ -16,7 +16,7 @@ end
 
 test "assert with truthy value" do
 	expect {
-		Class.new(GreenDots::Context) do
+		Class.new(Quickdraw::Context) do
 			test { assert true }
 		end.run
 	}.not_to_raise

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class GreenDots::Runner
+class Quickdraw::Runner
 	def self.call(queue)
 		tests = []
 
 		queue.drain do |f|
-			tests << [f, Class.new(GreenDots::Context) do
+			tests << [f, Class.new(Quickdraw::Context) do
 				class_eval(
 					File.read(f), f, 1
 				)
@@ -25,7 +25,7 @@ class GreenDots::Runner
 	attr_reader :successes, :failures, :duration
 
 	def call
-		@duration = GreenDots::Timer.time do
+		@duration = Quickdraw::Timer.time do
 			@tests.each { |(f, t)| t.run(self, [f]) }
 		end
 	end

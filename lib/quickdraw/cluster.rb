@@ -2,7 +2,7 @@
 
 require "etc"
 
-class GreenDots::Cluster
+class Quickdraw::Cluster
 	def self.call(n = Etc.nprocessors, &)
 		spawn(n, &).wait
 	end
@@ -18,7 +18,7 @@ class GreenDots::Cluster
 	end
 
 	def fork(&)
-		@workers << GreenDots::Worker.fork(&)
+		@workers << Quickdraw::Worker.fork(&)
 	end
 
 	def wait

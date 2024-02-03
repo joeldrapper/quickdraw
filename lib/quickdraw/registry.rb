@@ -3,11 +3,11 @@
 
 # frozen_string_literal: true
 
-class GreenDots::Registry
+class Quickdraw::Registry
 	def initialize
-		@registered_matchers = GreenDots::Map.new
-		@type_matchers = GreenDots::Map.new
-		@shapes = GreenDots::Map.new
+		@registered_matchers = Quickdraw::Map.new
+		@type_matchers = Quickdraw::Map.new
+		@shapes = Quickdraw::Map.new
 	end
 
 	# Register a new matcher for the given types.
@@ -35,7 +35,7 @@ class GreenDots::Registry
 
 	# A "shape" is a specialised Expectation class that includes the given matchers. It's cached against the list of matchers.
 	def shape_for(matchers)
-		@shapes[matchers] ||= Class.new(GreenDots::Expectation) do
+		@shapes[matchers] ||= Class.new(Quickdraw::Expectation) do
 			matchers.each { |m| include m }
 			freeze
 		end

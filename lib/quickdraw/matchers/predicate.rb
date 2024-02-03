@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::Predicate
+module Quickdraw::Matchers::Predicate
 	def to_be(predicate)
 		assert(value.send(predicate)) { "expected `#{value.inspect}` to be `#{predicate.inspect}`" }
 	end

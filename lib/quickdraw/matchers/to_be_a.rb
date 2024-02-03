@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::ToBeA
+module Quickdraw::Matchers::ToBeA
 	def to_be_a(type)
 		assert type === value do
 			"expected `#{value.inspect}` to have the type `#{type.inspect}`"

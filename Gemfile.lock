@@ -1,13 +1,12 @@
 PATH
   remote: .
   specs:
-    green_dots (0.1.0)
+    quickdraw (0.1.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
-    concurrent-ruby (1.2.2)
     docile (1.4.0)
     json (2.6.3)
     parallel (1.22.1)
@@ -42,8 +41,7 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
-  concurrent-ruby
-  green_dots!
+  quickdraw!
   rubocop
   simplecov
 

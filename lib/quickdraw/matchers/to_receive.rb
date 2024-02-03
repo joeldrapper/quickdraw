@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::ToReceive
+module Quickdraw::Matchers::ToReceive
 	def to_receive(method_name, &expectation_block)
 		__raise__ ::ArgumentError, "You can't use the `to_receive` matcher with a block expectation." if @block
 

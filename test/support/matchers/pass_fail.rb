@@ -21,8 +21,8 @@ module Matchers
 
 		def to_pass
 			begin
-				Class.new(GreenDots::Context, &block).run(Result.new)
-			rescue GreenDots::TestFailure
+				Class.new(Quickdraw::Context, &block).run(Result.new)
+			rescue Quickdraw::TestFailure
 				return failure! { "expected the test to pass" }
 			end
 
@@ -31,7 +31,7 @@ module Matchers
 
 		def to_fail(message: nil)
 			result = Result.new
-			Class.new(GreenDots::Context, &block).run(result)
+			Class.new(Quickdraw::Context, &block).run(result)
 
 			assert result.failures.any? do
 				"expected the test to fail"

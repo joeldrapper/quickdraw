@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module GreenDots::Matchers::Change
-	def to_change(from: GreenDots::Null, to: GreenDots::Null, by: GreenDots::Null, &object)
+module Quickdraw::Matchers::Change
+	def to_change(from: Quickdraw::Null, to: Quickdraw::Null, by: Quickdraw::Null, &object)
 		original = object.call
 
-		if GreenDots::Null != from
+		if Quickdraw::Null != from
 			assert from === original do
 				"expected `#{original.inspect}` to be `#{from.inspect}`"
 			end
@@ -18,13 +18,13 @@ module GreenDots::Matchers::Change
 			failure! "expected `#{original.inspect}` to change"
 		end
 
-		if GreenDots::Null != to
+		if Quickdraw::Null != to
 			assert to === new do
 				"expected `#{new.inspect}` to be `#{to.inspect}`"
 			end
 		end
 
-		if GreenDots::Null != by
+		if Quickdraw::Null != by
 			assert by === (new - original) do
 				"expected `#{new.inspect}` to change by `#{by.inspect}`"
 			end

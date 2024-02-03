@@ -8,7 +8,7 @@ module BazMatcher
 	end
 end
 
-GreenDots.configure do |config|
+Quickdraw.configure do |config|
 	config.matcher Matchers::PassFail, Proc
 	config.matcher BazMatcher, String
 end

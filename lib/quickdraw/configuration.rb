@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class GreenDots::Configuration
+class Quickdraw::Configuration
 	def initialize
-		@registry = GreenDots::Registry.new
+		@registry = Quickdraw::Registry.new
 	end
 
 	attr_reader :registry
