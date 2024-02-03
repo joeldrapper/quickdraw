@@ -3,7 +3,7 @@
 Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
 
 > [!TIP]
-> Your test files are executed in an anonymous class, so you can define methods and constants at the top level without worrying about collisions. If you’re testing something that references `Class.name`, you may have to define those classes as fixtures somewhere else.
+> Your test files are executed in an anonymous class, so you can define methods and constants at the top level without worrying about collisions. If you’re testing something that references `Class#name`, you may have to define those classes as fixtures somewhere else.
 
 ## Getting Started
 
@@ -67,7 +67,7 @@ You can pass a custom failure message as a block. Using blocks for the failure m
 
 ```ruby
 test "something" do
-	assert(false) { "This is a custom failure message" }
+  assert(false) { "This is a custom failure message" }
 end
 ```
 
