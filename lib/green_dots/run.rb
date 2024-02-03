@@ -46,7 +46,7 @@ class GreenDots::Run
 
 				results.each_with_index do |result, thread|
 					writer.write("\n")
-					writer.write("Process[#{index + 1}], Thread[#{thread + 1}]: #{result.successes.count} assertions passed in #{result.elapsed_time}. #{GreenDots::SUCCESS_EMOJI.sample}")
+					writer.write("Process[#{index + 1}], Thread[#{thread + 1}]: #{result.successes.count} assertions passed in #{result.duration}. #{GreenDots::SUCCESS_EMOJI.sample}")
 				end
 			end
 		end

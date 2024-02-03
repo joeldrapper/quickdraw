@@ -22,10 +22,10 @@ class GreenDots::Runner
 		@failures = []
 	end
 
-	attr_reader :successes, :failures, :elapsed_time
+	attr_reader :successes, :failures, :duration
 
 	def call
-		@elapsed_time = GreenDots::Timer.time do
+		@duration = GreenDots::Timer.time do
 			@tests.each { |(f, t)| t.run(self, [f]) }
 		end
 	end

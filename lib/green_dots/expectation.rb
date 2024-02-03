@@ -21,6 +21,7 @@ class GreenDots::Expectation
 
 	def failure!(&)
 		@context.failure!(&)
+		@made_expectations = true
 	end
 
 	def resolve
