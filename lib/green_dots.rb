@@ -15,8 +15,6 @@ module GreenDots
 	Null = Object.new.freeze
 	Config = Configuration.new
 
-
-
 	module Error; end
 
 	class TestFailure < RuntimeError

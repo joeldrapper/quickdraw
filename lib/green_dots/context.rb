@@ -59,6 +59,9 @@ class GreenDots::Context
 		@path = path
 		@expectations = []
 		@matchers = self.class.matchers
+
+		@name = nil
+		@skip = false
 	end
 
 	def run(tests)
@@ -66,7 +69,7 @@ class GreenDots::Context
 			@name = name
 			@skip = skip
 
-			instance_eval(&block)
+			instance_exec(&block)
 
 			resolve
 		end
