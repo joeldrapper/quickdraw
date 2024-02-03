@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative "../lib/green_dots"
-
 require "etc"
+require_relative "../lib/green_dots"
+require File.expand_path("config/green_dots")
+
 
 GreenDots::Run.new(
 	number_of_processes: Etc.nprocessors,
 	number_of_threads: 2,
-	directory: ARGV[0] || "test",
 	test_files: Dir.glob("./**/*.test.rb")
 ).call

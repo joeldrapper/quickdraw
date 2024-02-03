@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class GreenDots::Run
-	def initialize(number_of_processes:, number_of_threads: 1, directory:, test_files:)
+	def initialize(number_of_processes:, number_of_threads: 1, test_files:)
 		@number_of_processes = number_of_processes
 		@number_of_threads = number_of_threads
-		@directory = directory
 		@test_files = test_files.shuffle
 
 		@cluster = GreenDots::Cluster.new
@@ -17,8 +16,6 @@ class GreenDots::Run
 
 	def call
 		report_time do
-			load_directory
-			require "helper"
 			fork_processes
 			@results = @cluster.wait
 			puts_results
@@ -28,10 +25,6 @@ class GreenDots::Run
 	def report_time(&)
 		total_time = GreenDots::Timer.time(&)
 		puts "Total time: #{total_time}"
-	end
-
-	def load_directory
-		$LOAD_PATH.unshift File.expand_path("#{@directory}/support")
 	end
 
 	def fork_processes
