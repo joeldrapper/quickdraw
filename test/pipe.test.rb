@@ -1,0 +1,15 @@
+describe GreenDots::Pipe do
+	test "with_reader and with_writer" do
+		pipe = GreenDots::Pipe.new
+
+		Process.fork do
+			pipe.with_writer do |writer|
+				writer.write "Hello, world!"
+			end
+		end
+
+		pipe.with_reader do |reader|
+			expect(reader.read) == "Hello, world!"
+		end
+	end
+end
