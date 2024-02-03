@@ -6,9 +6,8 @@ require_relative "../lib/green_dots"
 require "etc"
 
 GreenDots::Run.new(
-	# number_of_processes: Etc.nprocessors,
-	number_of_processes: 1,
-	number_of_threads: 1,
+	number_of_processes: Etc.nprocessors,
+	number_of_threads: 2,
 	directory: ARGV[0] || "test",
 	test_files: Dir.glob("./**/*.test.rb")
 ).call
