@@ -2,94 +2,90 @@
 
 class GreenDots::Context
 	DEFAULT_MATCHERS = [
-		GreenDots::Matchers::ToBeA,
 		GreenDots::Matchers::Boolean,
-		GreenDots::Matchers::ToRaise,
-		GreenDots::Matchers::Equality,
-		GreenDots::Matchers::ToReceive,
-		GreenDots::Matchers::Predicate,
 		GreenDots::Matchers::CaseEquality,
-		GreenDots::Matchers::ToHaveAttributes
+		GreenDots::Matchers::Change,
+		GreenDots::Matchers::Equality,
+		GreenDots::Matchers::Include,
+		GreenDots::Matchers::Predicate,
+		GreenDots::Matchers::RespondTo,
+		GreenDots::Matchers::ToBeA,
+		GreenDots::Matchers::ToHaveAttributes,
+		GreenDots::Matchers::ToRaise,
+		GreenDots::Matchers::ToReceive,
 	].freeze
 
 	class << self
-		def run(run = GreenDots::Run.new)
-			@sub_contexts&.each { |c| c.run(run) }
+		def run(result = GreenDots::Runner.new, path = [])
+			new(result, path).run(@tests) if @tests
 
-			new(run).run(@tests) if @tests
+			if defined?(@sub_contexts)
+				@sub_contexts.each do |(context, desc)|
+					context.run(result, [*path, desc])
+				end
+			end
 		end
 
-		def use(*args)
-			args.each { |m| matchers << m }
+		def use(*new_matchers)
+			new_matchers.each { |m| matchers << m }
 		end
 
 		def matchers
 			@matchers ||= if superclass < GreenDots::Context
 				superclass.matchers.dup
 			else
-				Concurrent::Set.new(DEFAULT_MATCHERS)
+				Set.new(DEFAULT_MATCHERS)
 			end
 		end
 
-		def describe(description = nil, &block)
-			(@sub_contexts ||= Concurrent::Array.new) << Class.new(self, &block)
+		def describe(description, &block)
+			unless defined?(@sub_contexts)
+				@sub_contexts = []
+			end
+
+			@sub_contexts << [Class.new(self, &block), description]
 		end
 
 		alias_method :context, :describe
 
 		def test(name = nil, skip: false, &block)
-			(@tests ||= Concurrent::Array.new) << {
-				name: name,
-				block: block,
-				skip: skip
-			}
-		end
-
-		def let(method_name)
-			original_method = instance_method(method_name)
-			ivar_name = :"@#{method_name}"
-
-			define_method(method_name) do
-				if instance_variable_defined?(ivar_name)
-					instance_variable_get(ivar_name)
-				else
-					instance_variable_set(ivar_name, original_method.bind(self).call)
-				end
+			unless defined?(@tests)
+				@tests = []
 			end
 
-			method_name
+			@tests << [name, skip, block]
 		end
 	end
 
-	def initialize(run)
+	def initialize(run, path)
 		@run = run
+		@path = path
 		@expectations = []
 		@matchers = self.class.matchers
+
+		@name = nil
+		@skip = false
 	end
 
 	def run(tests)
-		tests.shuffle.each do |test|
-			@name = test[:name]
-			@skip = test[:skip]
+		tests.each do |(name, skip, block)|
+			@name = name
+			@skip = skip
 
-			instance_eval(&test[:block])
+			instance_exec(&block)
 
 			resolve
 		end
-	ensure
-		@name = nil
-		@skip = nil
 	end
 
-	def expect(subject = GreenDots::Null, &block)
-		type = GreenDots::Null == subject ? block : subject
+	def expect(value = GreenDots::Null, &block)
+		type = GreenDots::Null == value ? block : value
 
-		expectation_class = GreenDots::CONFIGURATION.registry.expectation_for(type, matchers: @matchers)
+		expectation_class = GreenDots::Config.registry.expectation_for(
+			type, matchers: @matchers
+		)
 
-		# location = caller_locations(1, 1).first
-
-		expectation = expectation_class.new(self, subject, &block)
-
+		expectation = expectation_class.new(self, value, &block)
 		@expectations << expectation
 		expectation
 	end
@@ -100,29 +96,43 @@ class GreenDots::Context
 		@expectations.clear
 	end
 
-	def assert(subject, &block)
-		block ||= -> { "Expected #{subject.inspect} to be truthy." }
-		subject ? success! : failure!(block.call)
+	def assert(value)
+		if value
+			success!
+		elsif block_given?
+			failure! { yield(value) }
+		else
+			failure! { "expected #{value.inspect} to be truthy" }
+		end
 	end
 
-	def refute(subject, &block)
-		block ||= -> { "Expected #{subject.inspect} to be falsy." }
-		subject ? failure!(block.call) : success!
+	def refute(value)
+		if !value
+			success!
+		elsif block_given?
+			failure! { yield(value) }
+		else
+			failure! { "expected #{value.inspect} to be falsy" }
+		end
 	end
 
 	def success!
 		if @skip
-			@run.failure! "The skipped test `#{@name}` started passing."
+			@run.failure!(full_path) { "The skipped test `#{@name}` started passing." }
 		else
-			@run.success!
+			@run.success!(@name)
 		end
 	end
 
-	def failure!(message)
+	def failure!(&)
 		if @skip
-			@run.success!
+			@run.success!(@name)
 		else
-			@run.failure!(message)
+			@run.failure!(full_path, &)
 		end
+	end
+
+	def full_path
+		[*@path, @name]
 	end
 end

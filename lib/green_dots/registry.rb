@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+
+# frozen_string_literal: true
+
 class GreenDots::Registry
 	def initialize
-		@registered_matchers = Concurrent::Hash.new
-		@type_matchers = Concurrent::Map.new
-		@shapes = Concurrent::Map.new
+		@registered_matchers = GreenDots::Map.new
+		@type_matchers = GreenDots::Map.new
+		@shapes = GreenDots::Map.new
 	end
 
 	# Register a new matcher for the given types.

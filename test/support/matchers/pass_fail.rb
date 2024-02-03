@@ -2,33 +2,46 @@
 
 module Matchers
 	module PassFail
+		class Result
+			def initialize
+				@successes = []
+				@failures = []
+			end
+
+			attr_reader :successes, :failures
+
+			def success!(name)
+				@successes << name
+			end
+
+			def failure!(path)
+				@failures << yield
+			end
+		end
+
 		def to_pass
 			begin
-				Class.new(GreenDots::Context, &block).run
+				Class.new(GreenDots::Context, &block).run(Result.new)
 			rescue GreenDots::TestFailure
-				failure! { "Expected the test to pass." }
+				return failure! { "expected the test to pass" }
 			end
 
 			success!
 		end
 
 		def to_fail(message: nil)
-			begin
-				Class.new(GreenDots::Context, &block).run
-			rescue GreenDots::TestFailure => e
-				success!
-				if message
-					if message == e.message
-						success!
-					else
-						failure! { "Expected `#{e.message.inspect}` to equal `#{message.inspect}`." }
-					end
-				end
+			result = Result.new
+			Class.new(GreenDots::Context, &block).run(result)
 
-				return
+			assert result.failures.any? do
+				"expected the test to fail"
 			end
 
-			failure! { "Expected the test to fail." }
+			if message
+				assert result.failures.include?(message) do
+					"expected the test to fail with message: #{message.inspect}"
+				end
+			end
 		end
 	end
 end

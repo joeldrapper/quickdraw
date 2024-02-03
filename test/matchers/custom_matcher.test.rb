@@ -2,7 +2,7 @@
 
 module FooMatcher
 	def foo?
-		assert(subject == "foo") { %(Expected #{subject} to be "foo" but it wasn't.) }
+		assert(value == "foo") { %(expected #{value} to be "foo" but it wasn't) }
 	end
 end
 
@@ -21,5 +21,5 @@ test("custom matcher fail case") do
 		use FooMatcher
 
 		test { expect("bar").foo? }
-	}.to_fail message: %(Expected bar to be "foo" but it wasn't.)
+	}.to_fail message: %(expected bar to be "foo" but it wasn't)
 end

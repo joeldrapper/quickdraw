@@ -1,29 +1,13 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "concurrent"
-
+require "etc"
 require_relative "../lib/green_dots"
+require File.expand_path("config/green_dots")
 
-directory = ARGV[0] || "test"
 
-$LOAD_PATH.unshift File.expand_path("#{directory}/support")
-
-require "helper"
-
-# Dir.glob("#{directory}/support/**/*.rb").each { |f| eval File.read(f), binding, f, 1 }
-
-run = GreenDots::Run.new
-
-Dir.glob("#{directory}/**/*.rb").reject { |f| f.start_with? "#{directory}/support/" }.shuffle.each do |f|
-	Class.new(GreenDots::Context) do
-		class_eval(
-			File.read(f), f, 1
-		)
-	end.run(run)
-end
-
-SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
-
-puts "\n\n"
-puts "#{run.successes} expectations passed. #{SUCCESS_EMOJI.sample}"
+GreenDots::Run.new(
+	number_of_processes: Etc.nprocessors,
+	number_of_threads: 2,
+	test_files: Dir.glob("./**/*.test.rb")
+).call

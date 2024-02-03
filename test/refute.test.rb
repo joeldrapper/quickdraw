@@ -10,10 +10,6 @@ end
 
 test "refute with truthy value" do
 	expect {
-		Class.new(GreenDots::Context) do
-			test { refute true }
-		end.run
-	}.to_raise(GreenDots::TestFailure) do |error|
-		expect(error.message) == "Expected true to be falsy."
-	end
+		test { refute true }
+	}.to_fail
 end

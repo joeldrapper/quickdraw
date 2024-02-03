@@ -1,53 +1,62 @@
 # frozen_string_literal: true
 
 class GreenDots::Expectation
-	def initialize(context, subject = GreenDots::Null, &block)
-		if block && GreenDots::Null != subject
-			raise GreenDots::ArgumentError, "You can only provide a subject or a block to `expect`."
+	def initialize(context, value = GreenDots::Null, &block)
+		if block && GreenDots::Null != value
+			raise GreenDots::ArgumentError.new(
+				"You must only provide a value or a block to `expect`."
+			)
 		end
 
 		@context = context
-		@subject = subject
+		@value = value
 		@block = block
-	end
-
-	def resolve
-		if @result.nil?
-			failure! { "You didn't make any expectations." }
-		end
+		@made_expectations = false
 	end
 
 	def success!
 		@context.success!
-		@result = true
+		@made_expectations = true
 	end
 
-	def failure!
-		@context.failure!(yield)
-		@result = false
+	def failure!(&)
+		@context.failure!(&)
+		@made_expectations = true
+	end
+
+	def resolve
+		if !@made_expectations
+			failure! { "You didn't make any expectations." }
+		end
 	end
 
 	private
 
-	def subject
+	def assert(value, &)
+		value ? success! : failure!(&)
+	end
+
+	def refute(value, &)
+		value ? failure!(&) : success!
+	end
+
+	def value
 		if @block
-			raise GreenDots::ArgumentError,
-				"You must pass a subject rather than a block when using the #{caller_locations.first.label} matcher."
+			raise GreenDots::ArgumentError.new(
+				"You must pass a value rather than a block when using the #{caller_locations.first.label} matcher."
+			)
 		else
-			@subject
+			@value
 		end
 	end
 
 	def block
-		@block || raise(GreenDots::ArgumentError,
-			"You must pass a block rather than a subject when using the #{caller_locations.first.label} matcher.")
-	end
-
-	def assert(subject, &block)
-		subject ? success! : failure!(&block)
-	end
-
-	def refute(subject, &block)
-		subject ? failure!(&block) : success!
+		if @block
+			@block
+		else
+			raise GreenDots::ArgumentError.new(
+				"You must pass a block rather than a value when using the #{caller_locations.first.label} matcher."
+			)
+		end
 	end
 end

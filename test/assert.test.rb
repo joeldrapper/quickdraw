@@ -2,14 +2,16 @@
 
 use Matchers::PassFail
 
+# test "something interesting" do
+# 	expect(
+# 		false
+# 	).to_be_truthy
+# end
+
 test "assert with falsy value" do
 	expect {
-		Class.new(GreenDots::Context) do
-			test { assert false }
-		end.run
-	}.to_raise GreenDots::TestFailure do |error|
-		expect(error.message) == "Expected false to be truthy."
-	end
+		test { assert false }
+	}.to_fail message: "expected false to be truthy"
 end
 
 test "assert with truthy value" do

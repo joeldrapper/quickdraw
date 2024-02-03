@@ -19,7 +19,7 @@ test "failure with wrong value" do
 				name: "Jill"
 			)
 		}
-	}.to_fail message: %(Expected `#<data name="Joel">` to have the attribute `:name` equal to `"Jill"`.)
+	}.to_fail message: %(expected `#<data name="Joel">` to have the attribute `:name` equal to `"Jill"`)
 end
 
 test "failure with missing reader method" do
@@ -29,5 +29,5 @@ test "failure with missing reader method" do
 				email: "joel@drapper.me"
 			)
 		}
-	}.to_fail message: %(Expected `#<data name="Joel">` to respond to `email`.)
+	}.to_fail message: %(expected `#<data name="Joel">` to respond to `email`)
 end
