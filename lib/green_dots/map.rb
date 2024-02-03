@@ -21,4 +21,10 @@ class GreenDots::Map
 	def each(&)
 		@hash.each(&)
 	end
+
+	def clear
+		@mutex.synchronize do
+			@hash.clear
+		end
+	end
 end
