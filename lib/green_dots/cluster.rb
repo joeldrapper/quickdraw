@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+require "etc"
+
 class GreenDots::Cluster
-	def self.call(n, &)
+	def self.call(n = Etc.nprocessors, &)
 		spawn(n, &).wait
 	end
 
-	def self.spawn(n, &block)
+	def self.spawn(n = Etc.nprocessors, &block)
 	  new.tap do |cluster|
 			n.times { cluster.fork(&block) }
 		end

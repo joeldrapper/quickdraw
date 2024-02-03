@@ -1,27 +1,28 @@
 # frozen_string_literal: true
 
 class GreenDots::Worker
-	def self.fork(&)
-		reader, writer = IO.pipe
+	def self.fork
+		pipe = GreenDots::Pipe.new
 
 		pid = Process.fork do
-			reader.close
-			yield(writer)
-			writer.close
+			pipe.with_writer do |writer|
+				yield(writer)
+			end
 		end
 
-		writer.close
-
-		new(pid:, reader:)
+		new(pid:, pipe:)
 	end
 
-	def initialize(pid:, reader:)
+	def initialize(pid:, pipe:)
 		@pid = pid
-		@reader = reader
+		@pipe = pipe
 	end
 
 	def wait
 		Process.wait(@pid)
-		@reader.read.tap { @reader.close }
+
+		@pipe.with_reader do |reader|
+			reader.read
+		end
 	end
 end

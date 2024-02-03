@@ -11,6 +11,9 @@ module GreenDots
 	autoload :Run, "green_dots/run"
 	autoload :TimeElapsed, "green_dots/time_elapsed"
 	autoload :Worker, "green_dots/worker"
+	autoload :Pipe, "green_dots/pipe"
+
+	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
 
 	Null = Object.new.freeze
 	Config = Configuration.new
