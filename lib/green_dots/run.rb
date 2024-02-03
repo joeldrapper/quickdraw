@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class GreenDots::Run
-	def initialize(number_of_processes:, directory:, test_files:)
+	def initialize(number_of_processes:, number_of_threads: 1, directory:, test_files:)
 		@number_of_processes = number_of_processes
+		@number_of_threads = number_of_threads
 		@directory = directory
 		@test_files = test_files.shuffle
 
@@ -25,8 +26,8 @@ class GreenDots::Run
 	end
 
 	def report_time(&)
-		total_time = GreenDots.timer(&)
-		puts "Total time: #{total_time.ms}ms"
+		total_time = GreenDots::Timer.time(&)
+		puts "Total time: #{total_time}"
 	end
 
 	def load_directory
@@ -36,15 +37,15 @@ class GreenDots::Run
 	def fork_processes
 		@batches.each_with_index do |batch, index|
 			@cluster.fork do |writer|
-				result = GreenDots::Result.call(batch)
+				result = nil
 
-				writer.write("Process[#{index + 1}]: #{result.successes.count} assertions passed in #{result.elapsed_time.time} milliseconds. #{GreenDots::SUCCESS_EMOJI.sample}")
-				result.failures.each do |(message, backtrace, path)|
-					writer.write "\n\n"
-					writer.write GreenDots::Path.new([*path, "\e[31m#{message.call}\e[0m"]).render
+				@number_of_threads.times.map do
+					Thread.new do
+						result = GreenDots::Runner.call(batch)
+					end
+				end.each(&:join)
 
-					writer.write "\n"
-				end
+				writer.write("Process[#{index + 1}]: #{result.successes.count} assertions passed in #{result.elapsed_time}. #{GreenDots::SUCCESS_EMOJI.sample}")
 			end
 		end
 	end

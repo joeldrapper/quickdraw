@@ -22,7 +22,7 @@ describe "to_raise" do
 					exception = error
 				end
 			end
-		end.run(GreenDots::Result.new)
+		end.run(GreenDots::Runner.new)
 
 		expect(exception).to_be_an ArgumentError
 	end

@@ -7,9 +7,9 @@ module GreenDots
 	autoload :Expectation, "green_dots/expectation"
 	autoload :Matchers, "green_dots/matchers"
 	autoload :Registry, "green_dots/registry"
-	autoload :Result, "green_dots/result"
+	autoload :Runner, "green_dots/runner"
 	autoload :Run, "green_dots/run"
-	autoload :TimeElapsed, "green_dots/time_elapsed"
+	autoload :Timer, "green_dots/timer"
 	autoload :Worker, "green_dots/worker"
 	autoload :Pipe, "green_dots/pipe"
 
@@ -34,13 +34,6 @@ module GreenDots
 		else
 			yield Config
 		end
-	end
-
-	def self.timer(&block)
-		start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
-		yield
-		finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
-		GreenDots::TimeElapsed.new(start, finish)
 	end
 
 	def self.run(...)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GreenDots::Result
+class GreenDots::Runner
 	def self.call(batch)
 		tests = batch.map do |f|
 			[f, Class.new(GreenDots::Context) do
@@ -23,7 +23,7 @@ class GreenDots::Result
 	attr_reader :successes, :failures, :elapsed_time
 
 	def call
-		@elapsed_time = GreenDots.timer do
+		@elapsed_time = GreenDots::Timer.time do
 			@tests.each { |(f, t)| t.run(self, [f]) }
 		end
 	end
