@@ -23,8 +23,10 @@ Now create a file called `config/quickdraw.rb`.
 
 To run tests, execute:
 ```bash
-bundle exec gd
+bundle exec qt
 ```
+
+It stands for "quickdraw tests".
 
 ## Usage
 
