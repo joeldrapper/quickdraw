@@ -6,12 +6,13 @@ module GreenDots
 	autoload :Context, "green_dots/context"
 	autoload :Expectation, "green_dots/expectation"
 	autoload :Matchers, "green_dots/matchers"
+	autoload :Pipe, "green_dots/pipe"
 	autoload :Registry, "green_dots/registry"
-	autoload :Runner, "green_dots/runner"
 	autoload :Run, "green_dots/run"
+	autoload :Runner, "green_dots/runner"
 	autoload :Timer, "green_dots/timer"
 	autoload :Worker, "green_dots/worker"
-	autoload :Pipe, "green_dots/pipe"
+	autoload :Queue, "green_dots/queue"
 
 	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
 
@@ -34,9 +35,5 @@ module GreenDots
 		else
 			yield Config
 		end
-	end
-
-	def self.run(...)
-		Run.new(...).call
 	end
 end

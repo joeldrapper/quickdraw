@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class GreenDots::Runner
-	def self.call(batch)
-		tests = batch.map do |f|
-			[f, Class.new(GreenDots::Context) do
+	def self.call(queue)
+		tests = []
+
+		queue.drain do |f|
+			tests << [f, Class.new(GreenDots::Context) do
 				class_eval(
 					File.read(f), f, 1
 				)

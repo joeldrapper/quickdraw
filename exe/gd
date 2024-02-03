@@ -5,9 +5,9 @@ require_relative "../lib/green_dots"
 
 require "etc"
 
-GreenDots.run(
+GreenDots::Run.new(
 	number_of_processes: Etc.nprocessors,
 	number_of_threads: 2,
 	directory: ARGV[0] || "test",
-	test_files: Dir.glob("./**/*.test.rb").reject { |f| f.start_with? "#{@directory}/support/" }
-)
+	test_files: Dir.glob("./**/*.test.rb")
+).call

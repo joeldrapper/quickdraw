@@ -8,7 +8,7 @@ class GreenDots::Run
 		@test_files = test_files.shuffle
 
 		@cluster = GreenDots::Cluster.new
-		@batches = Array.new(@number_of_processes) { [] }
+		@batches = Array.new(@number_of_processes) { GreenDots::Queue.new }
 
 		@test_files.each_with_index do |file, index|
 			@batches[index % @number_of_processes] << file
@@ -35,17 +35,25 @@ class GreenDots::Run
 	end
 
 	def fork_processes
+		# Enable YJIT right before forking
+		RubyVM::YJIT.enable
+
 		@batches.each_with_index do |batch, index|
 			@cluster.fork do |writer|
-				result = nil
 
-				@number_of_threads.times.map do
+
+				results = @number_of_threads.times.map do
 					Thread.new do
-						result = GreenDots::Runner.call(batch)
+						GreenDots::Runner.call(batch)
 					end
-				end.each(&:join)
+				end.map(&:value)
 
-				writer.write("Process[#{index + 1}]: #{result.successes.count} assertions passed in #{result.elapsed_time}. #{GreenDots::SUCCESS_EMOJI.sample}")
+
+
+				results.each_with_index do |result, thread|
+					writer.write("\n")
+					writer.write("Process[#{index + 1}], Thread[#{thread + 1}]: #{result.successes.count} assertions passed in #{result.elapsed_time}. #{GreenDots::SUCCESS_EMOJI.sample}")
+				end
 			end
 		end
 	end
