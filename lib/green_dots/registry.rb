@@ -48,8 +48,10 @@ class GreenDots::Registry
 
 	# If the above has a cache miss, we'll need to find the correct matchers slowly and then cache them.
 	def slowly_find_matchers_for(value)
-		@registered_matchers.map do |matcher, types|
-			matcher if types.any? { |t| t === value }
-		end.compact! # no need to sort or uniquify for consistency here, as the registered_matchers are stored in a hash so they're already sorted and unique.
+		[].tap do |matchers|
+			@registered_matchers.each do |matcher, types|
+				matchers << matcher if types.any? { |t| t === value }
+			end
+		end
 	end
 end
