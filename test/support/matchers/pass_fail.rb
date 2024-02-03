@@ -4,8 +4,8 @@ module Matchers
 	module PassFail
 		class Result
 			def initialize
-				@successes = Concurrent::Array.new
-				@failures = Concurrent::Array.new
+				@successes = []
+				@failures = []
 			end
 
 			attr_reader :successes, :failures

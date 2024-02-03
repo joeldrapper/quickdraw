@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "concurrent"
-
 module GreenDots
 	autoload :Cluster, "green_dots/cluster"
 	autoload :Configuration, "green_dots/configuration"
@@ -16,6 +14,8 @@ module GreenDots
 
 	Null = Object.new.freeze
 	Config = Configuration.new
+
+
 
 	module Error; end
 

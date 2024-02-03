@@ -6,7 +6,6 @@ require_relative "../lib/green_dots"
 SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈]
 
 require "etc"
-require "concurrent"
 
 GreenDots.run(
 	number_of_processes: Etc.nprocessors,

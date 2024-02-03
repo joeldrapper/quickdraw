@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 	spec.description = "Experimental test framework"
 	spec.homepage = "https://github.com/joeldrapper/green_dots"
 	spec.license = "MIT"
-	spec.required_ruby_version = ">= 2.7"
+	spec.required_ruby_version = ">= 3.3"
 
 	spec.metadata["homepage_uri"] = spec.homepage
 	spec.metadata["source_code_uri"] = "https://github.com/joeldrapper/green_dots"
@@ -28,13 +28,6 @@ Gem::Specification.new do |spec|
 	spec.bindir = "exe"
 	spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
 	spec.require_paths = ["lib"]
-
-	# Uncomment to register a new dependency of your gem
-	spec.add_dependency "concurrent-ruby"
-	spec.add_dependency "zeitwerk"
-	spec.add_dependency "tty-tree"
-	spec.add_dependency "rouge"
-	spec.add_dependency "prism"
 
 
 	# For more information and examples about making a new gem, check out our

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require "rouge"
 
 class GreenDots::Run
 	def initialize(number_of_processes:, directory:, test_files:)
@@ -43,8 +42,6 @@ class GreenDots::Run
 				result.failures.each do |(message, backtrace, path)|
 					writer.write "\n\n"
 					writer.write GreenDots::Path.new([*path, "\e[31m#{message.call}\e[0m"]).render
-
-					writer.write GreenDots::CodeBox.new(File.read(backtrace.first.path), backtrace.first.lineno).render
 
 					writer.write "\n"
 				end

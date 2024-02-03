@@ -16,8 +16,8 @@ class GreenDots::Result
 	def initialize(tests = nil)
 		@tests = tests
 
-		@successes = Concurrent::Array.new
-		@failures = Concurrent::Array.new
+		@successes = []
+		@failures = []
 	end
 
 	attr_reader :successes, :failures, :elapsed_time

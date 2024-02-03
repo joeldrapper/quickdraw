@@ -31,13 +31,13 @@ class GreenDots::Context
 			@matchers ||= if superclass < GreenDots::Context
 				superclass.matchers.dup
 			else
-				Concurrent::Set.new(DEFAULT_MATCHERS)
+				Set.new(DEFAULT_MATCHERS)
 			end
 		end
 
 		def describe(description, &block)
 			unless defined?(@sub_contexts)
-				@sub_contexts = Concurrent::Array.new
+				@sub_contexts = []
 			end
 
 			@sub_contexts << [Class.new(self, &block), description]
@@ -47,7 +47,7 @@ class GreenDots::Context
 
 		def test(name = nil, skip: false, &block)
 			unless defined?(@tests)
-				@tests = Concurrent::Array.new
+				@tests = []
 			end
 
 			@tests << [name, skip, block]
