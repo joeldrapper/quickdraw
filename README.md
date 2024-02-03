@@ -2,33 +2,58 @@
 
 GreenDots is currently in development. You should almost definitely not use it in a project until `1.0` is released.
 
-Your test files are executed in an anonymous class, so you can define methods and constants at the top level, without collisions.
+> [!TIP]
+> Your test files are executed in an anonymous class, so you can define methods and constants at the top level without worrying about collisions. If you’re testing something that references `Class.name`, you may have to define those classes as fixtures somewhere else.
 
-### `.describe`
-You can optionally wrap tests in any number of `describe` blocks. `describe` is also aliased as `context`. The describe block might not be necessary though and the name of the file might be enough.
+## Getting Started
+
+Add this line to your application's Gemfile:
 
 ```ruby
-describe Thing do
-  test "something" do
-    assert true
-  end
-end
+gem 'green_dots'
 ```
 
+And then execute:
+
+```bash
+bundle install
+```
+
+Now create a file called `config/green_dots.rb`.
+
+To run tests, execute:
+```bash
+bundle exec gd
+```
+
+## Usage
+
+GreenDots searches for files that end with `.test.rb`. You can put these anywhere. Some people like to put them under `/tests` or `/spec`. Others like to put them next to the code they're testing.
+
 ### `.test`
-The test description is optional — sometimes you don't need a description.
+Use the `test` method to define a test. The description is optional — sometimes you don’t need it.
 
 ```ruby
 test { assert true }
 ```
 
-You can pass `skip: true` to skip the test. Skipped tests are still run and will fail if they start passing.
+You can pass `skip: true` to skip the test. Skipped tests are still run; they pass if they fail and fail they pass.
 
 ```ruby
 test(skip: true) { assert false }
 ```
 
+### `.describe`
+You can optionally wrap tests in any number of `describe` blocks, which can take a description as a string or module/class.
+
+```ruby
+describe Thing do
+  # your Thing tests here
+end
+```
+
 ### `#assert`
+`assert` takes a value and passes if it’s truthy.
 
 ```ruby
 test "something" do
@@ -36,7 +61,16 @@ test "something" do
 end
 ```
 
+You can pass a custom failure message as a block. Using blocks for the failure messages means we don’t waste time constructing them unless the test fails. You don’t need to worry about expensive failure messages slowing down your tests.
+
+```ruby
+test "something" do
+	assert(false) { "This is a custom failure message" }
+end
+```
+
 ### `#refute`
+`refute` is just like `assert`, but it passes if the value is falsy.
 
 ```ruby
 test "something" do
@@ -45,6 +79,7 @@ end
 ```
 
 ### `expect` matchers
+`expect` takes either a value or a block and returns an expectation object, which you can call matchers on.
 
 #### `==` and `!=`
 
