@@ -2,7 +2,15 @@
 
 <img src="quickdraw.png" alt="Quickdraw" width="128">
 
-Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
+Quickdraw is a new test framework for Ruby:
+
+- Spec-like DSL, but with just three methods: `describe`, `test` and `expect`; no `context`, `let`, `subject`, `to`, `it`, `is_expected` or `specify`, and you’ll never need to guess whether the next character is a space, a colon, dot or underscore.
+- Auto-loaded configuration, so you never need to `require "test_helper"`.
+- You can define your own expectations, which can be scoped to a specific type of object and they can be overloaded for different types.
+- Designed to take advantage of all your 16 CPU cores.
+
+> [!WARNING]
+> Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
 
 > [!TIP]
 > Your test files are executed in an anonymous class, so you can define methods and constants at the top level without worrying about collisions. If you’re testing something that references `Class#name`, you may have to define those classes as fixtures somewhere else.
