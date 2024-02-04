@@ -18,6 +18,7 @@ Quickdraw is a new test framework for Ruby:
 - Built in profiling.
 - Rich diffs for failed equality expectations.
 - Configurable dots.
+- Retry flaky tests.
 
 > [!WARNING]
 > Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
