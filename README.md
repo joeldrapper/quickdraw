@@ -5,9 +5,10 @@
 Quickdraw is a new test framework for Ruby:
 
 - Spec-like DSL, but with just five methods: `describe`, `test` and `expect`, `assert`, `refute`. No `context`, `let`, `subject`, `to`, `it`, `is_expected` or `specify`, and you’ll never need to guess whether the next symbol should be a space, a colon, a dot or an underscore.
+- No chaining on matchers. Rather than chain, the matcher can yield if it wants to allow for more complex matching.
 - Auto-loaded configuration, so you never need to `require "test_helper"`.
 - Scoped execution, so you can define methods and constants at the top level without worrying about collisions.
-- You can define your own expectations, which can be scoped to a specific type of object and they can be overloaded for different types.
+- You can define your own matchers, which can be scoped to a specific type of object and they can be overloaded for different types.
 - Designed to take advantage of all your CPU cores — by default it runs one process per CPU core and two threads per process.
 - Built in mocking and spying.
 - Error messages are calculated lazily, so you don’t need to worry about expensive failure messages slowing down your tests.
