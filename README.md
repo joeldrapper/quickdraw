@@ -1,6 +1,6 @@
 # Quickdraw
 
-<img src="quickdraw.png" alt="Quickdraw" width="256">
+<img src="quickdraw.png" alt="Quickdraw" width="128">
 
 Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
 
