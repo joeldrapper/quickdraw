@@ -12,6 +12,7 @@ Quickdraw is a new test framework for Ruby:
 - Built in mocking and spying.
 - Error messages are calculated lazily, so you don’t need to worry about expensive failure messages slowing down your tests.
 - Optional test names — sometimes the code is so clear, you don’t need names.
+- Make as many expectations as you want in a test. You’ll get a dot for each one to make you feel good about youtself.
 
 [Coming soon]:
 
