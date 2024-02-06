@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 class Quickdraw::Runner
-	def initialize(tests = nil)
-		@tests = tests
+	def initialize(queue = nil)
+		@queue = queue
 
+		@duration = nil
 		@successes = []
 		@failures = []
-		@duration = nil
 	end
 
 	def call
 		@duration = Quickdraw::Timer.time do
-			@tests.drain { |(f, t)| t.run(self, [f]) }
+			@queue.drain { |(f, t)| t.run(self, [f]) }
 		end
 
-		result
+		[@duration, @successes, @failures]
 	end
 
 	def success!(name)
@@ -33,13 +33,5 @@ class Quickdraw::Runner
 		Kernel.print(
 			Quickdraw::CONFIG.failure_symbol
 		)
-	end
-
-	def result
-		[
-			@duration,
-			@successes,
-			@failures
-		]
 	end
 end
