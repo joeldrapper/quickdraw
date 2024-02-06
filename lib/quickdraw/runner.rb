@@ -1,20 +1,6 @@
 # frozen_string_literal: true
 
 class Quickdraw::Runner
-	def self.call(queue)
-		tests = []
-
-		queue.drain do |f|
-			tests << [f, Class.new(Quickdraw::Context) do
-				class_eval(
-					File.read(f), f, 1
-				)
-			end]
-		end
-
-		new(tests).tap(&:call)
-	end
-
 	def initialize(tests = nil)
 		@tests = tests
 
@@ -26,7 +12,7 @@ class Quickdraw::Runner
 
 	def call
 		@duration = Quickdraw::Timer.time do
-			@tests.each { |(f, t)| t.run(self, [f]) }
+			@tests.drain { |(f, t)| t.run(self, [f]) }
 		end
 	end
 

@@ -7,7 +7,7 @@ class Quickdraw::Run
 		@test_files = test_files.shuffle
 
 		@cluster = Quickdraw::Cluster.new
-		@batches = Array.new(@number_of_processes) { Quickdraw::Queue.new }
+		@batches = Array.new(@number_of_processes) { [] }
 
 		@test_files.each_with_index do |file, index|
 			@batches[index % @number_of_processes] << file
@@ -29,13 +29,21 @@ class Quickdraw::Run
 
 	def fork_processes
 		# Enable YJIT right before forking
-		RubyVM::YJIT.enable
-
 		@batches.each_with_index do |batch, index|
+			queue = Quickdraw::Queue.new
+
 			@cluster.fork do |writer|
+				batch.each do |file|
+					queue << [file, Class.new(Quickdraw::Context) do
+						class_eval(File.read(file), file, 1)
+					end]
+				end
+
+				RubyVM::YJIT.enable
+
 				results = @number_of_threads.times.map do
-					Thread.new { Quickdraw::Runner.call(batch) }
-				end.map(&:value)
+					Thread.new { Quickdraw::Runner.new(queue).tap(&:call) }
+				end.map!(&:value)
 
 				results.each_with_index do |result, thread|
 					writer.write("\n")
@@ -48,6 +56,6 @@ class Quickdraw::Run
 	def puts_results
 		puts
 		puts
-		puts "Collated results: \n#{@results.join("\n")}"
+		# puts "Collated results: \n#{@results.join("\n")}"
 	end
 end
