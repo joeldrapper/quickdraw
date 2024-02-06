@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 class Quickdraw::Run
 	def initialize(number_of_processes:, number_of_threads: 1, test_files:)
 		@number_of_processes = number_of_processes
@@ -39,15 +41,17 @@ class Quickdraw::Run
 					end]
 				end
 
+				# We enable YJIT here after the files have been loaded
 				RubyVM::YJIT.enable
 
-				results = @number_of_threads.times.map do
-					Thread.new { Quickdraw::Runner.new(queue).tap(&:call) }
-				end.map!(&:value)
-
-				results.each_with_index do |result, thread|
-					writer.write("\n")
-					writer.write("Process[#{index + 1}], Thread[#{thread + 1}]: #{result.successes.count} assertions passed in #{result.duration}. #{Quickdraw::SUCCESS_EMOJI.sample}")
+				@number_of_threads.times.map {
+					Thread.new { Quickdraw::Runner.new(queue).call }
+				}.map!(&:value).each_with_index do |result, thread|
+					writer.write({
+						process: index + 1,
+						thread: thread + 1,
+						result: result
+					}.to_json)
 				end
 			end
 		end
@@ -56,6 +60,6 @@ class Quickdraw::Run
 	def puts_results
 		puts
 		puts
-		# puts "Collated results: \n#{@results.join("\n")}"
+		puts "Collated results: \n#{@results.join("\n")}"
 	end
 end

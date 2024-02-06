@@ -6,14 +6,15 @@ class Quickdraw::Runner
 
 		@successes = []
 		@failures = []
+		@duration = nil
 	end
-
-	attr_reader :successes, :failures, :duration
 
 	def call
 		@duration = Quickdraw::Timer.time do
 			@tests.drain { |(f, t)| t.run(self, [f]) }
 		end
+
+		result
 	end
 
 	def success!(name)
@@ -30,5 +31,13 @@ class Quickdraw::Runner
 
 		Kernel.print "🔴 "
 		# ::Kernel.print "\e[31m⚬\e[0m"
+	end
+
+	def result
+		{
+			successes: @successes,
+			failures: @failures,
+			duration: @duration
+		}
 	end
 end
