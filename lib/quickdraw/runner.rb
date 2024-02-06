@@ -14,7 +14,7 @@ class Quickdraw::Runner
 			@queue.drain { |(f, t)| t.run(self, [f]) }
 		end
 
-		[@duration, @successes, @failures]
+		[@duration.to_s, @successes, @failures]
 	end
 
 	def success!(name)

@@ -44,15 +44,19 @@ class Quickdraw::Run
 				# We enable YJIT here after the files have been loaded
 				RubyVM::YJIT.enable
 
+				results = []
+
 				@number_of_threads.times.map {
 					Thread.new { Quickdraw::Runner.new(queue).call }
 				}.map!(&:value).each_with_index do |result, thread|
-					writer.write [
+					results << [
 						index + 1,
 						thread + 1,
 						result
-					].to_json
+					]
 				end
+
+				writer.write results.to_json
 			end
 		end
 	end
@@ -60,6 +64,12 @@ class Quickdraw::Run
 	def puts_results
 		puts
 		puts
-		puts "Collated results: \n#{@results.join("\n")}"
+
+		@results.each do |result|
+			JSON.parse(result).each do |r|
+				process, thread, (duration, successes, failures) = r
+				puts "[Process: #{process}, Thread: #{thread}] Successes: #{successes.size}, Failures: #{failures.size}, in: #{duration}"
+			end
+		end
 	end
 end
