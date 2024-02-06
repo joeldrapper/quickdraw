@@ -47,11 +47,11 @@ class Quickdraw::Run
 				@number_of_threads.times.map {
 					Thread.new { Quickdraw::Runner.new(queue).call }
 				}.map!(&:value).each_with_index do |result, thread|
-					writer.write({
-						process: index + 1,
-						thread: thread + 1,
-						result: result
-					}.to_json)
+					writer.write [
+						index + 1,
+						thread + 1,
+						result
+					].to_json
 				end
 			end
 		end

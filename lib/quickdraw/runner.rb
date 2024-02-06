@@ -20,8 +20,9 @@ class Quickdraw::Runner
 	def success!(name)
 		@successes << [name]
 
-		Kernel.print "🟢 "
-		# ::Kernel.print "\e[32m⚬\e[0m"
+		Kernel.print(
+			Quickdraw::CONFIG.success_symbol
+		)
 	end
 
 	def failure!(path, &message)
@@ -29,15 +30,16 @@ class Quickdraw::Runner
 
 		@failures << [message, location, path]
 
-		Kernel.print "🔴 "
-		# ::Kernel.print "\e[31m⚬\e[0m"
+		Kernel.print(
+			Quickdraw::CONFIG.failure_symbol
+		)
 	end
 
 	def result
-		{
-			successes: @successes,
-			failures: @failures,
-			duration: @duration
-		}
+		[
+			@duration,
+			@successes,
+			@failures
+		]
 	end
 end

@@ -3,9 +3,11 @@
 class Quickdraw::Configuration
 	def initialize
 		@registry = Quickdraw::Registry.new
+		@failure_symbol = "🔴"
+		@success_symbol = "🟢"
 	end
 
-	attr_reader :registry
+	attr_reader :registry, :failure_symbol, :success_symbol
 
 	def matcher(matcher, *types)
 		@registry.register(matcher, *types)
