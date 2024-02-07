@@ -1,12 +1,43 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
+
 require "etc"
+require "optparse"
+
 require_relative "../lib/quickdraw"
 require File.expand_path("config/quickdraw")
 
-Quickdraw::Run.new(
-	number_of_processes: Etc.nprocessors,
-	number_of_threads: 2,
-	test_files: Dir.glob("./**/*.test.rb")
-).call
+module Quickdraw
+	options = {}
+
+	OptionParser.new do |parser|
+		parser.banner = "Usage: bundle exec qt [options]"
+
+		parser.on("-h", "--help", "Prints this help") do
+			puts parser
+			exit
+		end
+
+		parser.on("-p N", "--processes N", Integer, "Sets the number of processes") do |processes|
+			options[:processes] = processes
+		end
+
+		parser.on("-t N", "--threads N", Integer, "Sets the number of threads per process") do |threads|
+			options[:threads] = threads
+		end
+
+		options[:test_files] = ARGV[0]
+	end.parse!
+
+	Quickdraw::Run.new(
+		number_of_processes: options[:processes] || Etc.nprocessors,
+		number_of_threads: options[:threads] || 2,
+		test_files: Dir.glob(options[:test_files] || "./**/*.test.rb")
+	).call
+end
+
+finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
+
+puts "Actual total time including loading Quickdraw itself: #{Quickdraw::Timer::Duration.new(finish - start)}"

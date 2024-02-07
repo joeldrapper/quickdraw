@@ -15,20 +15,15 @@ module Quickdraw
 	autoload :Queue, "quickdraw/queue"
 	autoload :Map, "quickdraw/map"
 
+	autoload :ArgumentError, "quickdraw/argument_error"
+	autoload :TestFailure, "quickdraw/test_failure"
+
 	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
 
 	Null = Object.new.freeze
 	CONFIG = Configuration.new
 
 	module Error; end
-
-	class TestFailure < RuntimeError
-		include Error
-	end
-
-	class ArgumentError < ::ArgumentError
-		include Error
-	end
 
 	def self.configure(&block)
 		if block.arity == 0
