@@ -28,8 +28,9 @@ module Quickdraw
 			options[:threads] = threads
 		end
 
-		options[:files] = ARGV[0]
 	end.parse!
+
+	options[:files] = ARGV[0]
 
 	Quickdraw::Run.new(
 		number_of_processes: options[:processes] || Quickdraw::Config.number_of_processes,
