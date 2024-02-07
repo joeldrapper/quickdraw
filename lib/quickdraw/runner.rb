@@ -21,7 +21,7 @@ class Quickdraw::Runner
 		@successes << [name]
 
 		Kernel.print(
-			Quickdraw::CONFIG.success_symbol
+			Quickdraw::Config.success_symbol
 		)
 	end
 
@@ -31,7 +31,7 @@ class Quickdraw::Runner
 		@failures << [message, location, path]
 
 		Kernel.print(
-			Quickdraw::CONFIG.failure_symbol
+			Quickdraw::Config.failure_symbol
 		)
 	end
 end

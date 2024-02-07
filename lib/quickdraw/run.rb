@@ -3,15 +3,15 @@
 require "json"
 
 class Quickdraw::Run
-	def initialize(number_of_processes:, number_of_threads: 1, test_files:)
-		@number_of_processes = [number_of_processes, test_files.size].min
-		@number_of_threads = number_of_threads
-		@test_files = test_files.shuffle
+	def initialize(number_of_processes:, number_of_threads_per_process: 1, files:)
+		@number_of_processes = [number_of_processes, files.size].min
+		@number_of_threads_per_process = number_of_threads_per_process
+		@files = files.shuffle
 
 		@cluster = Quickdraw::Cluster.new
 		@batches = Array.new(@number_of_processes) { [] }
 
-		@test_files.each_with_index do |file, index|
+		@files.each_with_index do |file, index|
 			@batches[index % @number_of_processes] << file
 		end
 	end
@@ -46,7 +46,7 @@ class Quickdraw::Run
 
 				results = []
 
-				@number_of_threads.times.map {
+				@number_of_threads_per_process.times.map {
 					Thread.new { Quickdraw::Runner.new(queue).call }
 				}.map!(&:value).each_with_index do |result, thread|
 					results << [

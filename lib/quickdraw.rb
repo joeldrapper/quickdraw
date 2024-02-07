@@ -21,17 +21,12 @@ module Quickdraw
 	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
 
 	Null = Object.new.freeze
-	CONFIG = Configuration.new
+	Config = Configuration.new
 
 	module Error; end
 
 	def self.configure(&block)
-		if block.arity == 0
-			CONFIG.instance_eval(&block)
-		else
-			yield CONFIG
-		end
-
-		CONFIG.freeze
+		yield Config
+		Config.freeze
 	end
 end

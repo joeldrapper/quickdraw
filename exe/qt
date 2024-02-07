@@ -3,10 +3,10 @@
 
 start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
 
-require "etc"
 require "optparse"
-
 require_relative "../lib/quickdraw"
+
+# Load the local configuration
 require File.expand_path("config/quickdraw")
 
 module Quickdraw
@@ -28,13 +28,13 @@ module Quickdraw
 			options[:threads] = threads
 		end
 
-		options[:test_files] = ARGV[0]
+		options[:files] = ARGV[0]
 	end.parse!
 
 	Quickdraw::Run.new(
-		number_of_processes: options[:processes] || Etc.nprocessors,
-		number_of_threads: options[:threads] || 2,
-		test_files: Dir.glob(options[:test_files] || "./**/*.test.rb")
+		number_of_processes: options[:processes] || Quickdraw::Config.number_of_processes,
+		number_of_threads_per_process: options[:threads] || Quickdraw::Config.number_of_threads_per_process,
+		files: Dir.glob(options[:files] || Quickdraw::Config.glob)
 	).call
 end
 

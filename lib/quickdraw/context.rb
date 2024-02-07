@@ -81,7 +81,7 @@ class Quickdraw::Context
 	def expect(value = Quickdraw::Null, &block)
 		type = Quickdraw::Null == value ? block : value
 
-		expectation_class = Quickdraw::CONFIG.registry.expectation_for(
+		expectation_class = Quickdraw::Config.registry.expectation_for(
 			type, matchers: @matchers
 		)
 
