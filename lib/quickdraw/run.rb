@@ -4,7 +4,7 @@ require "json"
 
 class Quickdraw::Run
 	def initialize(number_of_processes:, number_of_threads: 1, test_files:)
-		@number_of_processes = number_of_processes
+		@number_of_processes = [number_of_processes, test_files.size].min
 		@number_of_threads = number_of_threads
 		@test_files = test_files.shuffle
 
