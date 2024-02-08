@@ -11,7 +11,13 @@ class Quickdraw::Queue
 	end
 
 	def drain
-		yield(shift) until empty?
+		loop do
+			if (value = shift)
+				yield(value)
+			else
+				break
+			end
+		end
 	end
 
 	def pop
