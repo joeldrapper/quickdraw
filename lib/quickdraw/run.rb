@@ -30,7 +30,6 @@ class Quickdraw::Run
 	end
 
 	def fork_processes
-		# Enable YJIT right before forking
 		@batches.each_with_index do |batch, index|
 			queue = Quickdraw::Queue.new
 
@@ -42,7 +41,7 @@ class Quickdraw::Run
 				end
 
 				# We enable YJIT here after the files have been loaded
-				RubyVM::YJIT.enable
+				RubyVM::YJIT.enable if Kernel.const_defined?("RubyVM::YJIT")
 
 				results = []
 
