@@ -17,16 +17,9 @@ class Quickdraw::Run
 	end
 
 	def call
-		report_time do
-			fork_processes
-			@results = @cluster.wait
-			puts_results
-		end
-	end
-
-	def report_time(&)
-		total_time = Quickdraw::Timer.time(&)
-		puts "Total time: #{total_time}"
+		fork_processes
+		@results = @cluster.wait
+		puts_results
 	end
 
 	def fork_processes

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Quickdraw::Matchers
 	autoload :Boolean, "quickdraw/matchers/boolean"
 	autoload :CaseEquality, "quickdraw/matchers/case_equality"

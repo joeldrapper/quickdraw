@@ -6,7 +6,7 @@ start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
 require "optparse"
 require_relative "../lib/quickdraw"
 
-# Load the local configuration
+#  Load the local configuration
 require File.expand_path("config/quickdraw")
 
 module Quickdraw
@@ -27,7 +27,6 @@ module Quickdraw
 		parser.on("-t N", "--threads N", Integer, "Sets the number of threads per process") do |threads|
 			options[:threads] = threads
 		end
-
 	end.parse!
 
 	options[:files] = ARGV[0]
@@ -41,4 +40,4 @@ end
 
 finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
 
-puts "Actual total time including loading Quickdraw itself: #{Quickdraw::Timer::Duration.new(finish - start)}"
+puts "Total time: #{Quickdraw::Timer::Duration.new(finish - start)}"

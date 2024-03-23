@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-
-# frozen_string_literal: true
-
 class Quickdraw::Registry
 	def initialize
 		@registered_matchers = Quickdraw::Map.new

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Quickdraw::Pipe do
 	test "with_reader and with_writer" do
 		pipe = Quickdraw::Pipe.new

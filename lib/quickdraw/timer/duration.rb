@@ -6,8 +6,8 @@ class Quickdraw::Timer::Duration
 	end
 
 	def to_s
-    if @duration < 1_000
-   	"#{@duration}ns"
+		if @duration < 1_000
+			"#{@duration}ns"
 		elsif @duration < 1_000_000
 			"#{@duration / 1_000}μs"
 		elsif @duration < 1_000_000_000
@@ -15,7 +15,7 @@ class Quickdraw::Timer::Duration
 		elsif @duration < 60_000_000_000
 			"#{@duration / 1_000_000_000}s"
 		else
-			"#{(@duration / 60_000_000_000)}m"
+			"#{@duration / 60_000_000_000}m"
 		end
-  end
+	end
 end
