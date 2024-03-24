@@ -5,9 +5,7 @@ class Quickdraw::Worker
 		pipe = Quickdraw::Pipe.new
 
 		pid = Process.fork do
-			pipe.with_writer do |writer|
-				yield(writer)
-			end
+			pipe.with_writer { |it| yield(it) }
 		end
 
 		new(pid:, pipe:)
@@ -20,9 +18,6 @@ class Quickdraw::Worker
 
 	def wait
 		Process.wait(@pid)
-
-		@pipe.with_reader do |reader|
-			reader.read
-		end
+		@pipe.with_reader(&:read)
 	end
 end

@@ -20,12 +20,7 @@ module Matchers
 		end
 
 		def to_pass
-			begin
-				Class.new(Quickdraw::Context, &block).run(Result.new)
-			rescue Quickdraw::TestFailure
-				return failure! { "expected the test to pass" }
-			end
-
+			Class.new(Quickdraw::Context, &block).run(Result.new)
 			success!
 		end
 

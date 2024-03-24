@@ -16,14 +16,12 @@ module Quickdraw
 	autoload :Map, "quickdraw/map"
 
 	autoload :ArgumentError, "quickdraw/argument_error"
-	autoload :TestFailure, "quickdraw/test_failure"
 
 	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
 
 	Null = Object.new.freeze
+	Error = Module.new
 	Config = Configuration.new
-
-	module Error; end
 
 	def self.configure(&block)
 		yield Config

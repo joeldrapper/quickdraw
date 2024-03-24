@@ -3,7 +3,7 @@
 require "json"
 
 class Quickdraw::Run
-	def initialize(number_of_processes:, number_of_threads_per_process: 1, files:)
+	def initialize(number_of_processes:, number_of_threads_per_process: 3, files:)
 		@number_of_processes = [number_of_processes, files.size].min
 		@number_of_threads_per_process = number_of_threads_per_process
 		@files = files.shuffle
@@ -23,7 +23,6 @@ class Quickdraw::Run
 	end
 
 	def fork_processes
-		# Enable YJIT right before forking
 		@batches.each_with_index do |batch, index|
 			queue = Quickdraw::Queue.new
 
@@ -61,7 +60,7 @@ class Quickdraw::Run
 		@results.each do |result|
 			JSON.parse(result).each do |r|
 				process, thread, (duration, successes, failures) = r
-				puts "[Process: #{process}, Thread: #{thread}] Successes: #{successes.size}, Failures: #{failures.size}, in: #{duration}"
+				# puts "[Process: #{process}, Thread: #{thread}] Successes: #{successes.size}, Failures: #{failures.size}, in: #{duration}"
 			end
 		end
 	end
