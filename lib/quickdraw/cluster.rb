@@ -8,7 +8,7 @@ class Quickdraw::Cluster
 	end
 
 	def self.spawn(n = Etc.nprocessors, &block)
-	  new.tap do |cluster|
+		new.tap do |cluster|
 			n.times { cluster.fork(&block) }
 		end
 	end
