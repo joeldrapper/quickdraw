@@ -41,7 +41,7 @@ class Quickdraw::Run
 				end
 
 				# We enable YJIT here after the files have been loaded
-				RubyVM::YJIT.enable
+				RubyVM::YJIT.enable if Kernel.const_defined?("RubyVM::YJIT")
 
 				results = []
 
