@@ -4,17 +4,21 @@ require "json"
 
 class Quickdraw::Run
 	def initialize(processes:, threads:, files:, seed:)
-		@processes = [processes, files.size].min
-		@threads = threads
-		@files = files.shuffle(random: Random.new(seed))
-		@seed = seed
+		files = files.shuffle(random: Random.new(seed))
+		number_of_files = files.size
+		processes = [processes, number_of_files].min
+		batches = Array.new(processes) { [] }
 
-		@cluster = Quickdraw::Cluster.new
-		@batches = Array.new(@processes) { [] }
-
-		@files.each_with_index do |file, index|
-			@batches[index % @processes] << file
+		i = 0
+		while i < number_of_files
+			batches[i % processes] << files[i]
+			i += 1
 		end
+
+		@threads = threads
+		@seed = seed
+		@cluster = Quickdraw::Cluster.new
+		@batches = batches
 	end
 
 	def call
