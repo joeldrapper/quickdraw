@@ -2,20 +2,20 @@
 
 class Quickdraw::Timer::Duration
 	def initialize(duration)
-		@duration = duration
+		@duration = duration.to_f
 	end
 
 	def to_s
 		if @duration < 1_000
-			"#{@duration}ns"
+			"#{format("%.1f", @duration)}ns"
 		elsif @duration < 1_000_000
-			"#{@duration / 1_000}μs"
+			"#{format("%.1f", @duration / 1_000)}μs"
 		elsif @duration < 1_000_000_000
-			"#{@duration / 1_000_000}ms"
+			"#{format("%.1f", @duration / 1_000_000)}ms"
 		elsif @duration < 60_000_000_000
-			"#{@duration / 1_000_000_000}s"
+			"#{format("%.1f", @duration / 1_000_000_000)}s"
 		else
-			"#{@duration / 60_000_000_000}m"
+			"#{format("%.1f", @duration / 60_000_000_000)}m"
 		end
 	end
 end
