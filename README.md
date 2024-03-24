@@ -47,6 +47,7 @@ bundle install
 Now create a file called `config/quickdraw.rb`.
 
 To run tests, execute:
+
 ```bash
 bundle exec qt
 ```
@@ -58,6 +59,7 @@ It stands for "quickdraw tests".
 Quickdraw searches for files that end with `.test.rb`. You can put these anywhere. Some people like to put them under `/tests` or `/spec`. Others like to put them next to the code they're testing.
 
 ### `.test`
+
 Use the `test` method to define a test. The description is optional — sometimes you don’t need it.
 
 ```ruby
@@ -71,6 +73,7 @@ test(skip: true) { assert false }
 ```
 
 ### `.describe`
+
 You can optionally wrap tests in any number of `describe` blocks, which can take a description as a string or module/class.
 
 ```ruby
@@ -80,6 +83,7 @@ end
 ```
 
 ### `#assert`
+
 `assert` takes a value and passes if it’s truthy.
 
 ```ruby
@@ -97,6 +101,7 @@ end
 ```
 
 ### `#refute`
+
 `refute` is just like `assert`, but it passes if the value is falsy.
 
 ```ruby
@@ -106,6 +111,7 @@ end
 ```
 
 ### `expect` matchers
+
 `expect` takes either a value or a block and returns an expectation object, which you can call matchers on.
 
 #### `==` and `!=`
@@ -144,3 +150,16 @@ test "mocks and spies" do
   Thing.foo(1, 2, 3)
 end
 ```
+
+### Configuration
+
+To configure Quickdraw, you can create a file in `config/quickdraw.rb`. This file will be automatically loaded when you run your tests. You’ll have have to worry about requiring `test_helper` or `spec_helper` again.
+
+```ruby
+Quickdraw.configure do |config|
+  config.processes = 4
+  config.threads = 8
+end
+```
+
+The config is frozen after this block is evaluated. You cannot reconfigure Quickdraw while it’s running.

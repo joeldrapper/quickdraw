@@ -3,20 +3,23 @@
 require "etc"
 
 class Quickdraw::Configuration
+	DEFAULT_CPU_CORE_RATIO = 1.4
+	DEFAULT_THREAD_COUNT = 8
+
 	def initialize
 		@registry = Quickdraw::Registry.new
 		@failure_symbol = "🔴"
 		@success_symbol = "🟢"
-		@number_of_processes = (Etc.nprocessors * 1.4).floor
-		@number_of_threads_per_process = 8
+		@processes = (Etc.nprocessors * DEFAULT_CPU_CORE_RATIO).floor
+		@threads = 8
 		@glob = "./**/*.test.rb"
 	end
 
 	attr_reader :registry
 	attr_accessor :failure_symbol
 	attr_accessor :success_symbol
-	attr_accessor :number_of_processes
-	attr_accessor :number_of_threads_per_process
+	attr_accessor :processes
+	attr_accessor :threads
 	attr_accessor :glob
 
 	def matcher(matcher, *types)

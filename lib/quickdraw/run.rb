@@ -3,16 +3,17 @@
 require "json"
 
 class Quickdraw::Run
-	def initialize(number_of_processes:, number_of_threads_per_process:, files:)
-		@number_of_processes = [number_of_processes, files.size].min
-		@number_of_threads_per_process = number_of_threads_per_process
-		@files = files.shuffle
+	def initialize(processes:, threads:, files:, seed:)
+		@processes = [processes, files.size].min
+		@threads = threads
+		@files = files.shuffle(random: Random.new(seed))
+		@seed = seed
 
 		@cluster = Quickdraw::Cluster.new
-		@batches = Array.new(@number_of_processes) { [] }
+		@batches = Array.new(@processes) { [] }
 
 		@files.each_with_index do |file, index|
-			@batches[index % @number_of_processes] << file
+			@batches[index % @processes] << file
 		end
 	end
 
@@ -31,10 +32,10 @@ class Quickdraw::Run
 				batch_size = batch.size
 
 				while i < batch_size
-					file = batch[i]
+					file_path = batch[i]
 
-					queue << [file, Class.new(Quickdraw::Context) do
-						class_eval(File.read(file), file, 1)
+					queue << [file_path, Class.new(Quickdraw::Context) do
+						class_eval(File.read(file_path), file_path, 1)
 					end]
 
 					i += 1
@@ -45,7 +46,7 @@ class Quickdraw::Run
 
 				results = []
 
-				@number_of_threads_per_process.times.map {
+				@threads.times.map {
 					Thread.new { Quickdraw::Runner.new(queue).call }
 				}.map!(&:value).each_with_index do |result, thread|
 					results << [
@@ -63,11 +64,12 @@ class Quickdraw::Run
 	def puts_results
 		puts
 		puts
+		puts "Randomized with seed: #{@seed}"
 
 		@results.each do |result|
 			JSON.parse(result).each do |r|
 				process, thread, (duration, successes, failures) = r
-				# puts "[Process: #{process}, Thread: #{thread}] Successes: #{successes.size}, Failures: #{failures.size}, in: #{duration}"
+				puts "[Process: #{process}, Thread: #{thread}] Successes: #{successes.size}, Failures: #{failures.size}, in: #{duration}"
 			end
 		end
 	end

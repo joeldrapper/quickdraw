@@ -1,16 +1,17 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
-
-require "optparse"
-require_relative "../lib/quickdraw"
-
-# Load the local configuration
-require File.expand_path("config/quickdraw")
-
 module Quickdraw
-	options = {}
+	start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
+
+	require "optparse"
+	require_relative "../lib/quickdraw"
+
+	#  Load the local configuration
+	configuration_path = File.expand_path("config/quickdraw.rb")
+	require configuration_path if File.exist?(configuration_path)
+
+	processes, threads, seed = nil
 
 	OptionParser.new do |parser|
 		parser.banner = "Usage: bundle exec qt [options]"
@@ -20,25 +21,29 @@ module Quickdraw
 			exit
 		end
 
-		parser.on("-p N", "--processes N", Integer, "Sets the number of processes") do |processes|
-			options[:processes] = processes
+		parser.on("-p N", "--processes N", Integer, "Number of Ruby Processes to fork (default: ~#{Quickdraw::Configuration::DEFAULT_CPU_CORE_RATIO}× CPU cores)") do |it|
+			processes = it
 		end
 
-		parser.on("-t N", "--threads N", Integer, "Sets the number of threads per process") do |threads|
-			options[:threads] = threads
+		parser.on("-t N", "--threads N", Integer, "Number of Threads per Process (default: #{Quickdraw::Configuration::DEFAULT_THREAD_COUNT})") do |it|
+			threads = it
 		end
 
+		parser.on("-s N", "--seed N", Integer, "Seed for randomization") do |it|
+			seed = it
+		end
 	end.parse!
 
-	options[:files] = ARGV[0]
+	files = ARGV[0]
 
 	Quickdraw::Run.new(
-		number_of_processes: options[:processes] || Quickdraw::Config.number_of_processes,
-		number_of_threads_per_process: options[:threads] || Quickdraw::Config.number_of_threads_per_process,
-		files: Dir.glob(options[:files] || Quickdraw::Config.glob)
+		processes: processes || Quickdraw::Config.processes,
+		threads: threads || Quickdraw::Config.threads,
+		files: Dir.glob(files || Quickdraw::Config.glob),
+		seed: seed || Random.new_seed
 	).call
+
+	finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
+
+	puts "Total time: #{Quickdraw::Timer::Duration.new(finish - start)}"
 end
-
-finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
-
-puts "Total time: #{Quickdraw::Timer::Duration.new(finish - start)}"
