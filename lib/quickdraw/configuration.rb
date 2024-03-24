@@ -7,8 +7,8 @@ class Quickdraw::Configuration
 		@registry = Quickdraw::Registry.new
 		@failure_symbol = "🔴"
 		@success_symbol = "🟢"
-		@number_of_processes = (Etc.nprocessors * 1.5).floor
-		@number_of_threads_per_process = 2
+		@number_of_processes = (Etc.nprocessors * 1.4).floor
+		@number_of_threads_per_process = 8
 		@glob = "./**/*.test.rb"
 	end
 
