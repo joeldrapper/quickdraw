@@ -27,10 +27,17 @@ class Quickdraw::Run
 			queue = Quickdraw::Queue.new
 
 			@cluster.fork do |writer|
-				batch.each do |file|
+				i = 0
+				batch_size = batch.size
+
+				while i < batch_size
+					file = batch[i]
+
 					queue << [file, Class.new(Quickdraw::Context) do
 						class_eval(File.read(file), file, 1)
 					end]
+
+					i += 1
 				end
 
 				# We enable YJIT here after the files have been loaded

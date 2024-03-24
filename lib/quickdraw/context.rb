@@ -20,14 +20,25 @@ class Quickdraw::Context
 			new(result, path).run(@tests) if @tests
 
 			if defined?(@sub_contexts)
-				@sub_contexts.each do |(context, desc)|
+				i = 0
+				sub_contexts_size = @sub_contexts.size
+
+				while i < sub_contexts_size
+					context, desc = @sub_contexts[i]
 					context.run(result, [*path, desc])
+					i += 1
 				end
 			end
 		end
 
 		def use(*new_matchers)
-			new_matchers.each { |m| matchers << m }
+			i = 0
+			new_matchers_size = new_matchers.size
+
+			while i < new_matchers_size
+				matchers << new_matchers[i]
+				i += 1
+			end
 		end
 
 		def matchers
@@ -45,8 +56,6 @@ class Quickdraw::Context
 
 			@sub_contexts << [Class.new(self, &block), description]
 		end
-
-		alias_method :context, :describe
 
 		def test(name = nil, skip: false, &block)
 			unless defined?(@tests)
@@ -68,13 +77,16 @@ class Quickdraw::Context
 	end
 
 	def run(tests)
-		tests.each do |(name, skip, block)|
-			@name = name
-			@skip = skip
+		i = 0
+		tests_size = tests.size
+
+		while i < tests_size
+			@name, @skip, block = tests[i]
 
 			instance_exec(&block)
 
 			resolve
+			i += 1
 		end
 	end
 
@@ -82,7 +94,8 @@ class Quickdraw::Context
 		type = Quickdraw::Null == value ? block : value
 
 		expectation_class = Quickdraw::Config.registry.expectation_for(
-			type, matchers: @matchers
+			type,
+			matchers: @matchers
 		)
 
 		expectation = expectation_class.new(self, value, &block)
@@ -91,7 +104,13 @@ class Quickdraw::Context
 	end
 
 	def resolve
-		@expectations.each(&:resolve)
+		i = 0
+		expectations_size = @expectations.size
+
+		while i < expectations_size
+			@expectations[i].resolve
+			i += 1
+		end
 	ensure
 		@expectations.clear
 	end
