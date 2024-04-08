@@ -16,8 +16,6 @@ module Quickdraw
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
 
-	SUCCESS_EMOJI = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
-
 	Null = Object.new.freeze
 	Error = Module.new
 	Config = Configuration.new

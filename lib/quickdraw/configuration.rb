@@ -13,14 +13,17 @@ class Quickdraw::Configuration
 		@processes = (Etc.nprocessors * DEFAULT_CPU_CORE_RATIO).floor
 		@threads = 8
 		@glob = "./**/*.test.rb"
+		@success_emoji = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
 	end
 
 	attr_reader :registry
+
 	attr_accessor :failure_symbol
 	attr_accessor :success_symbol
 	attr_accessor :processes
 	attr_accessor :threads
 	attr_accessor :glob
+	attr_accessor :success_emoji
 
 	def matcher(matcher, *types)
 		@registry.register(matcher, *types)
