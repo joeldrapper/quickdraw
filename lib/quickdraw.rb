@@ -12,15 +12,17 @@ module Quickdraw
 	autoload :Queue, "quickdraw/queue"
 	autoload :Registry, "quickdraw/registry"
 	autoload :Run, "quickdraw/run"
-	autoload :Runner, "quickdraw/runner"
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
+	autoload :ConcurrentArray, "quickdraw/concurrent_array"
+	autoload :RSpec, "quickdraw/rspec"
+	autoload :Minitest, "quickdraw/minitest"
 
 	Null = Object.new.freeze
 	Error = Module.new
 	Config = Configuration.new
 
-	def self.configure(&block)
+	def self.configure(&)
 		yield Config
 		Config.freeze
 	end

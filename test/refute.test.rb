@@ -2,10 +2,8 @@
 
 test "refute with falsy value" do
 	expect {
-		Class.new(Quickdraw::Context) do
-			test { refute false }
-		end.run
-	}.not_to_raise
+		test { refute false }
+	}.to_pass
 end
 
 test "refute with truthy value" do

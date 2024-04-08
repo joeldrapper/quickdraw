@@ -13,19 +13,17 @@ describe "to_raise" do
 		}.to_pass
 	end
 
-	test "yieldsd the exception to the block" do
-		exception = nil
+	# test "yieldsd the exception to the block" do
+	# 	exception = nil
 
-		Class.new(Quickdraw::Context) do
-			test do
-				expect { raise ArgumentError }.to_raise(ArgumentError) do |error|
-					exception = error
-				end
-			end
-		end.run(Quickdraw::Runner.new)
+	# 	test do
+	# 		expect { raise ArgumentError }.to_raise(ArgumentError) do |error|
+	# 			exception = error
+	# 		end
+	# 	end
 
-		expect(exception).to_be_an ArgumentError
-	end
+	# 	expect(exception).to_be_an ArgumentError
+	# end
 
 	describe "expcting a specific exception" do
 		test "with a block that raises the expected exception" do

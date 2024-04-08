@@ -12,23 +12,16 @@ class Quickdraw::Context
 		Quickdraw::Matchers::ToBeA,
 		Quickdraw::Matchers::ToHaveAttributes,
 		Quickdraw::Matchers::ToRaise,
-		Quickdraw::Matchers::ToReceive,
+		Quickdraw::Matchers::ToReceive
 	].freeze
 
 	class << self
-		def run(result = Quickdraw::Runner.new, path = [])
-			new(result, path).run(@tests) if @tests
+		def describe(description, &)
+			Class.new(self, &)
+		end
 
-			if defined?(@sub_contexts)
-				i = 0
-				sub_contexts_size = @sub_contexts.size
-
-				while i < sub_contexts_size
-					context, desc = @sub_contexts[i]
-					context.run(result, [*path, desc])
-					i += 1
-				end
-			end
+		def test(name = nil, skip: false, &block)
+			run << [name, skip, block, self]
 		end
 
 		def use(*new_matchers)
@@ -49,58 +42,32 @@ class Quickdraw::Context
 			end
 		end
 
-		def describe(description, &block)
-			unless defined?(@sub_contexts)
-				@sub_contexts = []
-			end
-
-			@sub_contexts << [Class.new(self, &block), description]
-		end
-
-		def test(name = nil, skip: false, &block)
-			unless defined?(@tests)
-				@tests = []
-			end
-
-			@tests << [name, skip, block]
+		def init(name, skip)
+			new(name, skip, run, matchers)
 		end
 	end
 
-	def initialize(run, path)
+	def initialize(name, skip, run, matchers)
+		@name = name
+		@skip = skip
 		@run = run
-		@path = path
+		@matchers = matchers
+
 		@expectations = []
-		@matchers = self.class.matchers
-
-		@name = nil
-		@skip = false
-	end
-
-	def run(tests)
-		i = 0
-		tests_size = tests.size
-
-		while i < tests_size
-			@name, @skip, block = tests[i]
-
-			instance_exec(&block)
-
-			resolve
-			i += 1
-		end
 	end
 
 	def expect(value = Quickdraw::Null, &block)
 		type = Quickdraw::Null == value ? block : value
+		expectation = expectation_for(type).new(self, value, &block)
+		@expectations << expectation
+		expectation
+	end
 
-		expectation_class = Quickdraw::Config.registry.expectation_for(
+	private def expectation_for(type)
+		Quickdraw::Config.registry.expectation_for(
 			type,
 			matchers: @matchers
 		)
-
-		expectation = expectation_class.new(self, value, &block)
-		@expectations << expectation
-		expectation
 	end
 
 	def resolve
@@ -137,7 +104,7 @@ class Quickdraw::Context
 
 	def success!
 		if @skip
-			@run.failure!(full_path) { "The skipped test `#{@name}` started passing." }
+			@run.failure! { "The skipped test `#{@name}` started passing." }
 		else
 			@run.success!(@name)
 		end
@@ -147,11 +114,7 @@ class Quickdraw::Context
 		if @skip
 			@run.success!(@name)
 		else
-			@run.failure!(full_path, &)
+			@run.failure!(&)
 		end
-	end
-
-	def full_path
-		[*@path, @name]
 	end
 end
