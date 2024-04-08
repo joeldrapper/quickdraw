@@ -33,9 +33,9 @@ class Quickdraw::Context
 
 		def use(*new_matchers)
 			i = 0
-			new_matchers_size = new_matchers.size
+			number_of_new_matchers = new_matchers.size
 
-			while i < new_matchers_size
+			while i < number_of_new_matchers
 				matchers << new_matchers[i]
 				i += 1
 			end
