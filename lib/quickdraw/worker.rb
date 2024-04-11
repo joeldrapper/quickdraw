@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Quickdraw::Worker
-	def self.fork
+	def self.fork(&block)
 		pipe = Quickdraw::Pipe.new
 
 		pid = Process.fork do
-			pipe.with_writer { |it| yield(it) }
+			pipe.with_writer(&block)
 		end
 
 		new(pid:, pipe:)
@@ -19,5 +19,9 @@ class Quickdraw::Worker
 	def wait
 		Process.wait(@pid)
 		@pipe.with_reader(&:read)
+	end
+
+	def terminate
+		Process.kill("TERM", @pid)
 	end
 end

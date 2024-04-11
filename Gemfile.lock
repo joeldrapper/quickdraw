@@ -7,9 +7,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    diff-lcs (1.5.1)
     docile (1.4.0)
-    json (2.7.1)
+    json (2.7.2)
     language_server-protocol (3.17.0.3)
+    minitest (5.22.3)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -18,7 +20,11 @@ GEM
     rainbow (3.1.1)
     regexp_parser (2.9.0)
     rexml (3.2.6)
-    rubocop (1.62.1)
+    rspec-expectations (3.13.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.1)
+    rubocop (1.63.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -38,6 +44,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
+    sus (0.24.6)
     unicode-display_width (2.5.0)
 
 PLATFORMS
@@ -45,9 +52,12 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
+  minitest
   quickdraw!
+  rspec-expectations
   rubocop
   simplecov
+  sus
 
 BUNDLED WITH
    2.4.6

@@ -7,3 +7,6 @@ gemspec
 
 gem "rubocop"
 gem "simplecov"
+gem "rspec-expectations"
+gem "minitest"
+gem "sus"

@@ -13,4 +13,8 @@ Quickdraw.configure do |config|
 	config.matcher BazMatcher, String
 end
 
-# SimpleCov.start
+# require 'simplecov'
+
+# SimpleCov.start do
+#   enable_coverage :branch
+# end

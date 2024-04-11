@@ -21,6 +21,10 @@ class Quickdraw::Cluster
 		@workers << Quickdraw::Worker.fork(&)
 	end
 
+	def terminate
+		@workers.map(&:terminate)
+	end
+
 	def wait
 		@workers.map(&:wait)
 	end

@@ -7,11 +7,7 @@ module Quickdraw
 	require "optparse"
 	require_relative "../lib/quickdraw"
 
-	#  Load the local configuration
-	configuration_path = File.expand_path("config/quickdraw.rb")
-	require configuration_path if File.exist?(configuration_path)
-
-	processes, threads, seed = nil
+	watch, processes, threads, seed = nil
 
 	OptionParser.new do |parser|
 		parser.banner = "Usage: bundle exec qt [options]"
@@ -21,11 +17,22 @@ module Quickdraw
 			exit
 		end
 
-		parser.on("-p N", "--processes N", Integer, "Number of Ruby Processes to fork (default: ~#{Quickdraw::Configuration::DEFAULT_CPU_CORE_RATIO}× CPU cores)") do |it|
+		parser.on("-p N", "--processes N", Integer, "Number of Ruby Processes to fork (default: #{Quickdraw::Configuration::DEFAULT_PROCESSES})") do |it|
 			processes = it
 		end
 
-		parser.on("-t N", "--threads N", Integer, "Number of Threads per Process (default: #{Quickdraw::Configuration::DEFAULT_THREAD_COUNT})") do |it|
+		if RUBY_PLATFORM =~ /darwin/
+			parser.on("-e", "--efficiency", "Use efficiency cores") do
+				processes ||= `sysctl -n hw.perflevel1.logicalcpu`.to_i
+				`taskpolicy -b -p #{Process.pid}`
+			end
+		end
+
+		parser.on("-w", "--watch", "Watch for changes") do
+			watch = true
+		end
+
+		parser.on("-t N", "--threads N", Integer, "Number of Threads per Process (default: #{Quickdraw::Configuration::DEFAULT_THREADS})") do |it|
 			threads = it
 		end
 
@@ -34,16 +41,53 @@ module Quickdraw
 		end
 	end.parse!
 
-	files = ARGV[0]
+	files = Dir.glob(ARGV[0] || "./**/*.test.rb")
+	configuration_path = File.expand_path("config/quickdraw.rb")
 
-	Quickdraw::Run.new(
-		processes: processes || Quickdraw::Config.processes,
-		threads: threads || Quickdraw::Config.threads,
-		files: Dir.glob(files || Quickdraw::Config.glob),
-		seed: seed || Random.new_seed
-	).call
+	if watch
+		file_mtimes = {}
+
+		files.each do |file|
+			file_mtimes[file] = File.mtime(file)
+		end
+
+		loop do
+			sleep 0.01
+			files.each do |file|
+				next unless File.mtime(file) > file_mtimes[file]
+
+				print "\033[2J\033[H"
+				file_mtimes[file] = File.mtime(file)
+
+				time = Quickdraw::Timer.time do
+					pid = Process.fork do
+						require configuration_path if File.exist?(configuration_path)
+
+						Quickdraw::Run.new(
+							processes: processes || Quickdraw::Config.processes,
+							threads: threads || Quickdraw::Config.threads,
+							files: [file],
+							seed: seed || Random.new_seed
+						).call
+					end
+
+					Process.wait(pid)
+				end
+
+				puts "Total time: #{time}"
+			end
+		end
+	else
+		require configuration_path if File.exist?(configuration_path)
+
+		Quickdraw::Run.new(
+			processes: processes || Quickdraw::Config.processes,
+			threads: threads || Quickdraw::Config.threads,
+			files:,
+			seed: seed || Random.new_seed
+		).call
+	end
 
 	finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
-
 	puts "Total time: #{Quickdraw::Timer::Duration.new(finish - start)}"
 end

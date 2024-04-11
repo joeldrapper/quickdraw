@@ -16,10 +16,8 @@ end
 
 test "assert with truthy value" do
 	expect {
-		Class.new(Quickdraw::Context) do
-			test { assert true }
-		end.run
-	}.not_to_raise
+		test { assert true }
+	}.to_pass
 end
 
 test "assert with custom failure message" do
