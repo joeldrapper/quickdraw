@@ -19,7 +19,7 @@ class Quickdraw::Run
 
 	def call
 		load_tests
-		RubyVM::YJIT.enable if Kernel.const_defined?("RubyVM::YJIT")
+		enable_yjit
 		fork_processes
 		results = @cluster.wait
 
@@ -130,5 +130,15 @@ class Quickdraw::Run
 
 			i += 1
 		end
+	end
+
+	private def enable_yjit
+		if yjit_supported?
+			RubyVM::YJIT.enable
+		end
+	end
+
+	private def yjit_supported?
+		Kernel.const_defined?("RubyVM::YJIT") && RubyVM::YJIT.respond_to?(:enable)
 	end
 end
