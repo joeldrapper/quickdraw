@@ -21,10 +21,12 @@ module Quickdraw
 			processes = it
 		end
 
-		if RUBY_PLATFORM =~ /darwin/
-			parser.on("-e", "--efficiency", "Use efficiency cores") do
+		parser.on("-e", "--efficiency", "Use efficiency cores (Apple M-series Macs only)") do
+			if RUBY_PLATFORM =~ /darwin/ && `sysctl -n machdep.cpu.brand_string`.include?("Apple M")
 				processes ||= `sysctl -n hw.perflevel1.logicalcpu`.to_i
 				`taskpolicy -b -p #{Process.pid}`
+			else
+				puts "Efficiency cores are only available on M-series Macs. The efficiency flag will be ignored."
 			end
 		end
 
