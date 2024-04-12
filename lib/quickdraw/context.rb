@@ -42,15 +42,15 @@ class Quickdraw::Context
 			end
 		end
 
-		def init(name, skip)
-			new(name, skip, run, matchers)
+		def init(name, skip, runner)
+			new(name, skip, runner, matchers)
 		end
 	end
 
-	def initialize(name, skip, run, matchers)
+	def initialize(name, skip, runner, matchers)
 		@name = name
 		@skip = skip
-		@run = run
+		@runner = runner
 		@matchers = matchers
 
 		@expectations = []
@@ -104,17 +104,17 @@ class Quickdraw::Context
 
 	def success!
 		if @skip
-			@run.failure! { "The skipped test `#{@name}` started passing." }
+			@runner.failure! { "The skipped test `#{@name}` started passing." }
 		else
-			@run.success!(@name)
+			@runner.success!(@name)
 		end
 	end
 
 	def failure!(&)
 		if @skip
-			@run.success!(@name)
+			@runner.success!(@name)
 		else
-			@run.failure!(&)
+			@runner.failure!(&)
 		end
 	end
 end

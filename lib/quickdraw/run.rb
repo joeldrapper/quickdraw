@@ -12,9 +12,6 @@ class Quickdraw::Run
 		@tests = []
 
 		@cluster = Quickdraw::Cluster.new
-
-		@successes = Quickdraw::ConcurrentArray.new
-		@failures = Quickdraw::ConcurrentArray.new
 	end
 
 	def call
@@ -75,23 +72,6 @@ class Quickdraw::Run
 		batches
 	end
 
-	def success!(name)
-		@successes << name
-
-		Kernel.print(
-			Quickdraw::Config.success_symbol
-		)
-	end
-
-	def failure!
-		location = caller_locations.drop_while { |it| !it.path.include?(".test.rb") }.first
-		@failures << [location.path, location.lineno, yield]
-
-		Kernel.print(
-			Quickdraw::Config.failure_symbol
-		)
-	end
-
 	def <<(test)
 		@tests << test
 	end
@@ -104,28 +84,11 @@ class Quickdraw::Run
 			queue = batches[i]
 
 			@cluster.fork do |writer|
-				threads = Array.new(@threads) do
-					Thread.new do
-						while true
-							if (name, skip, test, context = queue.shift)
-								context.init(name, skip).instance_exec(&test)
-							else
-								break
-							end
-						end
-					end
-				end
-
-				threads.each(&:join)
-
-				writer.write(
-					{
-						process: i + 1,
-						pid: Process.pid,
-						failures: @failures.to_a,
-						successes: @successes.size
-					}.to_json
-				)
+				Quickdraw::Runner.new(
+					queue:,
+					writer:,
+					threads: @threads
+				).call
 			end
 
 			i += 1
