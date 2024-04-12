@@ -2,6 +2,9 @@
 
 <img src="quickdraw.png" alt="Quickdraw" width="128">
 
+> [!WARNING]
+> Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
+
 Quickdraw is a new test framework for Ruby:
 
 - Spec-like DSL, but with just five methods: `describe`, `test` and `expect`, `assert`, `refute`. No `context`, `let`, `subject`, `to`, `it`, `is_expected` or `specify`, and you’ll never need to guess whether the next symbol should be a space, a colon, a dot or an underscore.
@@ -9,9 +12,11 @@ Quickdraw is a new test framework for Ruby:
 - Auto-loaded configuration, so you never need to `require "test_helper"`.
 - Scoped execution, so you can define methods and constants at the top level without worrying about collisions.
 - You can define your own matchers, which can be scoped to a specific type of object and they can be overloaded for different types.
-- Designed to take advantage of all your CPU cores — by default it runs one process per CPU core and two threads per process.
+- Designed to take advantage of all your CPU cores — by default it runs one process per CPU core and 8 threads per process.
+- Efficiency mode on M-series macs can run on just your efficiency cores to save battery.
+- Watch mode automatically runs tests when files are updated.
 - Built in mocking and spying.
-- Error messages are calculated lazily, so you don’t need to worry about expensive failure messages slowing down your tests.
+- Error messages are calculated lazily, so you don’t need to worry about expensive (but helpful) failure messages slowing down your tests.
 - Optional test names — sometimes the code is so clear, you don’t need names.
 - Make as many expectations as you want in a test. You’ll get a dot for each one to make you feel good about youtself.
 
@@ -21,11 +26,7 @@ Quickdraw is a new test framework for Ruby:
 - Built in code coverage reports.
 - Built in profiling.
 - Rich diffs for failed equality expectations.
-- Configurable dots.
 - Retry flaky tests.
-
-> [!WARNING]
-> Quickdraw is currently in development. You should almost definitely not use it in a project until `1.0` is released.
 
 > [!TIP]
 > Your test files are executed in an anonymous class, so you can define methods and constants at the top level without worrying about collisions. If you’re testing something that references `Class#name`, you may have to define those classes as fixtures somewhere else.
