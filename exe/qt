@@ -17,8 +17,12 @@ module Quickdraw
 			exit
 		end
 
-		parser.on("-p N", "--processes N", Integer, "Number of Ruby Processes to fork (default: #{Quickdraw::Configuration::DEFAULT_PROCESSES})") do |it|
-			processes = it
+		parser.on("-p N", "--processes N", Integer, "Number of Ruby Processes to fork") do |it|
+			if Process.respond_to?(:fork)
+				processes = it
+			else
+				puts "Forking processes is not supported on this platform. The processes flag will be ignored."
+			end
 		end
 
 		parser.on("-e", "--efficiency", "Use efficiency cores (Apple M-series Macs only)") do
@@ -31,10 +35,14 @@ module Quickdraw
 		end
 
 		parser.on("-w", "--watch", "Watch for changes") do
-			watch = true
+			if Process.respond_to?(:fork)
+				watch = true
+			else
+				puts "You cannot use the watch mode on this platform because forking processes is not supported."
+			end
 		end
 
-		parser.on("-t N", "--threads N", Integer, "Number of Threads per Process (default: #{Quickdraw::Configuration::DEFAULT_THREADS})") do |it|
+		parser.on("-t N", "--threads N", Integer, "Number of Threads per Process") do |it|
 			threads = it
 		end
 

@@ -3,9 +3,8 @@
 require "json"
 
 class Quickdraw::Runner
-	def initialize(queue:, writer:, threads:)
+	def initialize(queue:, threads:)
 		@queue = queue
-		@writer = writer
 		@threads = threads
 
 		@failures = Quickdraw::ConcurrentArray.new
@@ -21,7 +20,11 @@ class Quickdraw::Runner
 
 		results.each(&:join)
 
-		write_results
+		{
+			"pid" => Process.pid,
+			"failures" => @failures.to_a,
+			"successes" => @successes.size
+		}
 	end
 
 	def success!(name)
@@ -45,15 +48,5 @@ class Quickdraw::Runner
 		@queue.drain { |(name, skip, test, context)|
 			context.init(name, skip, self).instance_exec(&test)
 		}
-	end
-
-	private def write_results
-		@writer.write(
-			{
-				pid: Process.pid,
-				failures: @failures.to_a,
-				successes: @successes.size
-			}.to_json
-		)
 	end
 end

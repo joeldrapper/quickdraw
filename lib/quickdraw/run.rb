@@ -17,12 +17,17 @@ class Quickdraw::Run
 	def call
 		load_tests
 		enable_yjit
-		fork_processes
-		results = @cluster.wait
+
+		if @processes > 1
+			fork_processes
+			results = @cluster.wait.map { |it| JSON.parse(it) }
+		else
+			result = run_inline
+			results = [result]
+		end
 
 		puts
 		results.each do |result|
-			result = JSON.parse(result)
 			failures = result["failures"]
 
 			i = 0
@@ -58,7 +63,7 @@ class Quickdraw::Run
 		@tests.freeze
 	end
 
-	def batches
+	def batch_tests
 		batches = Array.new([@processes, @tests.size].min) { Quickdraw::Queue.new }
 
 		number_of_tests = @tests.size
@@ -77,6 +82,7 @@ class Quickdraw::Run
 	end
 
 	def fork_processes
+		batches = batch_tests
 		number_of_batches = batches.size
 		i = 0
 
@@ -84,15 +90,32 @@ class Quickdraw::Run
 			queue = batches[i]
 
 			@cluster.fork do |writer|
-				Quickdraw::Runner.new(
+				results = Quickdraw::Runner.new(
 					queue:,
-					writer:,
 					threads: @threads
 				).call
+
+				writer.write(JSON.generate(results))
 			end
 
 			i += 1
 		end
+	end
+
+	def run_inline
+		queue = Quickdraw::Queue.new
+
+		i = 0
+		number_of_tests = @tests.size
+		while i < number_of_tests
+			queue << @tests[i]
+			i += 1
+		end
+
+		Quickdraw::Runner.new(
+			queue:,
+			threads: @threads
+		).call
 	end
 
 	private def enable_yjit
