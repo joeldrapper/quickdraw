@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Quickdraw::Minitest
 	def self.extended(base)
 		base.include(Assertions)
 	end
 
-	def skip(*, **, &)
-		test(*, **, skip: true, &)
+	def skip(*args, **kwargs, &)
+		test(*args, **kwargs, skip: true, &)
 	end
 
 	module Assertions

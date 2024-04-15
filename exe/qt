@@ -7,7 +7,7 @@ module Quickdraw
 	require "optparse"
 	require_relative "../lib/quickdraw"
 
-	watch, processes, threads, seed = nil
+	watch, processes, threads, seed, covered = nil
 
 	OptionParser.new do |parser|
 		parser.banner = "Usage: bundle exec qt [options]"
@@ -30,7 +30,8 @@ module Quickdraw
 				processes ||= `sysctl -n hw.perflevel1.logicalcpu`.to_i
 				`taskpolicy -b -p #{Process.pid}`
 			else
-				puts "Efficiency cores are only available on M-series Macs. The efficiency flag will be ignored."
+				puts "Efficiency cores are only available on M-series Macs."
+				exit 1
 			end
 		end
 
@@ -38,7 +39,8 @@ module Quickdraw
 			if Process.respond_to?(:fork)
 				watch = true
 			else
-				puts "You cannot use the watch mode on this platform because forking processes is not supported."
+				warn "You cannot use the watch mode on this platform because forking processes is not supported."
+				exit 1
 			end
 		end
 
@@ -48,6 +50,17 @@ module Quickdraw
 
 		parser.on("-s N", "--seed N", Integer, "Seed for randomization") do |it|
 			seed = it
+		end
+
+		parser.on("-c", "--coverage", "Generate coverage report") do
+			begin
+				require "covered/config"
+			rescue LoadError
+				warn "You must add the `covered` gem to your Gemfile to use the coverage flag."
+				exit 1
+			end
+
+			covered = Covered::Config.load
 		end
 	end.parse!
 
@@ -90,12 +103,19 @@ module Quickdraw
 	else
 		require configuration_path if File.exist?(configuration_path)
 
+		covered&.start
+
 		Quickdraw::Run.new(
 			processes: processes || Quickdraw::Config.processes,
 			threads: threads || Quickdraw::Config.threads,
 			files:,
 			seed: seed || Random.new_seed
 		).call
+
+		if covered
+			covered.finish
+			covered.call($stdout)
+		end
 	end
 
 	finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)

@@ -27,8 +27,8 @@ class Quickdraw::Run
 		end
 
 		puts
-		results.each do |result|
-			failures = result["failures"]
+		results.each do |r|
+			failures = r["failures"]
 
 			i = 0
 			number_of_failures = failures.size

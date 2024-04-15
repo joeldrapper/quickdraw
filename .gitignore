@@ -8,3 +8,4 @@
 /tmp/
 .rubocop-*
 .DS_Store
+.covered.db

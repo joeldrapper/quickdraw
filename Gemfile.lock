@@ -7,11 +7,20 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    console (1.23.6)
+      fiber-annotation
+      fiber-local
+      json
+    covered (0.25.1)
+      console (~> 1.0)
+      msgpack (~> 1.0)
     diff-lcs (1.5.1)
-    docile (1.4.0)
+    fiber-annotation (0.2.0)
+    fiber-local (1.0.0)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
     minitest (5.22.3)
+    msgpack (1.7.2)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -38,12 +47,6 @@ GEM
     rubocop-ast (1.31.2)
       parser (>= 3.3.0.4)
     ruby-progressbar (1.13.0)
-    simplecov (0.22.0)
-      docile (~> 1.1)
-      simplecov-html (~> 0.11)
-      simplecov_json_formatter (~> 0.1)
-    simplecov-html (0.12.3)
-    simplecov_json_formatter (0.1.4)
     sus (0.24.6)
     unicode-display_width (2.5.0)
 
@@ -52,11 +55,11 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
+  covered
   minitest
   quickdraw!
   rspec-expectations
   rubocop
-  simplecov
   sus
 
 BUNDLED WITH

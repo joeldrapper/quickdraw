@@ -19,3 +19,9 @@ Style/YodaCondition:
 
 Style/InfiniteLoop:
   Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Style/MixinUsage:
+  Enabled: false
