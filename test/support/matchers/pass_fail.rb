@@ -2,6 +2,18 @@
 
 module Matchers
 	module PassFail
+		class Run
+			def initialize
+				@tests = []
+			end
+
+			attr_reader :tests
+
+			def <<(test)
+				@tests << test
+			end
+		end
+
 		class Result
 			def initialize
 				@successes = []
@@ -14,30 +26,51 @@ module Matchers
 				@successes << name
 			end
 
-			def failure!(path)
+			def failure!
 				@failures << yield
 			end
 		end
 
 		def to_pass
-			# Class.new(Quickdraw::Context, &block).run(Result.new)
-			success!
+			run = Run.new
+			result = Result.new
+			definition = block
+
+			Class.new(Quickdraw::Context) do
+				define_singleton_method(:run) { run }
+				class_exec(&definition)
+			end
+
+			run.tests.each do |(name, skip, test, context)|
+				context.run_test(name, skip, result, &test)
+			end
+
+			assert result.failures.empty? do
+				"expected the test to pass, but it failed"
+			end
+
+			assert result.successes.length > 0 do
+				"expected the test to pass but no assertions were made"
+			end
 		end
 
 		def to_fail(message: nil)
-			success!
-			# result = Result.new
-			# Class.new(Quickdraw::Context, &block).run(result)
+			run = Run.new
+			result = Result.new
+			definition = block
 
-			# assert result.failures.any? do
-			# 	"expected the test to fail"
-			# end
+			Class.new(Quickdraw::Context) do
+				define_singleton_method(:run) { run }
+				class_exec(&definition)
+			end
 
-			# if message
-			# 	assert result.failures.include?(message) do
-			# 		"expected the test to fail with message: #{message.inspect}"
-			# 	end
-			# end
+			run.tests.each do |(name, skip, test, context)|
+				context.run_test(name, skip, result, &test)
+			end
+
+			assert result.failures.length > 0 do
+				"expected the test to fail"
+			end
 		end
 	end
 end

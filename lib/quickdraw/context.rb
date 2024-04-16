@@ -42,8 +42,8 @@ class Quickdraw::Context
 			end
 		end
 
-		def init(name, skip, runner)
-			new(name, skip, runner, matchers)
+		def run_test(name, skip, runner, &)
+			new(name, skip, runner, matchers).instance_exec(&)
 		end
 	end
 
