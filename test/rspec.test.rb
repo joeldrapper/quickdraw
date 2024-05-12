@@ -2,16 +2,18 @@
 
 extend Quickdraw::RSpec
 
-describe Quickdraw::RSpec do
-	context "whatever" do
-		let(:a) { "a" }
+RSpec.describe Quickdraw::RSpec do
+	describe "foo" do
+		context "whatever" do
+			let(:a) { "a" }
 
-		it "works" do
-			expect([1, 2, 3]).to include(1)
+			it "works" do
+				expect([1, 2, 3]).to include(1)
 
-			expect {
-				throw(:baz)
-			}.to throw_symbol(:baz)
+				expect {
+					throw(:baz)
+				}.to throw_symbol(:baz)
+			end
 		end
 	end
 end
