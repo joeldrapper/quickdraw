@@ -1,27 +1,5 @@
 inherit_from:
-  - "https://www.goodcop.style/rubocop.yml"
   - "https://www.goodcop.style/tabs.yml"
 
 AllCops:
   TargetRubyVersion: 3.1
-
-Lint/RescueException:
-  Enabled: false
-
-Lint/Void:
-  Enabled: false
-
-Style/MultilineBlockChain:
-  Enabled: false
-
-Style/YodaCondition:
-  Enabled: false
-
-Style/InfiniteLoop:
-  Enabled: false
-
-Naming/PredicateName:
-  Enabled: false
-
-Style/MixinUsage:
-  Enabled: false
