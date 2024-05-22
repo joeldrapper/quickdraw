@@ -12,7 +12,8 @@ class Quickdraw::Context
 		Quickdraw::Matchers::ToBeA,
 		Quickdraw::Matchers::ToHaveAttributes,
 		Quickdraw::Matchers::ToRaise,
-		Quickdraw::Matchers::ToReceive
+		Quickdraw::Matchers::ToReceive,
+		Quickdraw::Matchers::PatternMatch
 	].freeze
 
 	class << self
