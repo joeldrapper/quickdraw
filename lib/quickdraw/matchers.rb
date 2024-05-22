@@ -12,4 +12,5 @@ module Quickdraw::Matchers
 	autoload :ToHaveAttributes, "quickdraw/matchers/to_have_attributes"
 	autoload :ToRaise, "quickdraw/matchers/to_raise"
 	autoload :ToReceive, "quickdraw/matchers/to_receive"
+	autoload :PatternMatch, "quickdraw/matchers/pattern_match"
 end
