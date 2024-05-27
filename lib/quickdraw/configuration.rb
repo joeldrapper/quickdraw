@@ -3,8 +3,8 @@
 require "etc"
 
 class Quickdraw::Configuration
-	DEFAULT_PROCESSES = Process.respond_to?(:fork) ? Etc.nprocessors : 1
-	DEFAULT_THREADS = Process.respond_to?(:fork) ? 8 : Etc.nprocessors * 8
+	DEFAULT_PROCESSES = Quickdraw::SystemInfo.supports_forking? ? Quickdraw::SystemInfo.non_blocking_cores : 1
+	DEFAULT_THREADS = 8
 
 	def initialize
 		@registry = Quickdraw::Registry.new

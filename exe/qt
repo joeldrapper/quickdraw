@@ -21,13 +21,28 @@ module Quickdraw
 			if Process.respond_to?(:fork)
 				processes = it
 			else
-				puts "Forking processes is not supported on this platform. The processes flag will be ignored."
+				warn "Forking processes is not supported on this platform."
+				exit 1
 			end
 		end
 
+		parser.on("-m", "--max", "Use all available CPU cores") do
+			if processes
+				warn "You cannot use the max flag with the processes flag."
+				exit 1
+			end
+
+			processes = SystemInfo.cpu_cores
+		end
+
 		parser.on("-e", "--efficiency", "Use efficiency cores (Apple M-series Macs only)") do
-			if RUBY_PLATFORM =~ /darwin/ && `sysctl -n machdep.cpu.brand_string`.include?("Apple M")
-				processes ||= `sysctl -n hw.perflevel1.logicalcpu`.to_i
+			if SystemInfo.m_series?
+				if processes
+					warn "You cannot use the efficiency flag with the processes flag."
+					exit 1
+				end
+
+				processes = SystemInfo.efficiency_cores
 				`taskpolicy -b -p #{Process.pid}`
 			else
 				puts "Efficiency cores are only available on M-series Macs."
@@ -36,7 +51,7 @@ module Quickdraw
 		end
 
 		parser.on("-w", "--watch", "Watch for changes") do
-			if Process.respond_to?(:fork)
+			if SystemInfo.supports_forking?
 				watch = true
 			else
 				warn "You cannot use the watch mode on this platform because forking processes is not supported."

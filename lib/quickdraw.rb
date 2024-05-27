@@ -16,6 +16,7 @@ module Quickdraw
 	autoload :Registry, "quickdraw/registry"
 	autoload :Run, "quickdraw/run"
 	autoload :Runner, "quickdraw/runner"
+	autoload :SystemInfo, "quickdraw/system_info"
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
 
