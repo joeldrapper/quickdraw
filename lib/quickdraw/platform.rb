@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Quickdraw::SystemInfo
+module Quickdraw::Platform
 	extend self
 
 	# The number of CPU cores for an ideal balance of performance, and user experience.

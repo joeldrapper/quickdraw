@@ -32,17 +32,17 @@ module Quickdraw
 				exit 1
 			end
 
-			processes = SystemInfo.cpu_cores
+			processes = Platform.cpu_cores
 		end
 
 		parser.on("-e", "--efficiency", "Use efficiency cores (Apple M-series Macs only)") do
-			if SystemInfo.m_series?
+			if Platform.m_series?
 				if processes
 					warn "You cannot use the efficiency flag with the processes flag."
 					exit 1
 				end
 
-				processes = SystemInfo.efficiency_cores
+				processes = Platform.efficiency_cores
 				`taskpolicy -b -p #{Process.pid}`
 			else
 				puts "Efficiency cores are only available on M-series Macs."
@@ -51,7 +51,7 @@ module Quickdraw
 		end
 
 		parser.on("-w", "--watch", "Watch for changes") do
-			if SystemInfo.supports_forking?
+			if Platform.supports_forking?
 				watch = true
 			else
 				warn "You cannot use the watch mode on this platform because forking processes is not supported."

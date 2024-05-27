@@ -3,7 +3,7 @@
 require "etc"
 
 class Quickdraw::Configuration
-	DEFAULT_PROCESSES = Quickdraw::SystemInfo.supports_forking? ? Quickdraw::SystemInfo.non_blocking_cores : 1
+	DEFAULT_PROCESSES = Quickdraw::Platform.supports_forking? ? Quickdraw::Platform.non_blocking_cores : 1
 	DEFAULT_THREADS = 8
 
 	def initialize
