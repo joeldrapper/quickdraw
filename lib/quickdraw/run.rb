@@ -16,7 +16,7 @@ class Quickdraw::Run
 
 	def call
 		load_tests
-		enable_yjit
+		enable_yjit if yjit_supported?
 
 		if @processes > 1
 			fork_processes
@@ -118,13 +118,13 @@ class Quickdraw::Run
 		).call
 	end
 
-	private def enable_yjit
-		if yjit_supported?
-			RubyVM::YJIT.enable
-		end
+	private
+
+	def enable_yjit
+		RubyVM::YJIT.enable
 	end
 
-	private def yjit_supported?
-		Kernel.const_defined?("RubyVM::YJIT") && RubyVM::YJIT.respond_to?(:enable)
+	def yjit_supported?
+		Quickdraw::Platform.yjit_supported?
 	end
 end

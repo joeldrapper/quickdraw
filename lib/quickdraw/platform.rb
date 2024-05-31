@@ -48,4 +48,8 @@ module Quickdraw::Platform
 	def cpu_cores
 		Etc.nprocessors
 	end
+
+	def yjit_supported?
+		Kernel.const_defined?("RubyVM::YJIT") && RubyVM::YJIT.respond_to?(:enable)
+	end
 end
