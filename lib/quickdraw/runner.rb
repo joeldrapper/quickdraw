@@ -36,8 +36,8 @@ class Quickdraw::Runner
 	end
 
 	def failure!
-		location = caller_locations.drop_while { |it| !it.path.include?(".test.rb") }.first
-		@failures << [location.path, location.lineno, yield]
+		# TODO: Need to add caller_locations context here
+		@failures << [nil, nil, yield]
 
 		Kernel.print(
 			Quickdraw::Config.failure_symbol
