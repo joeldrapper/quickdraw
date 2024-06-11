@@ -44,7 +44,9 @@ class Quickdraw::Runner
 		)
 	end
 
-	private def drain_queue
+	private
+
+	def drain_queue
 		@queue.drain { |(name, skip, test, context)|
 			context.run_test(name, skip, self, &test)
 		}
