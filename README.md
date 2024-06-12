@@ -12,7 +12,7 @@ Quickdraw is a new test framework for Ruby:
 - Auto-loaded configuration, so you never need to `require "test_helper"`.
 - Scoped execution, so you can define methods and constants at the top level without worrying about collisions.
 - You can define your own matchers, which can be scoped to a specific type of object and they can be overloaded for different types.
-- Designed to take advantage of all your CPU cores — by default it runs one process per CPU core and 8 threads per process.
+- Designed to take advantage of multi-core systems. On M-series macs, it runs one process for each performance core.
 - Efficiency mode on M-series macs can run on just your efficiency cores to save battery.
 - Watch mode automatically runs tests when files are updated.
 - Built in mocking and spying.
