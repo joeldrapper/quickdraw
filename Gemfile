@@ -10,3 +10,5 @@ gem "rspec-expectations"
 gem "minitest"
 gem "sus"
 gem "covered"
+
+gem "bootsnap"
