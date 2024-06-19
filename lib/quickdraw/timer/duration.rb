@@ -1,21 +1,25 @@
 # frozen_string_literal: true
 
 class Quickdraw::Timer::Duration
-	def initialize(duration)
-		@duration = duration.to_f
+	def initialize(nanoseconds)
+		@nanoseconds = nanoseconds.to_f
 	end
 
+	attr_reader :nanoseconds
+
 	def to_s
-		if @duration < 1_000
-			"#{format('%.1f', @duration)}ns"
-		elsif @duration < 1_000_000
-			"#{format('%.1f', @duration / 1_000)}μs"
-		elsif @duration < 1_000_000_000
-			"#{format('%.1f', @duration / 1_000_000)}ms"
-		elsif @duration < 60_000_000_000
-			"#{format('%.1f', @duration / 1_000_000_000)}s"
+		if @nanoseconds < 1_000
+			"#{format('%.0f', @nanoseconds)}ns"
+		elsif @nanoseconds < 1_000_000
+			"#{format('%.1f', @nanoseconds / 1_000)}μs"
+		elsif @nanoseconds < 1_000_000_000
+			"#{format('%.1f', @nanoseconds / 1_000_000)}ms"
+		elsif @nanoseconds < 60_000_000_000
+			"#{format('%.1f', @nanoseconds / 1_000_000_000)}s"
 		else
-			"#{format('%.1f', @duration / 60_000_000_000)}m"
+			minutes = @nanoseconds / 60_000_000_000
+			seconds = (@nanoseconds % 60_000_000_000) / 1_000_000_000
+			"#{format('%.0f', minutes)}m #{format('%.0f', seconds)}s"
 		end
 	end
 end

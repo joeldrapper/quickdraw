@@ -13,6 +13,18 @@ module Quickdraw::Matchers::Equality
 		end
 	end
 
+	def >=(other)
+		assert value >= other do
+			"expected `#{value.inspect}` to be >= `#{other.inspect}`"
+		end
+	end
+
+	def <=(other)
+		assert value <= other do
+			"expected `#{value.inspect}` to be <= `#{other.inspect}`"
+		end
+	end
+
 	def to_eql?(other)
 		assert value.eql?(other) do
 			"expected `#{value.inspect}` to eql? `#{other.inspect}`"
