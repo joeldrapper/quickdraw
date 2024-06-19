@@ -3,7 +3,6 @@
 class Quickdraw::Context
 	DEFAULT_MATCHERS = [
 		Quickdraw::Matchers::Boolean,
-		Quickdraw::Matchers::CaseEquality,
 		Quickdraw::Matchers::Change,
 		Quickdraw::Matchers::Equality,
 		Quickdraw::Matchers::Include,
@@ -13,7 +12,6 @@ class Quickdraw::Context
 		Quickdraw::Matchers::ToHaveAttributes,
 		Quickdraw::Matchers::ToRaise,
 		Quickdraw::Matchers::ToReceive,
-		Quickdraw::Matchers::PatternMatch
 	].freeze
 
 	class << self
@@ -60,7 +58,7 @@ class Quickdraw::Context
 	end
 
 	def expect(value = Quickdraw::Null, &block)
-		type = Quickdraw::Null == value ? block : value
+		type = (Quickdraw::Null == value) ? block : value
 		expectation = expectation_for(type).new(self, value, &block)
 		@expectations << expectation
 		expectation
@@ -69,7 +67,7 @@ class Quickdraw::Context
 	private def expectation_for(type)
 		Quickdraw::Config.registry.expectation_for(
 			type,
-			matchers: @matchers
+			matchers: @matchers,
 		)
 	end
 

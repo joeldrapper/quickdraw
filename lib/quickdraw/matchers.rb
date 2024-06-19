@@ -2,7 +2,6 @@
 
 module Quickdraw::Matchers
 	autoload :Boolean, "quickdraw/matchers/boolean"
-	autoload :CaseEquality, "quickdraw/matchers/case_equality"
 	autoload :Change, "quickdraw/matchers/change"
 	autoload :Equality, "quickdraw/matchers/equality"
 	autoload :Include, "quickdraw/matchers/include"
@@ -12,5 +11,4 @@ module Quickdraw::Matchers
 	autoload :ToHaveAttributes, "quickdraw/matchers/to_have_attributes"
 	autoload :ToRaise, "quickdraw/matchers/to_raise"
 	autoload :ToReceive, "quickdraw/matchers/to_receive"
-	autoload :PatternMatch, "quickdraw/matchers/pattern_match"
 end
