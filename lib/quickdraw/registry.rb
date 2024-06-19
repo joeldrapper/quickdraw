@@ -19,11 +19,11 @@ class Quickdraw::Registry
 	def expectation_for(value, matchers: nil)
 		if matchers
 			shape_for(
-				matchers + matchers_for(value)
+				matchers + matchers_for(value),
 			)
 		else
 			shape_for(
-				matchers_for(value)
+				matchers_for(value),
 			)
 		end
 	end

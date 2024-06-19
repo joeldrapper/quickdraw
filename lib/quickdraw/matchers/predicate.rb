@@ -2,13 +2,13 @@
 
 module Quickdraw::Matchers::Predicate
 	def to_be(predicate)
-		assert value.send(predicate) do
+		assert value.__send__(predicate) do
 			"expected `#{value.inspect}` to be `#{predicate.inspect}`"
 		end
 	end
 
 	def not_to_be(predicate)
-		refute value.send(predicate) do
+		refute value.__send__(predicate) do
 			"expected `#{value.inspect}` to not be `#{predicate.inspect}`"
 		end
 	end

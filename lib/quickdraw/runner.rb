@@ -23,7 +23,7 @@ class Quickdraw::Runner
 		{
 			"pid" => Process.pid,
 			"failures" => @failures.to_a,
-			"successes" => @successes.size
+			"successes" => @successes.size,
 		}
 	end
 
@@ -31,7 +31,7 @@ class Quickdraw::Runner
 		@successes << name
 
 		Kernel.print(
-			Quickdraw::Config.success_symbol
+			Quickdraw::Config.success_symbol,
 		)
 	end
 
@@ -40,7 +40,7 @@ class Quickdraw::Runner
 		@failures << [nil, nil, yield]
 
 		Kernel.print(
-			Quickdraw::Config.failure_symbol
+			Quickdraw::Config.failure_symbol,
 		)
 	end
 

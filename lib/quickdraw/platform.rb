@@ -19,7 +19,7 @@ module Quickdraw::Platform
 
 	def efficiency_cores
 		if m_series?
-			`sysctl -n hw.perflevel1.logicalcpu`.to_i
+			Integer(`sysctl -n hw.perflevel1.logicalcpu`, 10)
 		else
 			0
 		end
@@ -27,7 +27,7 @@ module Quickdraw::Platform
 
 	def performance_cores
 		if m_series?
-			`sysctl -n hw.perflevel0.logicalcpu`.to_i
+			Integer(`sysctl -n hw.perflevel0.logicalcpu`, 10)
 		else
 			0
 		end

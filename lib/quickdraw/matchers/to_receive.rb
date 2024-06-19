@@ -12,7 +12,7 @@ module Quickdraw::Matchers::ToReceive
 
 		interceptor.define_method(method_name) do |*args, **kwargs, &block|
 			expectation.success!
-			super_block = -> (*a, &b) { (a.length > 0) || b ? super(*a, &b) : super(*args, **kwargs, &block) }
+			super_block = -> (*a, &b) { ((a.length > 0) || b) ? super(*a, &b) : super(*args, **kwargs, &block) }
 			original_super = context.instance_variable_get(:@super)
 			begin
 				context.instance_variable_set(:@super, super_block)

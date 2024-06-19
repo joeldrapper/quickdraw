@@ -3,7 +3,7 @@
 module Quickdraw::Matchers::ToHaveAttributes
 	def to_have_attributes(**attributes)
 		attributes.each do |k, v|
-			assert v === value.send(k) do
+			assert v === value.__send__(k) do
 				"expected `#{value.inspect}` to have the attribute `#{k.inspect}` equal to `#{v.inspect}`"
 			end
 		end

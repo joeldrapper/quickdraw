@@ -6,7 +6,7 @@ test "success" do
 	expect {
 		test {
 			expect(User.new(name: "Joel")).to_have_attributes(
-				name: "Joel"
+				name: "Joel",
 			)
 		}
 	}.to_pass
@@ -16,7 +16,7 @@ test "failure with wrong value" do
 	expect {
 		test {
 			expect(User.new(name: "Joel")).to_have_attributes(
-				name: "Jill"
+				name: "Jill",
 			)
 		}
 	}.to_fail message: %(expected `#<data name="Joel">` to have the attribute `:name` equal to `"Jill"`)
@@ -26,7 +26,7 @@ test "failure with missing reader method" do
 	expect {
 		test {
 			expect(User.new(name: "Joel")).to_have_attributes(
-				email: "joel@drapper.me"
+				email: "joel@drapper.me",
 			)
 		}
 	}.to_fail message: %(expected `#<data name="Joel">` to respond to `email`)

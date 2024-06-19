@@ -2,7 +2,7 @@
 
 class Quickdraw::Timer::Duration
 	def initialize(nanoseconds)
-		@nanoseconds = nanoseconds.to_f
+		@nanoseconds = Float(nanoseconds)
 	end
 
 	attr_reader :nanoseconds

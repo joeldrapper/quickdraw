@@ -92,7 +92,7 @@ class Quickdraw::Run
 			@cluster.fork do |writer|
 				results = Quickdraw::Runner.new(
 					queue:,
-					threads: @threads
+					threads: @threads,
 				).call
 
 				writer.write(JSON.generate(results))
@@ -114,7 +114,7 @@ class Quickdraw::Run
 
 		Quickdraw::Runner.new(
 			queue:,
-			threads: @threads
+			threads: @threads,
 		).call
 	end
 

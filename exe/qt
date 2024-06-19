@@ -105,7 +105,7 @@ module Quickdraw
 							processes: processes || Quickdraw::Config.processes,
 							threads: threads || Quickdraw::Config.threads,
 							files: [file],
-							seed: seed || Random.new_seed
+							seed: seed || Random.new_seed,
 						).call
 					end
 
@@ -124,7 +124,7 @@ module Quickdraw
 			processes: processes || Quickdraw::Config.processes,
 			threads: threads || Quickdraw::Config.threads,
 			files:,
-			seed: seed || Random.new_seed
+			seed: seed || Random.new_seed,
 		).call
 
 		if covered
