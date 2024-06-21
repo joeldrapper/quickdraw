@@ -154,7 +154,7 @@ end
 
 ### Configuration
 
-To configure Quickdraw, you can create a file in `config/quickdraw.rb`. This file will be automatically loaded when you run your tests. You’ll have have to worry about requiring `test_helper` or `spec_helper` again.
+To configure Quickdraw, you can create a file in `config/quickdraw.rb`. This file will be automatically loaded when you run your tests. You’ll never have to worry about requiring `test_helper` or `spec_helper` again.
 
 ```ruby
 Quickdraw.configure do |config|
