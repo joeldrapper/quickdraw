@@ -15,10 +15,6 @@ class Quickdraw::Context
 	].freeze
 
 	class << self
-		def describe(description, &)
-			Class.new(self, &)
-		end
-
 		def test(name = nil, skip: false, &block)
 			run << [name, skip, block, self]
 		end

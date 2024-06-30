@@ -7,7 +7,7 @@
 
 Quickdraw is a new test framework for Ruby:
 
-- Spec-like DSL, but with just five methods: `describe`, `test` and `expect`, `assert`, `refute`. No `context`, `let`, `subject`, `to`, `it`, `is_expected` or `specify`, and you’ll never need to guess whether the next symbol should be a space, a colon, a dot or an underscore.
+- Spec-like DSL, but with just four methods: `test`, `expect`, `assert`, `refute`. No `describe`, `context`, `let`, `subject`, `to`, `it`, `is_expected` or `specify`, and you’ll never need to guess whether the next symbol should be a space, a colon, a dot or an underscore.
 - No chaining on matchers. Rather than chain, the matcher can yield if it wants to allow for more complex matching.
 - Auto-loaded configuration, so you never need to `require "test_helper"`.
 - Scoped execution, so you can define methods and constants at the top level without worrying about collisions.
@@ -71,16 +71,6 @@ You can pass `skip: true` to skip the test. Skipped tests are still run; they pa
 
 ```ruby
 test(skip: true) { assert false }
-```
-
-### `.describe`
-
-You can optionally wrap tests in any number of `describe` blocks, which can take a description as a string or module/class.
-
-```ruby
-describe Thing do
-  # your Thing tests here
-end
 ```
 
 ### `#assert`

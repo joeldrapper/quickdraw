@@ -1,29 +1,21 @@
 # frozen_string_literal: true
 
-describe "==" do
-	test "when equal" do
-		expect {
-			test { expect("a") == "a" }
-		}.to_pass
-	end
+test "==" do
+	expect {
+		test { expect(1) == 1 }
+	}.to_pass
 
-	test "when not equal" do
-		expect {
-			test { expect("a") == "b" }
-		}.to_fail message: %(expected `"a"` to == `"b"`)
-	end
+	expect {
+		test { expect(1) == 2 }
+	}.to_fail(message: %(expected `1` to == `2`))
 end
 
-describe "!=" do
-	test "when not equal" do
-		expect {
-			test { expect("a") != "b" }
-		}.to_pass
-	end
+test "!=" do
+	expect {
+		test { expect(1) != 2 }
+	}.to_pass
 
-	test "when equal" do
-		expect {
-			test { expect("a") != "a" }
-		}.to_fail message: %(expected `"a"` to != `"a"`)
-	end
+	expect {
+		test { expect(1) != 1 }
+	}.to_fail(message: %(expected `1` to != `1`))
 end

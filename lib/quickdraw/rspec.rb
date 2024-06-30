@@ -10,9 +10,13 @@ module Quickdraw::RSpec
 		# Add support for `RSpec.describe`
 		base.const_set(:RSpec, Class.new do
 			define_singleton_method(:describe) do |*args, &block|
-				base.describe(*args, &block)
+				Class.new(base, &block)
 			end
 		end)
+	end
+
+	def describe(description, &)
+		Class.new(self, &)
 	end
 
 	def context(...) = describe(...)
