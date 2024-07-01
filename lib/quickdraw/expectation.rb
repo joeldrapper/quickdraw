@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 class Quickdraw::Expectation
+	include Quickdraw::Matchers::Boolean
+	include Quickdraw::Matchers::Change
+	include Quickdraw::Matchers::Equality
+	include Quickdraw::Matchers::Include
+	include Quickdraw::Matchers::Predicate
+	include Quickdraw::Matchers::RespondTo
+	include Quickdraw::Matchers::ToBeA
+	include Quickdraw::Matchers::ToHaveAttributes
+	include Quickdraw::Matchers::ToRaise
+	include Quickdraw::Matchers::ToReceive
+
 	def initialize(context, value = Quickdraw::Null, &block)
 		if block && Quickdraw::Null != value
 			raise Quickdraw::ArgumentError.new("You must only provide a value or a block to `expect`.")
@@ -47,6 +58,10 @@ class Quickdraw::Expectation
 	end
 
 	def block
-		@block || raise(Quickdraw::ArgumentError.new("You must pass a block rather than a value when using the #{caller_locations.first.label} matcher."))
+		@block || raise(
+			Quickdraw::ArgumentError.new(
+				"You must pass a block rather than a value when using the #{caller_locations.first.label} matcher.",
+			),
+		)
 	end
 end

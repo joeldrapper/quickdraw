@@ -1,19 +1,6 @@
 # frozen_string_literal: true
 
 class Quickdraw::Context
-	DEFAULT_MATCHERS = [
-		Quickdraw::Matchers::Boolean,
-		Quickdraw::Matchers::Change,
-		Quickdraw::Matchers::Equality,
-		Quickdraw::Matchers::Include,
-		Quickdraw::Matchers::Predicate,
-		Quickdraw::Matchers::RespondTo,
-		Quickdraw::Matchers::ToBeA,
-		Quickdraw::Matchers::ToHaveAttributes,
-		Quickdraw::Matchers::ToRaise,
-		Quickdraw::Matchers::ToReceive,
-	].freeze
-
 	class << self
 		def test(name = nil, skip: false, &block)
 			run << [name, skip, block, self]
@@ -33,7 +20,7 @@ class Quickdraw::Context
 			@matchers ||= if superclass < Quickdraw::Context
 				superclass.matchers.dup
 			else
-				Set.new(DEFAULT_MATCHERS)
+				Set[]
 			end
 		end
 

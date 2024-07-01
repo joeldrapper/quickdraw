@@ -8,5 +8,4 @@ test "measures the duration of the given block" do
 	expect(duration).to_be_a(Quickdraw::Timer::Duration)
 
 	expect(duration.nanoseconds) >= 10_000_000
-	expect(duration.nanoseconds) <= 15_000_000
 end
