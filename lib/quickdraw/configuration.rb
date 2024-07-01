@@ -8,8 +8,8 @@ class Quickdraw::Configuration
 
 	def initialize
 		@registry = Quickdraw::Registry.new
-		@failure_symbol = "🔴"
-		@success_symbol = "🟢"
+		@failure_symbol = "\e[31m⨯\e[0m"
+		@success_symbol = "\e[32m∘\e[0m"
 		@processes = DEFAULT_PROCESSES
 		@threads = DEFAULT_THREADS
 		@success_emoji = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
