@@ -22,6 +22,11 @@ module Quickdraw::RSpec
 	def context(...) = describe(...)
 	def it(...) = test(...)
 
+	def subject(name = nil, &)
+		let("subject", &)
+		let(name, &) if name
+	end
+
 	def let(name, &block)
 		instance_variable = :"@#{name}"
 

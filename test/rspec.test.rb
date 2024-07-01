@@ -16,4 +16,24 @@ RSpec.describe Quickdraw::RSpec do
 			end
 		end
 	end
+
+	describe "unnamed subject" do
+		subject { "subj" }
+
+		it "works when referenced as 'subject'" do
+			expect(subject) == "subj"
+		end
+	end
+
+	describe "named subject" do
+		subject(:named_subject) { "subj" }
+
+		it "works when referenced as 'subject'" do
+			expect(subject) == "subj"
+		end
+
+		it "works when referenced by its name" do
+			expect(named_subject) == "subj"
+		end
+	end
 end
