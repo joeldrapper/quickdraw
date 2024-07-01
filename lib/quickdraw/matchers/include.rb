@@ -2,14 +2,14 @@
 
 module Quickdraw::Matchers::Include
 	def to_include(other)
-		assert value.include?(other) do
-			"expected `#{value.inspect}` to include? `#{other.inspect}`"
+		assert @subject.include?(other) do
+			"expected `#{@subject.inspect}` to include? `#{other.inspect}`"
 		end
 	end
 
 	def not_to_include(other)
-		refute value.include?(other) do
-			"expected `#{value.inspect}` to not include? `#{other.inspect}`"
+		refute @subject.include?(other) do
+			"expected `#{@subject.inspect}` to not include? `#{other.inspect}`"
 		end
 	end
 end

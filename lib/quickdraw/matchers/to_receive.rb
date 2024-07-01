@@ -2,8 +2,6 @@
 
 module Quickdraw::Matchers::ToReceive
 	def to_receive(method_name, &expectation_block)
-		__raise__ Quickdraw::ArgumentError, "You can't use the `to_receive` matcher with a block expectation." if @block
-
 		interceptor = ::Module.new
 
 		# Define local variables so they're available from the block
@@ -25,6 +23,6 @@ module Quickdraw::Matchers::ToReceive
 			result
 		end
 
-		value.singleton_class.prepend(interceptor)
+		@subject.singleton_class.prepend(interceptor)
 	end
 end

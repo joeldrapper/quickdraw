@@ -19,6 +19,7 @@ module Quickdraw
 	autoload :Runner, "quickdraw/runner"
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
+	autoload :Never, "quickdraw/never"
 
 	Null = Object.new.freeze
 	Error = Module.new

@@ -3,11 +3,11 @@
 module Quickdraw::Matchers::ToHaveAttributes
 	def to_have_attributes(**attributes)
 		attributes.each do |k, v|
-			assert v === value.__send__(k) do
-				"expected `#{value.inspect}` to have the attribute `#{k.inspect}` equal to `#{v.inspect}`"
+			assert v === @subject.__send__(k) do
+				"expected `#{@subject.inspect}` to have the attribute `#{k.inspect}` equal to `#{v.inspect}`"
 			end
 		end
 	rescue NoMethodError => e
-		failure! { "expected `#{value.inspect}` to respond to `#{e.name}`" }
+		failure! { "expected `#{@subject.inspect}` to respond to `#{e.name}`" }
 	end
 end

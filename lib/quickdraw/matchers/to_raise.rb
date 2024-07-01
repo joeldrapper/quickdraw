@@ -2,7 +2,7 @@
 
 module Quickdraw::Matchers::ToRaise
 	def to_raise(error = ::Exception)
-		expectation_block = block
+		expectation_block = @block
 
 		begin
 			expectation_block.call
@@ -18,7 +18,7 @@ module Quickdraw::Matchers::ToRaise
 	end
 
 	def not_to_raise
-		block.call
+		@block.call
 		success!
 	rescue ::Exception => e
 		failure! { "expected the block not to raise, but it raised `#{e.class}`" }

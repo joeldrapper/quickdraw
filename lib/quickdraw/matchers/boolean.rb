@@ -2,10 +2,10 @@
 
 module Quickdraw::Matchers::Boolean
 	def to_be_truthy
-		assert(value) { "expected `#{value.inspect}` to be truthy" }
+		assert(@subject) { "expected `#{@subject.inspect}` to be truthy" }
 	end
 
 	def to_be_falsy
-		refute(value) { "expected `#{value.inspect}` to be falsy" }
+		refute(@subject) { "expected `#{@subject.inspect}` to be falsy" }
 	end
 end

@@ -2,6 +2,7 @@
 
 module Quickdraw::Minitest
 	autoload :Assertions, "quickdraw/minitest/assertions"
+	autoload :Expectations, "quickdraw/minitest/expectations"
 
 	def self.extended(base)
 		base.include(Quickdraw::Minitest::Assertions)

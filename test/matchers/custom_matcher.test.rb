@@ -2,7 +2,7 @@
 
 module FooMatcher
 	def foo?
-		assert(value == "foo") { %(expected #{value} to be "foo" but it wasn't) }
+		assert(@subject == "foo") { %(expected #{@subject} to be "foo" but it wasn't) }
 	end
 end
 

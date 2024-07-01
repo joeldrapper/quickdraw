@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Quickdraw::Expectation
+	NEVER_BLOCK = Quickdraw::Never.new("You must pass a block rather than a subject.")
+	NEVER_SUBJECT = Quickdraw::Never.new("You must pass a subject rather than a block.")
+
 	include Quickdraw::Matchers::Boolean
 	include Quickdraw::Matchers::Change
 	include Quickdraw::Matchers::Equality
@@ -12,14 +15,21 @@ class Quickdraw::Expectation
 	include Quickdraw::Matchers::ToRaise
 	include Quickdraw::Matchers::ToReceive
 
-	def initialize(context, value = Quickdraw::Null, &block)
-		if block && Quickdraw::Null != value
-			raise Quickdraw::ArgumentError.new("You must only provide a value or a block to `expect`.")
+	def initialize(context, subject = Quickdraw::Null, &block)
+		if block && Quickdraw::Null != subject
+			raise Quickdraw::ArgumentError.new("You must only provide a subject or a block to `expect`.")
 		end
 
 		@context = context
-		@value = value
-		@block = block
+
+		if Quickdraw::Null == subject
+			@subject = NEVER_SUBJECT
+			@block = block
+		else
+			@subject = subject
+			@block = NEVER_BLOCK
+		end
+
 		@made_expectations = false
 	end
 
@@ -47,21 +57,5 @@ class Quickdraw::Expectation
 
 	def refute(value, &)
 		value ? failure!(&) : success!
-	end
-
-	def value
-		if @block
-			raise Quickdraw::ArgumentError.new("You must pass a value rather than a block when using the #{caller_locations.first.label} matcher.")
-		else
-			@value
-		end
-	end
-
-	def block
-		@block || raise(
-			Quickdraw::ArgumentError.new(
-				"You must pass a block rather than a value when using the #{caller_locations.first.label} matcher.",
-			),
-		)
 	end
 end

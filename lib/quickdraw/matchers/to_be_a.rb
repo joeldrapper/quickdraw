@@ -2,14 +2,14 @@
 
 module Quickdraw::Matchers::ToBeA
 	def to_be_a(type)
-		assert type === value do
-			"expected `#{value.inspect}` to have the type `#{type.inspect}`"
+		assert type === @subject do
+			"expected `#{@subject.inspect}` to have the type `#{type.inspect}`"
 		end
 	end
 
 	def not_to_be_a(type)
-		refute type === value do
-			"expected `#{value.inspect}` to not have the type `#{type.inspect}`"
+		refute type === @subject do
+			"expected `#{@subject.inspect}` to not have the type `#{type.inspect}`"
 		end
 	end
 

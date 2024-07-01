@@ -2,14 +2,14 @@
 
 module Quickdraw::Matchers::Predicate
 	def to_be(predicate)
-		assert value.__send__(predicate) do
-			"expected `#{value.inspect}` to be `#{predicate.inspect}`"
+		assert @subject.public_send(predicate) do
+			"expected `#{@subject.inspect}` to be `#{predicate.inspect}`"
 		end
 	end
 
 	def not_to_be(predicate)
-		refute value.__send__(predicate) do
-			"expected `#{value.inspect}` to not be `#{predicate.inspect}`"
+		refute @subject.public_send(predicate) do
+			"expected `#{@subject.inspect}` to not be `#{predicate.inspect}`"
 		end
 	end
 

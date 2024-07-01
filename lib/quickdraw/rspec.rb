@@ -36,7 +36,9 @@ module Quickdraw::RSpec
 
 	module To
 		def to(matcher)
-			assert(matcher.matches?(@block || @value)) do
+			sub = (Quickdraw::Never === @block) ? @subject : @block
+
+			assert(matcher.matches?(sub)) do
 				if matcher.respond_to?(:failure_message)
 					matcher.failure_message
 				else
@@ -46,7 +48,9 @@ module Quickdraw::RSpec
 		end
 
 		def not_to(matcher)
-			refute(matcher.matches?(@block || @value)) do
+			sub = (Quickdraw::Never === @block) ? @subject : @block
+
+			refute(matcher.matches?(sub)) do
 				if matcher.respond_to?(:failure_message_when_negated)
 					matcher.failure_message_when_negated
 				else

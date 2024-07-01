@@ -34,7 +34,7 @@ module Matchers
 		def to_pass
 			run = Run.new
 			result = Result.new
-			definition = block
+			definition = @block
 
 			Class.new(Quickdraw::Context) do
 				define_singleton_method(:run) { run }
@@ -57,7 +57,7 @@ module Matchers
 		def to_fail(message: nil)
 			run = Run.new
 			result = Result.new
-			definition = block
+			definition = @block
 
 			Class.new(Quickdraw::Context) do
 				define_singleton_method(:run) { run }

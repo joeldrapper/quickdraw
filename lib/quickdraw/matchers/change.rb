@@ -10,7 +10,7 @@ module Quickdraw::Matchers::Change
 			end
 		end
 
-		block.call
+		@block.call
 
 		new = object.call
 
