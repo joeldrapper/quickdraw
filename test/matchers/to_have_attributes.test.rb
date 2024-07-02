@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-User = Data.define(:name)
+User = Struct.new(:name, keyword_init: true)
 
 test "success" do
 	expect {
