@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "set"
+
 class Quickdraw::Context
 	class << self
 		def test(name = nil, skip: false, &block)
