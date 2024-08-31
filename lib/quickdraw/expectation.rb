@@ -16,8 +16,12 @@ class Quickdraw::Expectation
 	include Quickdraw::Matchers::ToReceive
 
 	def initialize(context, subject = Quickdraw::Null, &block)
-		if block && Quickdraw::Null != subject
-			raise Quickdraw::ArgumentError.new("You must only provide a subject or a block to `expect`.")
+		if block
+			if Quickdraw::Null != subject
+				raise Quickdraw::ArgumentError.new("You must only provide a subject or a block to `expect`.")
+			end
+		elsif Quickdraw::Null == subject
+			raise Quickdraw::ArgumentError.new("You must provide a subject or a block to `expect`.")
 		end
 
 		@context = context

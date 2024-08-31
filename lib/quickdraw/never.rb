@@ -6,6 +6,8 @@ class Quickdraw::Never < BasicObject
 	end
 
 	def method_missing(method_name, ...)
-		::Kernel.raise ::ArgumentError.new(@message)
+		::Kernel.raise(
+				::ArgumentError.new(@message),
+			)
 	end
 end
