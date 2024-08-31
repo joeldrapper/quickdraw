@@ -1,12 +1,8 @@
 [
-  {
-    "label": "Test current file",
-    "command": "bundle exec qt $ZED_FILE",
-    "allow_concurrent_runs": false
-  },
-  {
-    "label": "Test all",
-    "command": "bundle exec qt",
-    "allow_concurrent_runs": false
-  }
+	{
+		"label": "quickdraw",
+		"command": "bundle exec qt",
+		"args": ["$ZED_RELATIVE_FILE"],
+		"tags": ["ruby-test"]
+	}
 ]
