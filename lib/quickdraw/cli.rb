@@ -53,7 +53,7 @@ class Quickdraw::CLI
 	end
 
 	def parse_files
-		@files = Dir.glob(@args[0] || "./**/*.test.rb")
+		@files = @args[0] || "./**/*.test.rb"
 	end
 
 	def processes=(value)
@@ -117,7 +117,7 @@ class Quickdraw::CLI
 						Quickdraw::Run.new(
 							processes: 1,
 							threads: @threads || Quickdraw::Config.threads,
-							files: @files,
+							files: Dir.glob(@files),
 							seed: @seed || Random.new_seed,
 						).call
 					end,
@@ -134,7 +134,7 @@ class Quickdraw::CLI
 		Quickdraw::Run.new(
 			processes: @processes || Quickdraw::Config.processes,
 			threads: @threads || Quickdraw::Config.threads,
-			files: @files,
+			files: Dir.glob(@files),
 			seed: @seed || Random.new_seed,
 		).call
 	end
