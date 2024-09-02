@@ -20,6 +20,7 @@ module Quickdraw
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
 	autoload :Never, "quickdraw/never"
+	autoload :CLI, "quickdraw/cli"
 
 	Null = Object.new.freeze
 	Error = Module.new
