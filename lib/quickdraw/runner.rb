@@ -36,8 +36,8 @@ class Quickdraw::Runner
 	end
 
 	def failure!
-		# TODO: Need to add caller_locations context here
-		@failures << [nil, nil, yield]
+		location = caller_locations(3, 1).first
+		@failures << [location.path, location.lineno, yield]
 
 		Kernel.print(
 			Quickdraw::Config.failure_symbol,
