@@ -15,7 +15,7 @@ module Quickdraw::Matchers::Change
 		new = object.call
 
 		if new == original
-			failure! "expected `#{original.inspect}` to change"
+			failure! { "expected `#{original.inspect}` to change" }
 		end
 
 		if Quickdraw::Null != to
