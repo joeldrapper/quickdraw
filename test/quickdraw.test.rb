@@ -46,3 +46,10 @@ test do
 
 	Foo.bar(1, 2, c: 3)
 end
+
+class Foo
+end
+
+test do
+	expect(Foo.name) == "Quickdraw::Context(in ./test/quickdraw.test.rb)::Foo"
+end

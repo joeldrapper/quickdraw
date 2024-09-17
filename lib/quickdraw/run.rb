@@ -52,6 +52,7 @@ class Quickdraw::Run
 			file_path = @files[i]
 
 			Class.new(Quickdraw::Context) do
+				set_temporary_name "Quickdraw::Context(in #{file_path})"
 				define_singleton_method(:run) { run }
 				class_eval(File.read(file_path), file_path, 1)
 			end
