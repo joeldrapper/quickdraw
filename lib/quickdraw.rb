@@ -2,6 +2,7 @@
 
 module Quickdraw
 	autoload :ArgumentError, "quickdraw/errors/argument_error"
+	autoload :CLI, "quickdraw/cli"
 	autoload :Cluster, "quickdraw/cluster"
 	autoload :ConcurrentArray, "quickdraw/concurrent_array"
 	autoload :Configuration, "quickdraw/configuration"
@@ -10,6 +11,7 @@ module Quickdraw
 	autoload :Map, "quickdraw/map"
 	autoload :Matchers, "quickdraw/matchers"
 	autoload :Minitest, "quickdraw/minitest"
+	autoload :Never, "quickdraw/never"
 	autoload :Pipe, "quickdraw/pipe"
 	autoload :Platform, "quickdraw/platform"
 	autoload :Queue, "quickdraw/queue"
@@ -18,9 +20,8 @@ module Quickdraw
 	autoload :Run, "quickdraw/run"
 	autoload :Runner, "quickdraw/runner"
 	autoload :Timer, "quickdraw/timer"
+	autoload :Watcher, "quickdraw/watcher"
 	autoload :Worker, "quickdraw/worker"
-	autoload :Never, "quickdraw/never"
-	autoload :CLI, "quickdraw/cli"
 
 	Null = Object.new.freeze
 	Error = Module.new

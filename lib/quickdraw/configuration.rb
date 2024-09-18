@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "etc"
-
 class Quickdraw::Configuration
 	DEFAULT_PROCESSES = Quickdraw::Platform.supports_forking? ? Quickdraw::Platform.non_blocking_cores : 1
 	DEFAULT_THREADS = 8

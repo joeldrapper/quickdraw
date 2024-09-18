@@ -107,15 +107,15 @@ class Quickdraw::CLI
 	end
 
 	def watch
-		require "io/watch"
-		IO::Watch::Monitor.new(["."]).run do |event|
+		Quickdraw::Watcher.watch("./**/*.rb") do |paths|
 			time = Quickdraw::Timer.time do
 				Process.wait(
 					Process.fork do
+						print "\e[H\e[2J"
 						require CONFIG_PATH if File.exist?(CONFIG_PATH)
 
 						Quickdraw::Run.new(
-							processes: 1,
+							processes: @processes || Quickdraw::Config.processes,
 							threads: @threads || Quickdraw::Config.threads,
 							files: Dir.glob(@files),
 							seed: @seed || Random.new_seed,

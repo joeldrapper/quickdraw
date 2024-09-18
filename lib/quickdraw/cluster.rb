@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-require "etc"
-
 class Quickdraw::Cluster
-	def self.call(n = Etc.nprocessors, &)
+	def self.call(n = Quickdraw::Platform.cpu_cores, &)
 		spawn(n, &).wait
 	end
 
-	def self.spawn(n = Etc.nprocessors, &block)
+	def self.spawn(n = Quickdraw::Platform.cpu_cores, &block)
 		new.tap do |cluster|
 			n.times { cluster.fork(&block) }
 		end
