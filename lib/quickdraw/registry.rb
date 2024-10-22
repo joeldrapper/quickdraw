@@ -2,9 +2,9 @@
 
 class Quickdraw::Registry
 	def initialize
-		@registered_matchers = Quickdraw::Map.new
-		@type_matchers = Quickdraw::Map.new
-		@shapes = Quickdraw::Map.new
+		@registered_matchers = Concurrent::Map.new
+		@type_matchers = Concurrent::Map.new
+		@shapes = Concurrent::Map.new
 	end
 
 	# Register a new matcher for the given types.
@@ -32,15 +32,19 @@ class Quickdraw::Registry
 
 	# A "shape" is a specialised Expectation class that includes the given matchers. It's cached against the list of matchers.
 	def shape_for(matchers)
-		@shapes[matchers] ||= Class.new(Quickdraw::Expectation) do
-			matchers.each { |m| include m }
-			freeze
+		@shapes.fetch_or_store(matchers) do
+			Class.new(Quickdraw::Expectation) do
+				matchers.each { |m| include m }
+				freeze
+			end
 		end
 	end
 
 	# Given a value, find all the matchers that match it. This is cached against the class of the value.
 	def matchers_for(value)
-		@type_matchers[value.class] ||= slowly_find_matchers_for(value)
+		@type_matchers.fetch_or_store(value.class) do
+			slowly_find_matchers_for(value)
+		end
 	end
 
 	# If the above has a cache miss, we'll need to find the correct matchers slowly and then cache them.

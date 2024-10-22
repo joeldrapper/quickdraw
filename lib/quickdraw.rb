@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "concurrent/map"
+require "concurrent/array"
+
 module Quickdraw
 	autoload :ArgumentError, "quickdraw/errors/argument_error"
 	autoload :CLI, "quickdraw/cli"

@@ -7,8 +7,8 @@ class Quickdraw::Runner
 		@queue = queue
 		@threads = threads
 
-		@failures = Quickdraw::ConcurrentArray.new
-		@successes = Quickdraw::ConcurrentArray.new
+		@failures = Concurrent::Array.new
+		@successes = Concurrent::Array.new
 	end
 
 	def call
