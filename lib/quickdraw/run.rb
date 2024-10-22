@@ -27,11 +27,14 @@ class Quickdraw::Run
 		end
 
 		puts
+		total_failures = 0
+
 		results.each do |r|
 			failures = r["failures"]
 
 			i = 0
 			number_of_failures = failures.size
+			total_failures += number_of_failures
 			while i < number_of_failures
 				failure = failures[i]
 				path, lineno, message = failure
@@ -41,6 +44,10 @@ class Quickdraw::Run
 		end
 
 		puts "Ran with seed: #{@seed}"
+
+		if total_failures > 0
+			exit 1
+		end
 	end
 
 	def load_tests
