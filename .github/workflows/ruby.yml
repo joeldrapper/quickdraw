@@ -6,25 +6,33 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+  contents: read
+
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ruby
-          bundler-cache: true
-      - run: bundle exec rubocop
+  ruby-versions:
+    uses: ruby/actions/.github/workflows/ruby_versions.yml@3fbf038d6f0d8043b914f923764c61bc2a114a77
+    with:
+      engine: all
+      min_version: 3.1
+
   test:
+    needs: ruby-versions
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        ruby-version: ["3.1", "3.2", "3.3"]
+        ruby-version: ${{ fromJson(needs.ruby-versions.outputs.versions) }}
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true
-      - run: bundle exec qt
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          bundler-args: --without development
+      - name: Run Rubocop
+        run: bundle exec rubocop
+      - name: Quickdraw tests
+        run: bundle exec qt
