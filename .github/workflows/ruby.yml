@@ -31,6 +31,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          bundler-args: --without development
       - name: Run Rubocop
         run: bundle exec rubocop
       - name: Quickdraw tests
