@@ -50,6 +50,8 @@ end
 class Foo
 end
 
-test do
-	expect(Foo.name) == "Quickdraw::Context(in ./test/quickdraw.test.rb)::Foo"
+if respond_to?(:set_temporary_name)
+	test do
+		expect(Foo.name) == "Quickdraw::Context(in ./test/quickdraw.test.rb)::Foo"
+	end
 end
