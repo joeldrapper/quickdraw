@@ -18,14 +18,17 @@ GEM
     fiber-annotation (0.2.0)
     fiber-local (1.0.0)
     json (2.7.2)
+    json (2.7.2-java)
     language_server-protocol (3.17.0.3)
     minitest (5.22.3)
     msgpack (1.7.2)
+    msgpack (1.7.2-java)
     parallel (1.25.1)
     parser (3.3.3.0)
       ast (~> 2.4.1)
       racc
     racc (1.8.0)
+    racc (1.8.0-java)
     rainbow (3.1.1)
     regexp_parser (2.9.2)
     rexml (3.3.0)
@@ -49,11 +52,13 @@ GEM
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
     strscan (3.1.0)
+    strscan (3.1.0-java)
     sus (0.24.6)
     unicode-display_width (2.5.0)
 
 PLATFORMS
   arm64-darwin
+  universal-java-11
   x86_64-linux
 
 DEPENDENCIES
