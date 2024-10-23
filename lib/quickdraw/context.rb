@@ -22,7 +22,7 @@ class Quickdraw::Context
 			@matchers ||= if superclass < Quickdraw::Context
 				superclass.matchers.dup
 			else
-				Set[]
+				Concurrent::Set.new
 			end
 		end
 
@@ -39,7 +39,7 @@ class Quickdraw::Context
 		@runner = runner
 		@matchers = matchers
 
-		@expectations = []
+		@expectations = Concurrent::Array.new
 	end
 
 	def expect(value = Quickdraw::Null, &block)

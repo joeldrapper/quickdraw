@@ -2,6 +2,7 @@
 
 require "concurrent/map"
 require "concurrent/array"
+require "concurrent/set"
 
 module Quickdraw
 	autoload :ArgumentError, "quickdraw/errors/argument_error"
