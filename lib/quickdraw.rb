@@ -30,6 +30,7 @@ module Quickdraw
 	Null = Object.new.freeze
 	Error = Module.new
 	Config = Configuration.new
+	MATCHERS = Concurrent::Map.new
 
 	def self.configure(&)
 		yield Config
