@@ -7,8 +7,8 @@ class Quickdraw::Runner
 		@queue = queue
 		@threads = threads
 
-		@failures = Quickdraw::ConcurrentArray.new
-		@successes = Quickdraw::ConcurrentArray.new
+		@failures = Concurrent::Array.new
+		@successes = Concurrent::Array.new
 	end
 
 	def call
@@ -47,8 +47,13 @@ class Quickdraw::Runner
 	private
 
 	def drain_queue
-		@queue.drain { |(name, skip, test, context)|
+		queue = @queue
+		next_item = queue.shift
+
+		while next_item
+			name, skip, test, context = next_item
 			context.run_test(name, skip, self, &test)
-		}
+			next_item = queue.shift
+		end
 	end
 end

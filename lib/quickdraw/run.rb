@@ -72,7 +72,7 @@ class Quickdraw::Run
 	end
 
 	def batch_tests
-		batches = Array.new([@processes, @tests.size].min) { Quickdraw::Queue.new }
+		batches = Array.new([@processes, @tests.size].min) { Concurrent::Array.new }
 
 		number_of_tests = @tests.size
 		i = 0
@@ -111,7 +111,7 @@ class Quickdraw::Run
 	end
 
 	def run_inline
-		queue = Quickdraw::Queue.new
+		queue = Concurrent::Array.new
 
 		i = 0
 		number_of_tests = @tests.size

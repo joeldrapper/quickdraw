@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require "concurrent/map"
+require "concurrent/array"
+require "concurrent/set"
+
 module Quickdraw
 	autoload :ArgumentError, "quickdraw/errors/argument_error"
 	autoload :CLI, "quickdraw/cli"
@@ -26,6 +30,7 @@ module Quickdraw
 	Null = Object.new.freeze
 	Error = Module.new
 	Config = Configuration.new
+	MATCHERS = Concurrent::Map.new
 
 	def self.configure(&)
 		yield Config

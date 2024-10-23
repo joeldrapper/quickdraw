@@ -9,6 +9,8 @@ class Quickdraw::Context
 		end
 
 		def use(*new_matchers)
+			matchers = self.matchers
+
 			i = 0
 			number_of_new_matchers = new_matchers.size
 
@@ -19,10 +21,12 @@ class Quickdraw::Context
 		end
 
 		def matchers
-			@matchers ||= if superclass < Quickdraw::Context
-				superclass.matchers.dup
-			else
-				Set[]
+			Quickdraw::MATCHERS.fetch_or_store(self) do
+				if superclass < Quickdraw::Context
+					superclass.matchers.dup
+				else
+					Concurrent::Set.new
+				end
 			end
 		end
 
@@ -39,7 +43,7 @@ class Quickdraw::Context
 		@runner = runner
 		@matchers = matchers
 
-		@expectations = []
+		@expectations = Concurrent::Array.new
 	end
 
 	def expect(value = Quickdraw::Null, &block)

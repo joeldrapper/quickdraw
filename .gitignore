@@ -9,3 +9,4 @@
 .rubocop-*
 .DS_Store
 .covered.db
+Gemfile.lock
