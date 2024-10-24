@@ -110,18 +110,18 @@ class Quickdraw::CLI
 		Quickdraw::Watcher.watch("./**/*.rb") do |paths|
 			time = Quickdraw::Timer.time do
 				Process.wait(
-					Process.fork do
-						print "\e[H\e[2J"
-						require CONFIG_PATH if File.exist?(CONFIG_PATH)
+						Process.fork do
+							print "\e[H\e[2J"
+							require CONFIG_PATH if File.exist?(CONFIG_PATH)
 
-						Quickdraw::Run.new(
-							processes: @processes || Quickdraw::Config.processes,
-							threads: @threads || Quickdraw::Config.threads,
-							files: Dir.glob(@files),
-							seed: @seed || Random.new_seed,
-						).call
-					end,
-				)
+							Quickdraw::Runner.new(
+								processes: @processes || Quickdraw::Config.processes,
+								threads: @threads || Quickdraw::Config.threads,
+								files: Dir.glob(@files),
+								seed: @seed || Random.new_seed,
+							).call
+						end,
+					)
 			end
 
 			puts "Total time: #{time}"
@@ -129,13 +129,19 @@ class Quickdraw::CLI
 	end
 
 	def run_once
-		require CONFIG_PATH if File.exist?(CONFIG_PATH)
+		time = Quickdraw::Timer.time do
+			require CONFIG_PATH if File.exist?(CONFIG_PATH)
 
-		Quickdraw::Run.new(
-			processes: @processes || Quickdraw::Config.processes,
-			threads: @threads || Quickdraw::Config.threads,
-			files: Dir.glob(@files),
-			seed: @seed || Random.new_seed,
-		).call
+			$quickdraw_runner = Quickdraw::Runner.new(
+				processes: @processes || Quickdraw::Config.processes,
+				threads: @threads || Quickdraw::Config.threads,
+				files: Dir.glob(@files),
+				seed: @seed || Random.new_seed,
+			)
+
+			$quickdraw_runner.call
+		end
+
+		puts "Total time: #{time}"
 	end
 end

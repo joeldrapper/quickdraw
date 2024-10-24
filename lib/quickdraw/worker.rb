@@ -1,24 +1,29 @@
 # frozen_string_literal: true
 
+require "socket"
+
 class Quickdraw::Worker
-	def self.fork(&block)
-		pipe = Quickdraw::Pipe.new
+	def self.fork
+		parent_socket, child_socket = UNIXSocket.pair
 
 		pid = Process.fork do
-			pipe.with_writer(&block)
+			parent_socket.close
+			yield(child_socket)
 		end
 
-		new(pid:, pipe:)
+		child_socket.close
+		new(pid:, socket: parent_socket)
 	end
 
-	def initialize(pid:, pipe:)
+	def initialize(pid:, socket:)
 		@pid = pid
-		@pipe = pipe
+		@socket = socket
 	end
+
+	attr_reader :pid, :socket
 
 	def wait
 		Process.wait(@pid)
-		@pipe.with_reader(&:read)
 	end
 
 	def terminate
