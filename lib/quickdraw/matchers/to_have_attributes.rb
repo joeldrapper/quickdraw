@@ -8,6 +8,6 @@ module Quickdraw::Matchers::ToHaveAttributes
 			end
 		end
 	rescue NoMethodError => e
-		failure! { "expected `#{@subject.inspect}` to respond to `#{e.name}`" }
+		failure!(depth: 1) { "expected `#{@subject.inspect}` to respond to `#{e.name}`" }
 	end
 end
