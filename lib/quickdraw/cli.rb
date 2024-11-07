@@ -47,7 +47,7 @@ class Quickdraw::CLI
 			end
 
 			parser.on("-s N", "--seed N", Integer, "Seed for randomization") do |it|
-				self.seeds = it
+				self.seed = it
 			end
 		end.parse!(@args)
 	end
