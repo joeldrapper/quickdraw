@@ -9,5 +9,5 @@ end
 test "when not equal" do
 	expect {
 		test { expect("a") =~ /b/ }
-	}.to_fail message: %(expected `"a"` to =~ `"/b/"`)
+	}.to_fail message: %(expected `"a"` to =~ `/b/`)
 end

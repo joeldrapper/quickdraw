@@ -8,6 +8,7 @@ class Quickdraw::Configuration
 		@registry = Quickdraw::Registry.new
 		@failure_symbol = "\e[31m⨯\e[0m"
 		@success_symbol = "\e[32m∘\e[0m"
+		@error_symbol = "\e[31me\e[0m"
 		@processes = DEFAULT_PROCESSES
 		@threads = DEFAULT_THREADS
 		@success_emoji = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
@@ -20,6 +21,7 @@ class Quickdraw::Configuration
 	attr_accessor :success_emoji
 	attr_accessor :success_symbol
 	attr_accessor :threads
+	attr_accessor :error_symbol
 
 	def matcher(matcher, *types)
 		@registry.register(matcher, *types)

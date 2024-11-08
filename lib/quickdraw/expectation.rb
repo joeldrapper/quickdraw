@@ -37,29 +37,29 @@ class Quickdraw::Expectation
 		@made_expectations = false
 	end
 
-	def success!
-		@context.success!
+	def success!(depth:)
+		@context.success!(depth:)
 		@made_expectations = true
 	end
 
-	def failure!(&)
-		@context.failure!(&)
+	def failure!(depth:, &)
+		@context.failure!(depth:, &)
 		@made_expectations = true
 	end
 
 	def resolve
 		unless @made_expectations
-			failure! { "You didn't make any expectations." }
+			failure!(depth: 2) { "You didn't make any expectations." }
 		end
 	end
 
 	private
 
-	def assert(value, &)
-		value ? success! : failure!(&)
+	def assert(value, depth: 1, &)
+		value ? success!(depth:) : failure!(depth:, &)
 	end
 
-	def refute(value, &)
-		value ? failure!(&) : success!
+	def refute(value, depth: 1, &)
+		value ? failure!(depth:, &) : success!(depth:)
 	end
 end

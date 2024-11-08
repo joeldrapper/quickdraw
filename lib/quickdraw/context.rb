@@ -34,6 +34,8 @@ class Quickdraw::Context
 			instance = new(name, skip, runner, matchers)
 			instance.instance_exec(&)
 			instance.resolve
+		rescue Exception => error
+			runner.error!(name, error)
 		end
 	end
 
@@ -74,37 +76,37 @@ class Quickdraw::Context
 
 	def assert(value)
 		if value
-			success!
+			success!(depth: 1)
 		elsif block_given?
-			failure! { yield(value) }
+			failure!(depth: 1) { yield(value) }
 		else
-			failure! { "expected #{value.inspect} to be truthy" }
+			failure!(depth: 1) { "expected #{value.inspect} to be truthy" }
 		end
 	end
 
 	def refute(value)
 		if !value
-			success!
+			success!(depth: 1)
 		elsif block_given?
-			failure! { yield(value) }
+			failure!(depth: 1) { yield(value) }
 		else
-			failure! { "expected #{value.inspect} to be falsy" }
+			failure!(depth: 1) { "expected #{value.inspect} to be falsy" }
 		end
 	end
 
-	def success!
+	def success!(depth:)
 		if @skip
-			@runner.failure! { "The skipped test `#{@name}` started passing." }
+			@runner.failure!(@name, depth:) { "The skipped test `#{@name}` started passing." }
 		else
-			@runner.success!(@name)
+			@runner.success!(@name, depth:)
 		end
 	end
 
-	def failure!(&)
+	def failure!(depth:, &)
 		if @skip
-			@runner.success!(@name)
+			@runner.success!(@name, depth:)
 		else
-			@runner.failure!(&)
+			@runner.failure!(@name, depth:, &)
 		end
 	end
 end

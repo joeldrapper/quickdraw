@@ -9,6 +9,7 @@ class Quickdraw::Runner
 
 		@failures = Concurrent::Array.new
 		@successes = Concurrent::Array.new
+		@errors = Concurrent::Array.new
 	end
 
 	def call
@@ -24,10 +25,11 @@ class Quickdraw::Runner
 			"pid" => Process.pid,
 			"failures" => @failures.to_a,
 			"successes" => @successes.size,
+			"errors" => @errors.to_a,
 		}
 	end
 
-	def success!(name)
+	def success!(name, depth: 0)
 		@successes << name
 
 		Kernel.print(
@@ -35,12 +37,21 @@ class Quickdraw::Runner
 		)
 	end
 
-	def failure!
-		location = caller_locations(3, 1).first
-		@failures << [location.path, location.lineno, yield]
+	def failure!(name, depth: 0)
+		location = caller_locations(2 + depth, 1).first
+		@failures << [name, location.path, location.lineno, yield]
 
 		Kernel.print(
 			Quickdraw::Config.failure_symbol,
+		)
+	end
+
+	def error!(name, error)
+		message = error.respond_to?(:detailed_message) ? error.detailed_message : error.message
+		@errors << [name, error.class.name, message, error.backtrace]
+
+		Kernel.print(
+			Quickdraw::Config.error_symbol,
 		)
 	end
 

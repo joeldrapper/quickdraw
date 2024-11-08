@@ -31,14 +31,24 @@ class Quickdraw::Run
 
 		results.each do |r|
 			failures = r["failures"]
+			errors = r["errors"]
 
 			i = 0
 			number_of_failures = failures.size
 			total_failures += number_of_failures
 			while i < number_of_failures
 				failure = failures[i]
-				path, lineno, message = failure
-				puts "#{path}:#{lineno} #{message}"
+				test_name, path, lineno, message = failure
+				puts "#{path}:#{lineno} in #{test_name.inspect}: #{message}"
+				i += 1
+			end
+
+			number_of_errors = errors.size
+			total_failures += number_of_errors
+			while i < number_of_errors
+				error = errors[i]
+				test_name, cls, message, backtrace = error
+				puts "Unexpected #{cls} in #{test_name}:\n#{message}\n#{backtrace.join("\n\t")}"
 				i += 1
 			end
 		end
