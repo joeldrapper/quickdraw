@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
-1_000_000.times do
+10_000.times do
 	test do
-		assert(true)
+		assert true
 	end
+end
+
+test do
+	refute false
+	assert_equal 1, 2
 end

@@ -2,7 +2,6 @@
 
 class Quickdraw::Test
 	def self.test(description = nil, skip: false, &block)
-		# An Array is used here for performance, since arrays are very cheap to allocate. Allocating a Test object is deferred until running the test later on, when the allocations can be parallelized.
 		$quickdraw_runner << [description, skip, block]
 	end
 
@@ -25,6 +24,12 @@ class Quickdraw::Test
 		success!
 	rescue Exception => e
 		failure! { e.message }
+	end
+
+	def assert_equal(a, b)
+		assert(a == b) do
+			"Expected #{a} to `==` #{b}"
+		end
 	end
 
 	def assert(value)

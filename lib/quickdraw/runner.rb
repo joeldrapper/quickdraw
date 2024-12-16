@@ -24,6 +24,7 @@ class Quickdraw::Runner
 
 		@cluster = Quickdraw::Cluster.new
 		@batch = nil
+		@failures = []
 	end
 
 	def call
@@ -35,6 +36,13 @@ class Quickdraw::Runner
 			results = @cluster.wait
 		else
 			@tests.each { |it| it.run(self) }
+		end
+
+		puts
+		puts
+
+		@failures.each do |it|
+			puts it
 		end
 
 		puts
@@ -59,7 +67,8 @@ class Quickdraw::Runner
 		@tests.shuffle!(random: @random)
 		@tests.freeze
 
-		@batch = [[(@tests.size / @processes / 10), 5].max, 500].min
+		# Try to break up the tests into at least 10 batches per core.
+		@batch = [[(@tests.size / @processes / 10), 1].max, 500].min
 	end
 
 	def fork_processes
@@ -78,8 +87,7 @@ class Quickdraw::Runner
 	end
 
 	def failure!
-		puts
-		puts yield
+		@failures << yield
 	end
 
 	private
@@ -108,14 +116,14 @@ class Quickdraw::Runner
 				break
 			when MESSAGE[:stop]
 				socket.write [MESSAGE[:stopping]].pack("C")
-				socket.write JSON.generate(["Results"])
+				socket.write JSON.generate(@failures)
 				break
 			when MESSAGE[:work]
 				cursor = socket.read(4).unpack1("L<")
 				stop = [tests_size, cursor + batch].min
 
 				while cursor < stop
-					queue << cursor
+					queue.push(cursor)
 					cursor += 1
 				end
 			else
@@ -160,8 +168,7 @@ class Quickdraw::Runner
 					end
 				when MESSAGE[:stopping]
 					results = JSON.parse(socket.read)
-					puts
-					# puts results
+					@failures << results
 				else
 					raise "Unhandled message: #{message}"
 				end
