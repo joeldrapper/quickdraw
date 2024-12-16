@@ -24,7 +24,8 @@ class Quickdraw::Runner
 
 		@cluster = Quickdraw::Cluster.new
 		@batch = nil
-		@failures = []
+		@failures = Quickdraw::ConcurrentArray.new
+		@successes = Quickdraw::ConcurrentInteger.new
 	end
 
 	def call
@@ -50,9 +51,7 @@ class Quickdraw::Runner
 
 		puts
 
-		if @failures.any?
-			puts "Failures: #{@failures.size}"
-		end
+		puts "Failures: #{@failures.size} | Passes: #{@successes.value}"
 
 		puts "Seed: #{@seed}"
 		exit(1) if @failures.any?
@@ -92,7 +91,7 @@ class Quickdraw::Runner
 	end
 
 	def success!(description)
-		# Kernel.print(Quickdraw::Config.success_symbol)
+		@successes.increment
 	end
 
 	def failure!(failure)
@@ -110,7 +109,9 @@ class Quickdraw::Runner
 		threads = @threads.times.map do |i|
 			Thread.new do
 				while true
-					description, skip, block = tests[queue.pop]
+					index = queue.pop
+					break if index == :stop
+					description, skip, block = tests[index]
 					Quickdraw::Test.new(description:, skip:, block:).run(self)
 				end
 			end
@@ -124,8 +125,13 @@ class Quickdraw::Runner
 				puts "EOF"
 				break
 			when Message::Stop
+				threads.each { queue.push(:stop) }
+				threads.each(&:join)
 				socket.write Message::Stopping
-				socket.write JSON.generate(@failures)
+				socket.write JSON.generate({
+					failures: @failures.to_a,
+					successes: @successes.value,
+				})
 				break
 			when Message::Work
 				cursor = socket.read(4).unpack1("L<")
@@ -175,7 +181,8 @@ class Quickdraw::Runner
 					print "\r\e[K#{'█' * (progress * bar_width / 100.0).floor}#{'░' * (bar_width - (progress * bar_width / 100.0).floor)} #{progress.round}%"
 				when Message::Stopping
 					results = JSON.parse(socket.read)
-					@failures.concat(results)
+					@failures.concat(results["failures"])
+					@successes.increment(results["successes"])
 				else
 					raise "Unhandled message: #{message}"
 				end

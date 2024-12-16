@@ -11,6 +11,8 @@ module Quickdraw
 	autoload :Test, "quickdraw/test"
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
+	autoload :ConcurrentInteger, "quickdraw/concurrent_integer"
+	autoload :ConcurrentArray, "quickdraw/concurrent_array"
 
 	Null = Object.new.freeze
 	Error = Module.new

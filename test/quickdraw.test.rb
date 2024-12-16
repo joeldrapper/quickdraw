@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-100.times do
+100_000.times do
 	test do
 		sleep 0.1
 		assert true
