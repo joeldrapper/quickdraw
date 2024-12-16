@@ -154,7 +154,11 @@ class Quickdraw::Runner
 		batch = @batch
 		progress = 0
 
-		console_width = IO.console.winsize[1]
+		console = IO.console
+		if console
+			console_width = IO.console.winsize[1]
+		end
+
 		bar_width = console_width - 6
 
 		Thread.new do
@@ -176,9 +180,10 @@ class Quickdraw::Runner
 						end
 					end
 
-					progress = (@cursor * 100.0 / tests_length)
-
-					print "\r\e[K#{'█' * (progress * bar_width / 100.0).floor}#{'░' * (bar_width - (progress * bar_width / 100.0).floor)} #{progress.round}%"
+					if console
+						progress = (@cursor * 100.0 / tests_length)
+						print "\r\e[K#{'█' * (progress * bar_width / 100.0).floor}#{'░' * (bar_width - (progress * bar_width / 100.0).floor)} #{progress.round}%"
+					end
 				when Message::Stopping
 					results = JSON.parse(socket.read)
 					@failures.concat(results["failures"])
