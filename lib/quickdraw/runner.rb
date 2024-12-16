@@ -47,6 +47,8 @@ class Quickdraw::Runner
 
 		puts
 		puts "Ran with seed: #{@seed}"
+
+		exit(1) if @failures.any?
 	end
 
 	def load_tests
