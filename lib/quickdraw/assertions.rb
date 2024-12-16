@@ -19,6 +19,54 @@ module Quickdraw::Assertions
 		end
 	end
 
+	def assert_includes(collection, item)
+		assert(collection.include?(item)) do
+			"expected #{collection.inspect} to include #{item.inspect}"
+		end
+	end
+
+	def refute_includes(collection, item)
+		refute(collection.include?(item)) do
+			"expected #{collection.inspect} to not include #{item.inspect}"
+		end
+	end
+
+	def assert_instance_of(klass, object)
+		assert(object.instance_of?(klass)) do
+			"expected #{object.class} to be an instance of #{klass}"
+		end
+	end
+
+	def refute_instance_of(klass, object)
+		refute(object.instance_of?(klass)) do
+			"expected #{object.class} to not be an instance of #{klass}"
+		end
+	end
+
+	def assert_kind_of(klass, object)
+		assert(object.kind_of?(klass)) do
+			"expected #{object.class} to be a kind of #{klass}"
+		end
+	end
+
+	def assert_match(pattern, object)
+		assert(pattern =~ object) do
+			"expected #{object.inspect} to match #{pattern.inspect}"
+		end
+	end
+
+	def refute_match(pattern, object)
+		refute(pattern =~ object) do
+			"expected #{object.inspect} to not match #{pattern.inspect}"
+		end
+	end
+
+	def refute_kind_of(klass, object)
+		refute(object.kind_of?(klass)) do
+			"expected #{object.class} to not be a kind of #{klass}"
+		end
+	end
+
 	def refute_empty(collection)
 		refute(collection.empty?) do
 			"expected #{collection.class} to not be empty"
@@ -44,14 +92,44 @@ module Quickdraw::Assertions
 	end
 
 	def assert_nil(value)
-		assert(nil === value) do
+		assert(nil == value) do
 			"expected #{value.class} to be nil"
+		end
+	end
+
+	def refute_nil(value)
+		refute(nil == value) do
+			"expected #{value.class} to not be nil"
+		end
+	end
+
+	def assert_operator(object, operator, other)
+		assert(object.public_send(operator, other)) do
+			"expected #{object.inspect} to #{operator} #{other.inspect}"
+		end
+	end
+
+	def refute_operator(object, operator, other)
+		refute(object.public_send(operator, other)) do
+			"expected #{object.inspect} to not #{operator} #{other.inspect}"
 		end
 	end
 
 	def assert_respond_to(object, method_name)
 		assert(object.respond_to?(method_name)) do
 			"expected #{object.inspect} to respond to ##{method_name}"
+		end
+	end
+
+	def assert_same(expected, actual)
+		assert(expected.equal?(actual)) do
+			"expected #{expected.inspect} to be the same object as #{actual.inspect}"
+		end
+	end
+
+	def refute_same(expected, actual)
+		refute(expected.equal?(actual)) do
+			"expected #{expected.inspect} to not be the same object as #{actual.inspect}"
 		end
 	end
 end
