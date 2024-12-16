@@ -10,6 +10,8 @@ class Quickdraw::Configuration
 		@processes = DEFAULT_PROCESSES
 		@threads = DEFAULT_THREADS
 		@success_emoji = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
+		@before_forking = []
+		@after_forking = []
 	end
 
 	attr_accessor :failure_symbol
@@ -17,4 +19,12 @@ class Quickdraw::Configuration
 	attr_accessor :success_emoji
 	attr_accessor :success_symbol
 	attr_accessor :threads
+
+	def before_forking(&block)
+		@before_forking << block
+	end
+
+	def after_forking(&block)
+		@after_forking << block
+	end
 end

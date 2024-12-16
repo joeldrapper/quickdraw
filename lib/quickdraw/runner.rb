@@ -39,9 +39,6 @@ class Quickdraw::Runner
 			@tests.each { |it| it.run(self) }
 		end
 
-		puts
-		puts
-
 		@failures.each do |failure|
 			puts "#{failure['location'][0]}:#{failure['location'][1]}"
 			puts "  #{failure['description']}"
@@ -51,9 +48,8 @@ class Quickdraw::Runner
 
 		puts
 
-		puts "Failures: #{@failures.size} | Passes: #{@successes.value}"
+		puts "Passed: #{@successes.value} | Failed: #{@failures.size}"
 
-		puts "Seed: #{@seed}"
 		exit(1) if @failures.any?
 	end
 
@@ -75,8 +71,8 @@ class Quickdraw::Runner
 		@tests.shuffle!(random: @random)
 		@tests.freeze
 
-		# Try to break up the tests into at least 10 batches per core.
-		@batch = [[(@tests.size / @processes / 10), 1].max, 500].min
+		# Try to break up the tests into at least 20 batches per core.
+		@batch = [[(@tests.size / @processes / 20), 1].max, 500].min
 	end
 
 	def fork_processes

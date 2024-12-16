@@ -1,20 +1,17 @@
 # frozen_string_literal: true
 
-100_000.times do
-	test do
-		sleep 0.1
-		assert true
-	end
+test "assert" do
+	assert true
 end
 
-# test "assert equal works as expected" do
-# 	assert_equal 1, 1
-# end
+test "assert", skip: true do
+	assert false
+end
 
-# test "assert works as expected" do
-# 	assert true
-# end
+test "refute" do
+	refute false
+end
 
-# test "refute works as expected" do
-# 	refute false
-# end
+test "refute", skip: true do
+	refute true
+end

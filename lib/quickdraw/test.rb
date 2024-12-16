@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Quickdraw::Test
+	include Quickdraw::Assertions
+
 	def self.test(description = nil, skip: false, &block)
 		$quickdraw_runner << [description, skip, block]
 	end
@@ -26,12 +28,6 @@ class Quickdraw::Test
 		failure! { e.message }
 	end
 
-	def assert_equal(a, b)
-		assert(a == b) do
-			"Expected #{a} to `==` #{b}"
-		end
-	end
-
 	def assert(value)
 		if value
 			success!
@@ -40,6 +36,8 @@ class Quickdraw::Test
 		else
 			failure! { "expected #{value.inspect} to be truthy" }
 		end
+
+		nil
 	end
 
 	def refute(value)
@@ -50,6 +48,8 @@ class Quickdraw::Test
 		else
 			failure! { "expected #{value.inspect} to be falsy" }
 		end
+
+		nil
 	end
 
 	# Indicate that an assertion passed successfully.
@@ -59,6 +59,8 @@ class Quickdraw::Test
 		else
 			@runner.success!(@description)
 		end
+
+		nil
 	end
 
 	# Indicate that an assertion failed.
@@ -73,6 +75,8 @@ class Quickdraw::Test
 				caller_locations:,
 			})
 		end
+
+		nil
 	end
 
 	def setup = nil
