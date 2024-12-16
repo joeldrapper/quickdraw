@@ -111,8 +111,8 @@ class Quickdraw::Runner
 				while true
 					index = queue.pop
 					break if index == :stop
-					description, skip, block = tests[index]
-					Quickdraw::Test.new(description:, skip:, block:).run(self)
+					context, description, skip, block = tests[index]
+					context.new(description:, skip:, block:).run(self)
 				end
 			end
 		end
