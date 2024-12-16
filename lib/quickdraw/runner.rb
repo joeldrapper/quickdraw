@@ -4,12 +4,12 @@ require "json"
 require "io/console"
 
 class Quickdraw::Runner
-	MESSAGE = {
-		fetch: "\x01",
-		work: "\x02",
-		stop: "\x03",
-		stopping: "\x04",
-	}.freeze
+	module Message
+		Fetch = "\x01"
+		Work = "\x02"
+		Stop = "\x03"
+		Stopping = "\x04"
+	end
 
 	def initialize(processes:, threads:, files:, seed:)
 		@processes = processes
@@ -117,17 +117,17 @@ class Quickdraw::Runner
 		end
 
 		while true
-			socket.write MESSAGE[:fetch]
+			socket.write Message::Fetch
 
 			case socket.read(1)
 			when nil
 				puts "EOF"
 				break
-			when MESSAGE[:stop]
-				socket.write MESSAGE[:stopping]
+			when Message::Stop
+				socket.write Message::Stopping
 				socket.write JSON.generate(@failures)
 				break
-			when MESSAGE[:work]
+			when Message::Work
 				cursor = socket.read(4).unpack1("L<")
 				stop = [tests_size, cursor + batch].min
 
@@ -159,21 +159,21 @@ class Quickdraw::Runner
 				case message
 				when nil
 					break
-				when MESSAGE[:fetch]
+				when Message::Fetch
 					mutex.synchronize do
 						if @cursor < tests_length
-							socket.write MESSAGE[:work]
+							socket.write Message::Work
 							socket.write [@cursor].pack("L<")
 							@cursor += batch
 						else
-							socket.write MESSAGE[:stop]
+							socket.write Message::Stop
 						end
 					end
 
 					progress = (@cursor * 100.0 / tests_length)
 
 					print "\r\e[K#{'█' * (progress * bar_width / 100.0).floor}#{'░' * (bar_width - (progress * bar_width / 100.0).floor)} #{progress.round}%"
-				when MESSAGE[:stopping]
+				when Message::Stopping
 					results = JSON.parse(socket.read)
 					@failures.concat(results)
 				else
