@@ -5,10 +5,10 @@ require "io/console"
 
 class Quickdraw::Runner
 	MESSAGE = {
-		fetch: 1,
-		work: 2,
-		stop: 3,
-		stopping: 4,
+		fetch: "\x01",
+		work: "\x02",
+		stop: "\x03",
+		stopping: "\x04",
 	}.freeze
 
 	def initialize(processes:, threads:, files:, seed:)
@@ -41,13 +41,20 @@ class Quickdraw::Runner
 		puts
 		puts
 
-		@failures.each do |it|
-			puts it
+		@failures.each do |failure|
+			puts "#{failure['location'][0]}:#{failure['location'][1]}"
+			puts "  #{failure['description']}"
+			puts "    #{failure['message']}"
+			puts
 		end
 
 		puts
-		puts "Ran with seed: #{@seed}"
 
+		if @failures.any?
+			puts "Failures: #{@failures.size}"
+		end
+
+		puts "Seed: #{@seed}"
 		exit(1) if @failures.any?
 	end
 
@@ -88,8 +95,8 @@ class Quickdraw::Runner
 		# Kernel.print(Quickdraw::Config.success_symbol)
 	end
 
-	def failure!
-		@failures << yield
+	def failure!(failure)
+		@failures << failure
 	end
 
 	private
@@ -110,14 +117,14 @@ class Quickdraw::Runner
 		end
 
 		while true
-			socket.write [MESSAGE[:fetch]].pack("C")
+			socket.write MESSAGE[:fetch]
 
-			case socket.read(1)&.unpack1("C")
+			case socket.read(1)
 			when nil
 				puts "EOF"
 				break
 			when MESSAGE[:stop]
-				socket.write [MESSAGE[:stopping]].pack("C")
+				socket.write MESSAGE[:stopping]
 				socket.write JSON.generate(@failures)
 				break
 			when MESSAGE[:work]
@@ -146,7 +153,7 @@ class Quickdraw::Runner
 
 		Thread.new do
 			while true
-				message = socket.read(1)&.unpack1("C")
+				message = socket.read(1)
 				tests_length = @tests.size
 
 				case message
@@ -155,22 +162,20 @@ class Quickdraw::Runner
 				when MESSAGE[:fetch]
 					mutex.synchronize do
 						if @cursor < tests_length
-							socket.write [MESSAGE[:work], @cursor].pack("CL<")
+							socket.write MESSAGE[:work]
+							socket.write [@cursor].pack("L<")
 							@cursor += batch
 						else
-							socket.write [MESSAGE[:stop]].pack("C")
+							socket.write MESSAGE[:stop]
 						end
 					end
 
-					new_progress = (@cursor * 100 / tests_length).round
+					progress = (@cursor * 100.0 / tests_length)
 
-					if new_progress != progress
-						progress = new_progress
-						print "\r\e[K#{'█' * (progress * bar_width / 100)}#{'░' * (bar_width - (progress * bar_width / 100))} #{progress}%"
-					end
+					print "\r\e[K#{'█' * (progress * bar_width / 100.0).floor}#{'░' * (bar_width - (progress * bar_width / 100.0).floor)} #{progress.round}%"
 				when MESSAGE[:stopping]
 					results = JSON.parse(socket.read)
-					@failures << results
+					@failures.concat(results)
 				else
 					raise "Unhandled message: #{message}"
 				end

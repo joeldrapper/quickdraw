@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-10_000.times do
-	test do
-		assert true
-	end
+test "assert equal works as expected" do
+	assert_equal 1, 2
 end
 
-test do
-	refute false
-	assert_equal 1, 2
+test "assert works as expected" do
+	assert false
+end
+
+test "refute works as expected" do
+	refute true
 end

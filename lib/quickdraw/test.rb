@@ -66,7 +66,12 @@ class Quickdraw::Test
 		if @skip
 			@runner.success!(@description)
 		else
-			@runner.failure!(&)
+			@runner.failure!({
+				location: @block.source_location,
+				description: @description,
+				message: yield,
+				caller_locations:,
+			})
 		end
 	end
 
