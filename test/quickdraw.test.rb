@@ -1,13 +1,20 @@
 # frozen_string_literal: true
 
-test "assert equal works as expected" do
-	assert_equal 1, 2
+100.times do
+	test do
+		sleep 0.1
+		assert true
+	end
 end
 
-test "assert works as expected" do
-	assert false
-end
+# test "assert equal works as expected" do
+# 	assert_equal 1, 1
+# end
 
-test "refute works as expected" do
-	refute true
-end
+# test "assert works as expected" do
+# 	assert true
+# end
+
+# test "refute works as expected" do
+# 	refute false
+# end

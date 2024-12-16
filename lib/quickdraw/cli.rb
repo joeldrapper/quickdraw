@@ -116,19 +116,15 @@ class Quickdraw::CLI
 	end
 
 	def run_once
-		time = Quickdraw::Timer.time do
-			require CONFIG_PATH if File.exist?(CONFIG_PATH)
+		require CONFIG_PATH if File.exist?(CONFIG_PATH)
 
-			$quickdraw_runner = Quickdraw::Runner.new(
-				processes: @processes || Quickdraw::Config.processes,
-				threads: @threads || Quickdraw::Config.threads,
-				files: Dir.glob(@files),
-				seed: @seed || Random.new_seed,
-			)
+		$quickdraw_runner = Quickdraw::Runner.new(
+			processes: @processes || Quickdraw::Config.processes,
+			threads: @threads || Quickdraw::Config.threads,
+			files: Dir.glob(@files),
+			seed: @seed || Random.new_seed,
+		)
 
-			$quickdraw_runner.call
-		end
-
-		puts "Total time: #{time}"
+		$quickdraw_runner.call
 	end
 end
