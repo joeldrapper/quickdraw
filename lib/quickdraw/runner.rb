@@ -76,6 +76,8 @@ class Quickdraw::Runner
 	end
 
 	def fork_processes
+		Quickdraw::Config.before_forking_callbacks.each(&:call)
+
 		@processes.times do
 			worker = @cluster.fork { |it| work(it) }
 			supervise(worker)
@@ -97,6 +99,8 @@ class Quickdraw::Runner
 	private
 
 	def work(socket)
+		Quickdraw::Config.after_forking_callbacks.each(&:call)
+
 		batch = @batch
 		queue = Thread::SizedQueue.new(batch)
 		tests = @tests
