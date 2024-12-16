@@ -155,11 +155,11 @@ class Quickdraw::Runner
 		progress = 0
 
 		console = IO.console
+
 		if console
 			console_width = IO.console.winsize[1]
+			bar_width = console_width - 6
 		end
-
-		bar_width = console_width - 6
 
 		Thread.new do
 			while true
