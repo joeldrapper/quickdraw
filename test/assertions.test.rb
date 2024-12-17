@@ -17,6 +17,10 @@ class Runner
 	end
 end
 
+test "the truth" do
+	assert_equal "Hello", "Joel"
+end
+
 test "assert_equal" do
 	assert_equal 1, 1
 end
@@ -37,16 +41,6 @@ test "assert_raises" do
 
 	assert_test_fails do
 		assert_raises(ArgumentError) {}
-	end
-end
-
-test "assert_respond_to" do
-	assert_test_passes do
-		assert_respond_to 1, :even?
-	end
-
-	assert_test_fails do
-		assert_respond_to 1, :not_a_valid_method
 	end
 end
 

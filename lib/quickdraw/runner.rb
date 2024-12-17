@@ -24,7 +24,9 @@ class Quickdraw::Runner
 
 		@cluster = Quickdraw::Cluster.new
 		@batch = nil
+
 		@failures = Quickdraw::ConcurrentArray.new
+		@errors = Quickdraw::ConcurrentArray.new
 		@successes = Quickdraw::ConcurrentInteger.new
 	end
 
@@ -41,16 +43,38 @@ class Quickdraw::Runner
 			end
 		end
 
-		@failures.each do |failure|
-			puts "#{failure['location'][0]}:#{failure['location'][1]}"
-			puts "  #{failure['description']}"
-			puts "    #{failure['message']}"
+		puts
+
+		@errors.each do |error|
 			puts
+
+			[
+				"\e[4m#{error['location'][0]}:#{error['location'][1]}\e[0m",
+				"\e[1m#{(error['description'])}\e[0m",
+				"\e[3munexpected \e[1m#{error['name']}\e[0m",
+				error["message"],
+				*error["backtrace"].map { |it| it.gsub(":in `", " in `") },
+			].each_with_index do |line, i|
+				puts "#{'  ' * i}#{line}"
+			end
+		end
+
+		@failures.each do |failure|
+			puts
+
+			[
+				"\e[4m#{failure['location'][0]}:#{failure['location'][1]}\e[0m",
+				"\e[1m#{(failure['description'])}\e[0m",
+				"\e[3m#{(failure['message'])}\e[0m",
+				failure["caller_locations"][failure["depth"]].gsub(":in `", " in `"),
+			].each_with_index do |line, i|
+				puts "#{'  ' * i}#{line}"
+			end
 		end
 
 		puts
 
-		puts "Passed: #{@successes.value} | Failed: #{@failures.size}"
+		puts "Passed: #{@successes.value} | Failed: #{@failures.size} | Errors: #{@errors.size}"
 
 		exit(1) if @failures.any?
 	end
@@ -98,6 +122,10 @@ class Quickdraw::Runner
 		@failures << failure
 	end
 
+	def error!(error)
+		@errors << error
+	end
+
 	private
 
 	def work(socket)
@@ -131,6 +159,7 @@ class Quickdraw::Runner
 				threads.each(&:join)
 				socket.write Message::Stopping
 				socket.write JSON.generate({
+					errors: @errors.to_a,
 					failures: @failures.to_a,
 					successes: @successes.value,
 				})
@@ -189,6 +218,7 @@ class Quickdraw::Runner
 				when Message::Stopping
 					results = JSON.parse(socket.read)
 					@failures.concat(results["failures"])
+					@errors.concat(results["errors"])
 					@successes.increment(results["successes"])
 				else
 					raise "Unhandled message: #{message}"

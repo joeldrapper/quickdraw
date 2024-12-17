@@ -19,6 +19,15 @@ class Quickdraw::Test
 		setup
 		around_test { instance_exec(&@block) }
 		teardown
+	rescue Exception => error
+		@runner.error!({
+			location: @block.source_location,
+			description: @description,
+			message: error.message,
+			name: error.class.name,
+			detailed_message: error.detailed_message,
+			backtrace: error.backtrace,
+		})
 	end
 
 	def match
@@ -28,13 +37,15 @@ class Quickdraw::Test
 		failure! { e.message }
 	end
 
-	def assert(value)
+	def assert(value, depth: 0)
+		depth += 1
+
 		if value
 			success!
 		elsif block_given?
-			failure! { yield(value) }
+			failure!(depth:) { yield(value) }
 		else
-			failure! { "expected #{value.inspect} to be truthy" }
+			failure!(depth:) { "expected #{value.inspect} to be truthy" }
 		end
 
 		nil
@@ -64,7 +75,7 @@ class Quickdraw::Test
 	end
 
 	# Indicate that an assertion failed.
-	def failure!(&)
+	def failure!(depth: 0, &)
 		if @skip
 			@runner.success!(@description)
 		else
@@ -73,6 +84,7 @@ class Quickdraw::Test
 				description: @description,
 				message: yield,
 				caller_locations:,
+				depth:,
 			})
 		end
 
