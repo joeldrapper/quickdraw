@@ -18,7 +18,7 @@ class Runner
 end
 
 test "the truth" do
-	assert_equal "Hello", "Joel"
+	assert_equal "Hello", "World"
 end
 
 test "assert_equal" do

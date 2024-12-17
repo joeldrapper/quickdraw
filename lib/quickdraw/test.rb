@@ -37,15 +37,13 @@ class Quickdraw::Test
 		failure! { e.message }
 	end
 
-	def assert(value, depth: 0)
-		depth += 1
-
+	def assert(value)
 		if value
 			success!
 		elsif block_given?
-			failure!(depth:) { yield(value) }
+			failure! { yield(value) }
 		else
-			failure!(depth:) { "expected #{value.inspect} to be truthy" }
+			failure! { "expected #{value.inspect} to be truthy" }
 		end
 
 		nil
@@ -75,16 +73,21 @@ class Quickdraw::Test
 	end
 
 	# Indicate that an assertion failed.
-	def failure!(depth: 0, &)
+	def failure!(&)
 		if @skip
 			@runner.success!(@description)
 		else
+			test_location = @block.source_location
+			locations = caller_locations
+			location = locations.find { |it| it.path.end_with?(".test.rb") } || locations.first
+
 			@runner.failure!({
-				location: @block.source_location,
+				test_path: test_location[0],
+				test_line: test_location[1],
 				description: @description,
 				message: yield,
-				caller_locations:,
-				depth:,
+				path: location.path,
+				line: location.lineno,
 			})
 		end
 

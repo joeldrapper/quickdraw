@@ -63,10 +63,10 @@ class Quickdraw::Runner
 			puts
 
 			[
-				"\e[4m#{failure['location'][0]}:#{failure['location'][1]}\e[0m",
+				"\e[4m#{failure['test_path']}:#{failure['test_line']}\e[0m",
 				"\e[1m#{(failure['description'])}\e[0m",
+				"\e[4m#{failure['path']}:#{failure['line']}\e[0m",
 				"\e[3m#{(failure['message'])}\e[0m",
-				failure["caller_locations"][failure["depth"]].gsub(":in `", " in `"),
 			].each_with_index do |line, i|
 				puts "#{'  ' * i}#{line}"
 			end
