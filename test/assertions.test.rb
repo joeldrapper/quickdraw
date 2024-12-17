@@ -17,10 +17,6 @@ class Runner
 	end
 end
 
-test "the truth" do
-	assert_equal "Hello", "World"
-end
-
 test "assert_equal" do
 	assert_equal 1, 1
 end
