@@ -96,9 +96,8 @@ class Quickdraw::Runner
 
 		@tests.shuffle!(random: @random)
 		@tests.freeze
-
 		# Try to break up the tests into at least 20 batches per core.
-		@batch = [[(@tests.size / @processes / 20), 1].max, 500].min
+		@batch = (@tests.size / @processes / 20).clamp(1, 500)
 	end
 
 	def fork_processes

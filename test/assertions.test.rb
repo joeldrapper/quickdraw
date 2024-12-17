@@ -40,7 +40,9 @@ test "assert_raises" do
 	end
 
 	assert_test_fails do
-		assert_raises(ArgumentError) {}
+		assert_raises(ArgumentError) do
+			# no-op
+		end
 	end
 end
 
