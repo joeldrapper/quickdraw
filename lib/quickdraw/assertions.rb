@@ -21,7 +21,7 @@ module Quickdraw::Assertions
 			"expected block to raise #{expected.inspect} but #{error.class.inspect} was raised instead"
 		end
 
-		e
+		error
 	end
 
 	def refute_raises
