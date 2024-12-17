@@ -31,19 +31,19 @@ module Quickdraw::Assertions
 		end
 	end
 
-	def assert_instance_of(klass, object)
+	def assert_instance_of(object, klass)
 		assert(object.instance_of?(klass)) do
 			"expected #{object.class} to be an instance of #{klass}"
 		end
 	end
 
-	def refute_instance_of(klass, object)
+	def refute_instance_of(object, klass)
 		refute(object.instance_of?(klass)) do
 			"expected #{object.class} to not be an instance of #{klass}"
 		end
 	end
 
-	def assert_kind_of(klass, object)
+	def assert_kind_of(object, klass)
 		assert(object.kind_of?(klass)) do
 			"expected #{object.class} to be a kind of #{klass}"
 		end
@@ -61,7 +61,7 @@ module Quickdraw::Assertions
 		end
 	end
 
-	def refute_kind_of(klass, object)
+	def refute_kind_of(object, klass)
 		refute(object.kind_of?(klass)) do
 			"expected #{object.class} to not be a kind of #{klass}"
 		end
@@ -89,18 +89,6 @@ module Quickdraw::Assertions
 		success!
 	rescue Exception => e
 		failure! { "expected block not to raise, but #{e.class.inspect} was raised" }
-	end
-
-	def assert_nil(value)
-		assert(nil == value) do
-			"expected #{value.class} to be nil"
-		end
-	end
-
-	def refute_nil(value)
-		refute(nil == value) do
-			"expected #{value.class} to not be nil"
-		end
 	end
 
 	def assert_operator(object, operator, other)

@@ -34,9 +34,11 @@ class Quickdraw::Runner
 
 		if @processes > 1
 			fork_processes
-			results = @cluster.wait
+			@cluster.wait
 		else
-			@tests.each { |it| it.run(self) }
+			@tests.each do |(context, description, skip, block)|
+				context.new(description:, skip:, block:).run(self)
+			end
 		end
 
 		@failures.each do |failure|
