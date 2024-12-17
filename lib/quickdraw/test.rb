@@ -33,7 +33,7 @@ class Quickdraw::Test
 	def match
 		yield
 		success!
-	rescue Exception => e
+	rescue NoMatchingPatternError => e
 		failure! { e.message }
 	end
 
