@@ -2,26 +2,31 @@
 
 class Quickdraw::Configuration
 	DEFAULT_PROCESSES = Quickdraw::Platform.supports_forking? ? Quickdraw::Platform.non_blocking_cores : 1
-	DEFAULT_THREADS = 8
+	DEFAULT_THREADS = 4
 
 	def initialize
-		@registry = Quickdraw::Registry.new
 		@failure_symbol = "\e[31m⨯\e[0m"
 		@success_symbol = "\e[32m∘\e[0m"
 		@processes = DEFAULT_PROCESSES
 		@threads = DEFAULT_THREADS
 		@success_emoji = %w[💃 🕺 🎉 🎊 💪 👏 🙌 ✨ 🥳 🎈 🌈 🎯 🏆]
+		@before_forking_callbacks = []
+		@after_forking_callbacks = []
 	end
-
-	attr_reader :registry
 
 	attr_accessor :failure_symbol
 	attr_accessor :processes
 	attr_accessor :success_emoji
 	attr_accessor :success_symbol
 	attr_accessor :threads
+	attr_reader :before_forking_callbacks
+	attr_reader :after_forking_callbacks
 
-	def matcher(matcher, *types)
-		@registry.register(matcher, *types)
+	def before_forking(&block)
+		@before_forking_callbacks << block
+	end
+
+	def after_forking(&block)
+		@after_forking_callbacks << block
 	end
 end

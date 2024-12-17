@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-class Quickdraw::Timer
+module Quickdraw::Timer
+	extend self
 	autoload :Duration, "quickdraw/timer/duration"
 
-	def self.time
+	def time
 		start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
 		yield
 		finish = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)

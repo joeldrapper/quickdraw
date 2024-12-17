@@ -5,7 +5,8 @@ require "etc"
 module Quickdraw::Platform
 	extend self
 
-	# The number of CPU cores for an ideal balance of performance, and user experience.
+	# The number of CPU cores for an ideal balance of performance and user experience.
+	#
 	# In the case of an M-series Mac, this is all your performance cores, leaving the
 	# efficienty cores for other tasks. On other platforms, this is all available CPU
 	# cores, minus one.

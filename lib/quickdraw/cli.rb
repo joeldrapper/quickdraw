@@ -5,8 +5,6 @@ require "optparse"
 class Quickdraw::CLI
 	CONFIG_PATH = File.expand_path("config/quickdraw.rb")
 
-	autoload :ArgumentParser, "quickdraw/cli/argument_parser"
-
 	def initialize(args)
 		@args = args
 	end
@@ -107,35 +105,26 @@ class Quickdraw::CLI
 	end
 
 	def watch
-		Quickdraw::Watcher.watch("./**/*.rb") do |paths|
-			time = Quickdraw::Timer.time do
-				Process.wait(
-					Process.fork do
-						print "\e[H\e[2J"
-						require CONFIG_PATH if File.exist?(CONFIG_PATH)
+		require "io/watch"
 
-						Quickdraw::Run.new(
-							processes: @processes || Quickdraw::Config.processes,
-							threads: @threads || Quickdraw::Config.threads,
-							files: Dir.glob(@files),
-							seed: @seed || Random.new_seed,
-						).call
-					end,
-				)
+		IO::Watch::Monitor.new(["."], latency: 0.1).run do |event|
+			Process.fork do
+				print "\e[H\e[2J"
+				run_once
 			end
-
-			puts "Total time: #{time}"
 		end
 	end
 
 	def run_once
 		require CONFIG_PATH if File.exist?(CONFIG_PATH)
 
-		Quickdraw::Run.new(
+		$quickdraw_runner = Quickdraw::Runner.new(
 			processes: @processes || Quickdraw::Config.processes,
 			threads: @threads || Quickdraw::Config.threads,
 			files: Dir.glob(@files),
 			seed: @seed || Random.new_seed,
-		).call
+		)
+
+		$quickdraw_runner.call
 	end
 end
