@@ -37,6 +37,23 @@ module Quickdraw::RSpecAdapter
 		def it(description, &)
 			test(description, &)
 		end
+
+		def subject(name = nil, &)
+			let("subject", &)
+			let(name, &) if name
+		end
+
+		def let(name, &block)
+			instance_variable = :"@#{name}"
+
+			define_method(name) do
+				if instance_variable_defined?(instance_variable)
+					instance_variable_get(instance_variable)
+				else
+					instance_variable_set(instance_variable, instance_exec(&block))
+				end
+			end
+		end
 	end
 
 	module InstanceMethods

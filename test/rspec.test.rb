@@ -4,8 +4,11 @@ include Quickdraw::RSpecAdapter
 
 describe String do
 	describe "test" do
+		let(:example) { "Hello" }
+		subject { "Hello" }
+
 		it "works" do
-			expect("Hello").to eq("Hello")
+			expect(example).to eq(subject)
 		end
 	end
 end
