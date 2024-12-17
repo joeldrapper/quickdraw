@@ -92,32 +92,32 @@ module Quickdraw::Assertions
 	end
 
 	def assert_operator(object, operator, other)
-		assert(object.public_send(operator, other)) do
+		assert object.public_send(operator, other) do
 			"expected #{object.inspect} to #{operator} #{other.inspect}"
 		end
 	end
 
 	def refute_operator(object, operator, other)
-		refute(object.public_send(operator, other)) do
+		refute object.public_send(operator, other) do
 			"expected #{object.inspect} to not #{operator} #{other.inspect}"
 		end
 	end
 
 	def assert_respond_to(object, method_name)
-		assert(object.respond_to?(method_name)) do
+		assert object.respond_to?(method_name) do
 			"expected #{object.inspect} to respond to ##{method_name}"
 		end
 	end
 
-	def assert_same(expected, actual)
-		assert(expected.equal?(actual)) do
-			"expected #{expected.inspect} to be the same object as #{actual.inspect}"
+	def assert_same(a, b)
+		assert a.equal?(b) do
+			"expected #{a.inspect} to be the same object as #{b.inspect}"
 		end
 	end
 
-	def refute_same(expected, actual)
-		refute(expected.equal?(actual)) do
-			"expected #{expected.inspect} to not be the same object as #{actual.inspect}"
+	def refute_same(a, b)
+		refute a.equal?(b) do
+			"expected #{a.inspect} to not be the same object as #{b.inspect}"
 		end
 	end
 end
