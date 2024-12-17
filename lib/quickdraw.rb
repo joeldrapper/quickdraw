@@ -10,10 +10,12 @@ module Quickdraw
 	autoload :Configuration, "quickdraw/configuration"
 	autoload :Platform, "quickdraw/platform"
 	autoload :Queue, "quickdraw/queue"
+	autoload :RSpecAdapter, "quickdraw/rspec_adapter"
 	autoload :Runner, "quickdraw/runner"
 	autoload :Test, "quickdraw/test"
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
+	autoload :MinitestAdapter, "quickdraw/minitest_adapter"
 
 	Null = Object.new.freeze
 	Error = Module.new

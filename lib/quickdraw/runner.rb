@@ -63,6 +63,7 @@ class Quickdraw::Runner
 			puts
 
 			[
+				"\e[1m#{(failure['class_name'])}\e[0m",
 				"\e[4m#{failure['test_path']}:#{failure['test_line']}\e[0m",
 				"\e[1m#{(failure['description'])}\e[0m",
 				"\e[4m#{failure['path']}:#{failure['line']}\e[0m",
@@ -76,7 +77,7 @@ class Quickdraw::Runner
 
 		puts "Passed: #{@successes.value} | Failed: #{@failures.size} | Errors: #{@errors.size}"
 
-		exit(1) if @failures.any?
+		exit(1) if @failures.any? || @errors.any?
 	end
 
 	def load_tests
@@ -150,10 +151,7 @@ class Quickdraw::Runner
 			socket.write Message::Fetch
 
 			case socket.read(1)
-			when nil
-				puts "EOF"
-				break
-			when Message::Stop
+			when nil, Message::Stop
 				threads.each { queue.push(:stop) }
 				threads.each(&:join)
 				socket.write Message::Stopping
@@ -180,7 +178,6 @@ class Quickdraw::Runner
 	def supervise(worker)
 		socket = worker.socket
 		mutex = @mutex
-		results = nil
 		batch = @batch
 		progress = 0
 

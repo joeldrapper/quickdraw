@@ -49,16 +49,8 @@ class Quickdraw::Test
 		nil
 	end
 
-	def refute(value)
-		if !value
-			success!
-		elsif block_given?
-			failure! { yield(value) }
-		else
-			failure! { "expected #{value.inspect} to be falsy" }
-		end
-
-		nil
+	def refute(value, ...)
+		assert(!value, ...)
 	end
 
 	# Indicate that an assertion passed successfully.
@@ -82,6 +74,7 @@ class Quickdraw::Test
 			location = locations.find { |it| it.path.end_with?(".test.rb") } || locations.first
 
 			@runner.failure!({
+				class_name: self.class.name,
 				test_path: test_location[0],
 				test_line: test_location[1],
 				description: @description,
