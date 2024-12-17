@@ -67,10 +67,12 @@ class Quickdraw::Runner
 				"\e[4m#{failure['test_path']}:#{failure['test_line']}\e[0m",
 				"\e[1m#{(failure['description'])}\e[0m",
 				"\e[4m#{failure['path']}:#{failure['line']}\e[0m",
-				"\e[3m#{(failure['message'])}\e[0m",
 			].each_with_index do |line, i|
 				puts "#{'  ' * i}#{line}"
 			end
+
+			puts
+			puts "\e[3m#{(failure['message'])}\e[0m"
 		end
 
 		puts

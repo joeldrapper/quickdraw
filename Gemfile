@@ -6,6 +6,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "rspec-expectations"
+gem "minitest"
 
 if RUBY_ENGINE == "ruby"
 	group :development do
