@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-require "minitest/assertions"
+begin
+	require "minitest/assertions"
+rescue LoadError
+	raise LoadError.new("You need to add `minitest` to your Gemfile")
+end
 
 module Quickdraw::MinitestAdapter
 	def self.extended(base)

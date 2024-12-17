@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-require "rspec/expectations"
+begin
+	require "rspec/expectations"
+rescue LoadError
+	raise LoadError.new("You need to add `rspec-expectations` to your Gemfile")
+end
 
 module Quickdraw::RSpecAdapter
 	def self.extended(base)
