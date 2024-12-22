@@ -20,7 +20,7 @@ module Quickdraw::RSpecAdapter
 	end
 
 	module ClassMethods
-		def describe(description, &)
+		def describe(description, &block)
 			Class.new(self) do
 				if respond_to?(:set_temporary_name)
 					case description
@@ -30,7 +30,7 @@ module Quickdraw::RSpecAdapter
 						set_temporary_name description.to_s
 					end
 				end
-				class_exec(&)
+				class_exec(&block)
 			end
 		end
 
