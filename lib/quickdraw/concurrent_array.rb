@@ -10,8 +10,8 @@ class Quickdraw::ConcurrentArray
 		@monitor.synchronize { @array << value }
 	end
 
-	def each(&)
-		@monitor.synchronize { @array.each(&) }
+	def each(&block)
+		@monitor.synchronize { @array.each(&block) }
 	end
 
 	def concat(other)
