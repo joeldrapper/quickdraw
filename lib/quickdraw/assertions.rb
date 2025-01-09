@@ -8,7 +8,7 @@ module Quickdraw::Assertions
 
 				#{actual.inspect}
 
-				\e[34mto be == to\e[0m
+				\e[34mto be == to:\e[0m
 
 				#{expected.inspect}
 			MESSAGE
@@ -17,31 +17,71 @@ module Quickdraw::Assertions
 
 	def refute_equal(actual, expected)
 		refute(actual == expected) do
-			"expected #{actual.inspect} not to == #{expected.inspect}"
+			<<~MESSAGE
+				\e[34mExpected:\e[0m
+
+				#{actual.inspect}
+
+				\e[34mnot to be == to:\e[0m
+
+				#{expected.inspect}
+			MESSAGE
 		end
 	end
 
 	def assert_includes(collection, member)
 		assert(collection.include?(member)) do
-			"expected #{collection.inspect} to include #{member.inspect}"
+			<<~MESSAGE
+				\e[34mExpected:\e[0m
+
+				#{collection.inspect}
+
+				\e[34mto include:\e[0m
+
+				#{member.inspect}
+			MESSAGE
 		end
 	end
 
 	def refute_includes(collection, member)
 		refute(collection.include?(member)) do
-			"expected #{collection.inspect} not to include #{member.inspect}"
+			<<~MESSAGE
+				\e[34mExpected:\e[0m
+
+				#{collection.inspect}
+
+				\e[34mnot to include:\e[0m
+
+				#{member.inspect}
+			MESSAGE
 		end
 	end
 
 	def assert_operator(object, operator, other)
 		assert object.public_send(operator, other) do
-			"expected #{object.inspect} to #{operator} #{other.inspect}"
+			<<~MESSAGE
+				\e[34mExpected:\e[0m
+
+				#{object.inspect}
+
+				\e[34mto #{operator}:\e[0m
+
+				#{other.inspect}
+			MESSAGE
 		end
 	end
 
 	def refute_operator(object, operator, other)
 		refute object.public_send(operator, other) do
-			"expected #{object.inspect} not to #{operator} #{other.inspect}"
+			<<~MESSAGE
+				\e[34mExpected:\e[0m
+
+				#{object.inspect}
+
+				\e[34mnot to #{operator}:\e[0m
+
+				#{other.inspect}
+			MESSAGE
 		end
 	end
 
