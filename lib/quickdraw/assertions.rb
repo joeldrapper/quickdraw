@@ -3,7 +3,15 @@
 module Quickdraw::Assertions
 	def assert_equal(actual, expected)
 		assert(actual == expected) do
-			"expected #{actual.inspect} to == #{expected.inspect}"
+			<<~MESSAGE
+				\e[34mExpected:\e[0m
+
+				#{actual.inspect}
+
+				\e[34mto be == to\e[0m
+
+				#{expected.inspect}
+			MESSAGE
 		end
 	end
 
