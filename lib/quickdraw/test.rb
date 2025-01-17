@@ -21,12 +21,12 @@ class Quickdraw::Test
 		teardown
 	rescue Exception => error
 		@runner.error!({
-			location: @block.source_location,
-			description: @description,
-			message: error.message,
-			name: error.class.name,
-			detailed_message: error.detailed_message,
-			backtrace: error.backtrace,
+			"location" => @block.source_location,
+			"description" => @description,
+			"message" => error.message,
+			"name" => error.class.name,
+			"detailed_message" => error.detailed_message,
+			"backtrace" => error.backtrace,
 		})
 	end
 
@@ -74,13 +74,13 @@ class Quickdraw::Test
 			location = locations.find { |it| it.path.end_with?(".test.rb") } || locations.first
 
 			@runner.failure!({
-				class_name: self.class.name,
-				test_path: test_location[0],
-				test_line: test_location[1],
-				description: @description,
-				message: yield,
-				path: location.path,
-				line: location.lineno,
+				"class_name" => self.class.name,
+				"test_path" => test_location[0],
+				"test_line" => test_location[1],
+				"description" => @description,
+				"message" => yield,
+				"path" => location.path,
+				"line" => location.lineno,
 			})
 		end
 
