@@ -35,4 +35,5 @@ Gem::Specification.new do |spec|
 	spec.metadata["rubygems_mfa_required"] = "true"
 
 	spec.add_dependency "io-watch", "~> 0.6"
+	spec.add_dependency "difftastic", "~> 0.1"
 end

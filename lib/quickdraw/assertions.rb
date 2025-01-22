@@ -1,17 +1,40 @@
 # frozen_string_literal: true
 
 module Quickdraw::Assertions
+	DIFFER = Difftastic::Differ.new(
+		color: :always,
+		tab_width: 2,
+	)
+
 	def assert_equal(actual, expected)
 		assert(actual == expected) do
-			<<~MESSAGE
-				\e[34mExpected:\e[0m
+			diff = DIFFER.diff_objects(actual, expected)
 
-				#{actual.inspect}
+			"Expected objects to be equal (compared with `==`):\n\n#{diff}"
+		end
+	end
 
-				\e[34mto be == to:\e[0m
+	def assert_equal_sql(actual, expected)
+		unless String === actual && String === expected
+			raise ArgumentError.new("expected both actual and expected to be strings")
+		end
 
-				#{expected.inspect}
-			MESSAGE
+		assert(actual == expected) do
+			diff = DIFFER.diff_sql(actual, expected)
+
+			"Expected SQL strings to be equal (compared with `==`):\n\n#{diff}"
+		end
+	end
+
+	def assert_equal_html(actual, expected)
+		unless String === actual && String === expected
+			raise ArgumentError.new("expected both actual and expected to be strings")
+		end
+
+		assert(actual == expected) do
+			diff = DIFFER.diff_html(actual, expected)
+
+			"Expected HTML strings to be equal (compared with `==`):\n\n#{diff}"
 		end
 	end
 

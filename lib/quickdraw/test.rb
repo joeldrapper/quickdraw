@@ -4,7 +4,7 @@ class Quickdraw::Test
 	include Quickdraw::Assertions
 
 	def self.test(description = nil, skip: false, &block)
-		$quickdraw_runner << [self, description, skip, block]
+		$quickdraw_runner << [self, description, skip, block].freeze
 	end
 
 	def initialize(description:, skip:, block:)

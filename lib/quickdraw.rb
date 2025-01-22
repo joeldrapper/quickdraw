@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "difftastic"
+
 module Quickdraw
 	autoload :ArgumentError, "quickdraw/errors/argument_error"
 	autoload :Assertions, "quickdraw/assertions"
