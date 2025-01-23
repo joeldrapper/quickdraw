@@ -2,6 +2,8 @@
 
 module Quickdraw::Assertions
 	DIFFER = Difftastic::Differ.new(
+		left_label: "Actual",
+		right_label: "Expected",
 		color: :always,
 		tab_width: 2,
 	)
@@ -10,7 +12,7 @@ module Quickdraw::Assertions
 		assert(actual == expected) do
 			diff = DIFFER.diff_objects(actual, expected)
 
-			"Expected objects to be equal (compared with `==`):\n\n#{diff}"
+			"Expected objects to be equal (compared with `actual == expected`):\n\n#{diff}"
 		end
 	end
 
@@ -22,7 +24,7 @@ module Quickdraw::Assertions
 		assert(actual == expected) do
 			diff = DIFFER.diff_sql(actual, expected)
 
-			"Expected SQL strings to be equal (compared with `==`):\n\n#{diff}"
+			"Expected SQL strings to be equal (compared with `actual == expected`):\n\n#{diff}"
 		end
 	end
 
@@ -34,7 +36,7 @@ module Quickdraw::Assertions
 		assert(actual == expected) do
 			diff = DIFFER.diff_html(actual, expected)
 
-			"Expected HTML strings to be equal (compared with `==`):\n\n#{diff}"
+			"Expected HTML strings to be equal (compared with `actual == expected`):\n\n#{diff}"
 		end
 	end
 
@@ -46,7 +48,7 @@ module Quickdraw::Assertions
 		assert(actual == expected) do
 			diff = DIFFER.diff_ruby(actual, expected)
 
-			"Expected Ruby strings to be equal (compared with `==`):\n\n#{diff}"
+			"Expected Ruby strings to be equal (compared with `actual == expected`):\n\n#{diff}"
 		end
 	end
 
