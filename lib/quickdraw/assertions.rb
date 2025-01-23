@@ -38,6 +38,18 @@ module Quickdraw::Assertions
 		end
 	end
 
+	def assert_equal_ruby(actual, expected)
+		unless String === actual && String === expected
+			raise ArgumentError.new("expected both actual and expected to be strings")
+		end
+
+		assert(actual == expected) do
+			diff = DIFFER.diff_ruby(actual, expected)
+
+			"Expected Ruby strings to be equal (compared with `==`):\n\n#{diff}"
+		end
+	end
+
 	def refute_equal(actual, expected)
 		refute(actual == expected) do
 			<<~MESSAGE
