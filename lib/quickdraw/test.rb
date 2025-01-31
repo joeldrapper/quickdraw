@@ -25,7 +25,7 @@ class Quickdraw::Test
 			"description" => @description,
 			"message" => error.message,
 			"name" => error.class.name,
-			"detailed_message" => error.detailed_message,
+			# "detailed_message" => error.detailed_message,
 			"backtrace" => error.backtrace,
 		})
 	end
