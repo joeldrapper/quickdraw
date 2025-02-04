@@ -11,7 +11,6 @@ gem "minitest"
 if RUBY_ENGINE == "ruby"
 	group :development do
 		gem "rubocop"
-		gem "minitest"
 		gem "sus"
 		gem "covered"
 	end
