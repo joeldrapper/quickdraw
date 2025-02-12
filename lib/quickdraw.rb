@@ -18,6 +18,7 @@ module Quickdraw
 	autoload :Timer, "quickdraw/timer"
 	autoload :Worker, "quickdraw/worker"
 	autoload :MinitestAdapter, "quickdraw/minitest_adapter"
+	autoload :HTMLPrettifier, "quickdraw/html_prettifier"
 
 	Null = Object.new.freeze
 	Error = Module.new

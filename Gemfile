@@ -7,11 +7,11 @@ gemspec
 
 gem "rspec-expectations"
 gem "minitest"
+gem "nokogiri"
 
 if RUBY_ENGINE == "ruby"
 	group :development do
 		gem "rubocop"
-		gem "minitest"
 		gem "sus"
 		gem "covered"
 	end

@@ -36,7 +36,30 @@ module Quickdraw::Assertions
 		assert(actual == expected) do
 			diff = DIFFER.diff_html(actual, expected)
 
+			if diff.end_with?("No syntactic changes.")
+				diff = DIFFER.diff_strings(actual, expected)
+			end
+
 			"Expected HTML strings to be equal (compared with `actual == expected`):\n\n#{diff}"
+		end
+	end
+
+	def assert_equivalent_html(actual, expected)
+		if actual == expected
+			success!
+		else
+			pretty_actual = Quickdraw::HTMLPrettifier.prettify(actual)
+			pretty_expected = Quickdraw::HTMLPrettifier.prettify(expected)
+
+			assert(pretty_actual == pretty_expected) do
+				diff = DIFFER.diff_html(pretty_actual, pretty_expected)
+
+				if diff.end_with?("No syntactic changes.")
+					diff = DIFFER.diff_strings(pretty_actual, pretty_expected)
+				end
+
+				"Expected HTML to be equivalent (ignoring whitespace):\n\n#{diff}"
+			end
 		end
 	end
 
