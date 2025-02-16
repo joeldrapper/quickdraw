@@ -2,7 +2,7 @@
 
 class Quickdraw::Configuration
 	DEFAULT_PROCESSES = Quickdraw::Platform.supports_forking? ? Quickdraw::Platform.non_blocking_cores : 1
-	DEFAULT_THREADS = 4
+	DEFAULT_THREADS = 2
 
 	def initialize
 		@failure_symbol = "\e[31m⨯\e[0m"
