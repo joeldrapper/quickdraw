@@ -10,7 +10,11 @@ module Quickdraw::Assertions
 
 	def assert_equal(actual, expected)
 		assert(actual == expected) do
-			diff = DIFFER.diff_objects(actual, expected)
+			if String === actual && String === expected
+				diff = DIFFER.diff_strings(actual, expected)
+			else
+				diff = DIFFER.diff_objects(actual, expected)
+			end
 
 			"Expected objects to be equal (compared with `actual == expected`):\n\n#{diff}"
 		end
