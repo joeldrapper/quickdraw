@@ -20,7 +20,7 @@ class Quickdraw::Test
 		around_test { instance_exec(&@block) }
 		teardown
 	rescue Exception => error
-		@runner.error!({
+		error!({
 			"location" => @block.source_location,
 			"description" => @description,
 			"message" => error.message,
@@ -56,7 +56,7 @@ class Quickdraw::Test
 	# Indicate that an assertion passed successfully.
 	def success!
 		if @skip
-			@runner.failure! { "The skipped test `#{@description}` started passing." }
+			@runner.failure!("The skipped test `#{@description}` started passing.")
 		else
 			@runner.success!(@description)
 		end
@@ -82,6 +82,16 @@ class Quickdraw::Test
 				"path" => location.path,
 				"line" => location.lineno,
 			})
+		end
+
+		nil
+	end
+
+	def error!(...)
+		if @skip
+			@runner.success!(@description)
+		else
+			@runner.error!(...)
 		end
 
 		nil
