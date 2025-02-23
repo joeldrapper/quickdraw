@@ -69,7 +69,7 @@ class Path
 end
 
 class Resolver
-	TestDirectories = Set["test", "spec", "tests", "specs"]
+	TestDirectories = Set["test", "spec", "tests", "specs", "quickdraw"]
 	CurrentDirectoryName = File.basename(Dir.pwd)
 
 	def self.call(path)
