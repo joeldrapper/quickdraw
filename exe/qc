@@ -148,7 +148,7 @@ class Resolver
 
 	def launch(path)
 		if File.exist?(path.to_s)
-			exec "zed #{path}"
+			exec "#{ENV.fetch('EDITOR', 'zed')} #{path}"
 		else
 			false
 		end

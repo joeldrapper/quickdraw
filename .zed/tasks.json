@@ -4,5 +4,12 @@
 		"command": "bundle exec qt",
 		"args": ["$ZED_RELATIVE_FILE"],
 		"tags": ["ruby-test"]
+	},
+	{
+		"label": "counterpart",
+		"command": "bundle exec qc",
+		"args": ["$ZED_RELATIVE_FILE"],
+		"hide": "always",
+		"reveal": "never"
 	}
 ]
