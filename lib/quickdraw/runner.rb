@@ -32,15 +32,17 @@ class Quickdraw::Runner
 	end
 
 	def call
-		load_tests
-		enable_yjit if yjit_supported?
+		elapsed = Quickdraw::Timer::time do
+			load_tests
+			enable_yjit if yjit_supported?
 
-		if @processes > 1
-			fork_processes
-			@cluster.wait
-		else
-			@tests.each do |(context, description, skip, block)|
-				context.new(description:, skip:, block:).run(self)
+			if @processes > 1
+				fork_processes
+				@cluster.wait
+			else
+				@tests.each do |(context, description, skip, block)|
+					context.new(description:, skip:, block:).run(self)
+				end
 			end
 		end
 
@@ -55,11 +57,11 @@ class Quickdraw::Runner
 				"\e[3munexpected \e[1m#{error['name']}\e[0m",
 				error["message"],
 				*error["backtrace"]
-					.take_while { |it| @backtrace || !it.include?('Quickdraw::Runner') }
+					.take_while { |it| @backtrace || !it.include?("Quickdraw::Runner") }
 					.map { |it| it.gsub(":in `", " in `") },
-			].each_with_index do |line, i|
-				puts "#{'  ' * i}#{line}"
-			end
+											].each_with_index do |line, i|
+												puts "#{'  ' * i}#{line}"
+											end
 		end
 
 		@failures.each do |failure|
@@ -70,9 +72,9 @@ class Quickdraw::Runner
 				"\e[4m#{failure['test_path']}:#{failure['test_line']}\e[0m",
 				"\e[1m#{(failure['description'])}\e[0m",
 				"\e[4m#{failure['path']}:#{failure['line']}\e[0m",
-			].each_with_index do |line, i|
-				puts "#{'  ' * i}#{line}"
-			end
+											].each_with_index do |line, i|
+												puts "#{'  ' * i}#{line}"
+											end
 
 			puts
 			puts "\e[3m#{(failure['message'])}\e[0m"
@@ -80,6 +82,7 @@ class Quickdraw::Runner
 
 		puts
 
+		puts "Elapsed: #{elapsed} | Seed: #{@seed}"
 		puts "Passed: #{@successes.value} | Failed: #{@failures.size} | Errors: #{@errors.size}"
 
 		exit(1) if @failures.any? || @errors.any?
