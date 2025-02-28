@@ -11,7 +11,8 @@ class Quickdraw::Runner
 		Stopping = "\x04"
 	end
 
-	def initialize(processes:, threads:, files:, seed:)
+	def initialize(backtrace: false, processes:, threads:, files:, seed:)
+		@backtrace = backtrace
 		@processes = processes
 		@threads = threads
 		@seed = seed
@@ -53,7 +54,9 @@ class Quickdraw::Runner
 				"\e[1m#{(error['description'])}\e[0m",
 				"\e[3munexpected \e[1m#{error['name']}\e[0m",
 				error["message"],
-				*error["backtrace"].map { |it| it.gsub(":in `", " in `") },
+				*error["backtrace"]
+					.take_while { |it| @backtrace || !it.include?('Quickdraw::Runner') }
+					.map { |it| it.gsub(":in `", " in `") },
 			].each_with_index do |line, i|
 				puts "#{'  ' * i}#{line}"
 			end
