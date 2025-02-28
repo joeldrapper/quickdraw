@@ -49,17 +49,14 @@ class Quickdraw::Runner
 		@errors.each do |error|
 			puts
 
-			[
-				"\e[4m#{error['location'][0]}:#{error['location'][1]}\e[0m",
-				"\e[1m#{(error['description'])}\e[0m",
-				"\e[3munexpected \e[1m#{error['name']}\e[0m",
-				error["message"],
-				*error["backtrace"]
-					.take_while { |it| @backtrace || !it.include?('Quickdraw::Runner') }
-					.map { |it| it.gsub(":in `", " in `") },
-			].each_with_index do |line, i|
-				puts "#{'  ' * i}#{line}"
-			end
+			puts "\e[4m#{error['location'][0]}:#{error['location'][1]} #{error['description']}\e[0m"
+			puts "\e[3m  unexpected \e[1m#{error['name']}: #{error['message']}\e[0m"
+			error["backtrace"]
+				.take_while { |it| @backtrace || !it.include?("Quickdraw::Runner") }
+				.map { |it| it.gsub(":in `", " in `") }
+				.each do |line|
+					puts line
+				end
 		end
 
 		@failures.each do |failure|
