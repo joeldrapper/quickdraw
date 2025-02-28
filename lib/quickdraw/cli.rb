@@ -24,6 +24,10 @@ class Quickdraw::CLI
 				exit
 			end
 
+			parser.on("-b", "--backtrace", "Backtrace past test into Quickdraw") do |it|
+				self.backtrace = true
+			end
+
 			parser.on("-p N", "--processes N", Integer, "Number of Ruby Processes to fork") do |it|
 				self.processes = it
 			end
@@ -52,6 +56,10 @@ class Quickdraw::CLI
 
 	def parse_files
 		@files = @args[0] || "./**/*.test.rb"
+	end
+
+	def backtrace=(value)
+		@backtrace = value
 	end
 
 	def processes=(value)
@@ -119,6 +127,7 @@ class Quickdraw::CLI
 		require CONFIG_PATH if File.exist?(CONFIG_PATH)
 
 		$quickdraw_runner = Quickdraw::Runner.new(
+			backtrace: @backtrace,
 			processes: @processes || Quickdraw::Config.processes,
 			threads: @threads || Quickdraw::Config.threads,
 			files: Dir.glob(@files),
