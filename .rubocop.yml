@@ -2,4 +2,5 @@ inherit_from:
   - "https://www.goodcop.style/tabs.yml"
 
 AllCops:
+  SuggestExtensions: false
   TargetRubyVersion: 3.1
