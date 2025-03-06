@@ -55,7 +55,7 @@ class Quickdraw::CLI
 	end
 
 	def parse_files
-		@files = @args || "./**/*.test.rb"
+		@files = @args.empty? ? "./**/*.test.rb" : @args
 	end
 
 	def backtrace=(value)
