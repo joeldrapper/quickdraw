@@ -33,7 +33,6 @@ class Quickdraw::Runner
 
 	def call
 		load_tests
-		enable_yjit if yjit_supported?
 
 		if @processes > 1
 			fork_processes
