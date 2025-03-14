@@ -115,7 +115,7 @@ class Quickdraw::CLI
 	def watch
 		require "io/watch"
 
-		IO::Watch::Monitor.new(["."], latency: 0.1).run do |event|
+		IO::Watch::Monitor.new(["."], latency: 0.01).run do |event|
 			Process.fork do
 				print "\e[H\e[2J"
 				run_once
